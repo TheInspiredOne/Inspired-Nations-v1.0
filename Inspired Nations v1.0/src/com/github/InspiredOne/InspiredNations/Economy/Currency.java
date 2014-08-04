@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.github.InspiredOne.InspiredNations.InspiredNations;
 import com.github.InspiredOne.InspiredNations.PlayerData;
 import com.github.InspiredOne.InspiredNations.Exceptions.NameAlreadyTakenException;
+import com.github.InspiredOne.InspiredNations.ToolBox.Config;
 import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNations.ToolBox.Tools;
 	
@@ -47,7 +48,7 @@ public final class Currency implements Serializable, Nameable, Comparable<Curren
 		}
 		else {
 			BigDecimal value = InspiredNations.Exchange.getExchangeMap().get(this);
-			BigDecimal amount = new BigDecimal(InspiredNations.plugin.getConfig().getString("exchange_multiplyer"));
+			BigDecimal amount = new BigDecimal(Config.exchangemultiplier);
 			InspiredNations.Exchange.unregisterCurrency(this);
 			this.name = name;
 			InspiredNations.Exchange.registerCurrency(this, value.divide(amount, InspiredNations.Exchange.mcdown));

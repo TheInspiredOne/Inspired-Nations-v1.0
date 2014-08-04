@@ -2,11 +2,8 @@ package com.github.InspiredOne.InspiredNations.ToolBox;
 
 import java.math.BigDecimal;
 
-import javax.sound.sampled.ReverbType;
-
 import org.bukkit.ChatColor;
 
-import com.github.InspiredOne.InspiredNations.Debug;
 import com.github.InspiredOne.InspiredNations.InspiredNations;
 import com.github.InspiredOne.InspiredNations.PlayerData;
 import com.github.InspiredOne.InspiredNations.Economy.Currency;
@@ -36,7 +33,7 @@ public class MenuTools {
 	 * @return	the space required to clear the chat area for a menu
 	 */
 	public static String space() {
-		return Tools.repeat("\n ", plugin.getConfig().getInt("hud_pre_message_space"));
+		return Tools.repeat("\n ", Config.hudpremsgspace);
 	}
 	
 	/**

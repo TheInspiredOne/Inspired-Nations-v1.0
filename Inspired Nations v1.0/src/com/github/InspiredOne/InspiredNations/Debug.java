@@ -9,15 +9,15 @@ public class Debug {
 	public static int startcount = 0;
 	private static String InformPluginDev = "If you see this, tell plugin developer";
 	public static void print(Object msg) {
-		InspiredNations.plugin.logger.info(msg.toString());
+		System.out.print(msg.toString());
 	}
 	
 	public static void print(int i) {
-		InspiredNations.plugin.logger.info("Debuger check: " + i);
+		System.out.print("Debuger Check: " + i);
 	}
 	
 	public static void InformPluginDev() {
-		InspiredNations.plugin.logger.info(InformPluginDev);
+		System.out.print(InformPluginDev);
 	}
 	public static void node(Object msg) {
 		//InspiredNations.plugin.logger.info("Node Tier " + Node.tier + ": " + msg.toString());

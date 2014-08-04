@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 
 import com.github.InspiredOne.InspiredNations.InspiredNations;
+import com.github.InspiredOne.InspiredNations.ToolBox.Config;
 
 public class MoneyExchange implements Serializable{
 
@@ -21,7 +22,7 @@ public class MoneyExchange implements Serializable{
 	
 	public void registerCurrency(Currency currency, BigDecimal diamondValue) {
 		
-		BigDecimal amount = new BigDecimal(InspiredNations.plugin.getConfig().getString("exchange_multiplyer"));
+		BigDecimal amount = new BigDecimal(Config.exchangemultiplier);
 		if(!this.Exchange.containsKey(currency)) {
 			Exchange.put(currency, amount.multiply(diamondValue));
 		}

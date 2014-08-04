@@ -3,7 +3,7 @@ package com.github.InspiredOne.InspiredNations.Hud;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.github.InspiredOne.InspiredNations.Hud.Implem.Player.PlayerID;
+import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
 
 public class MenuUpdateEvent extends Event {
 

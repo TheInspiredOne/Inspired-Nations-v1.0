@@ -7,8 +7,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.github.InspiredOne.InspiredNations.Economy.Implem.ItemSellable;
 import com.github.InspiredOne.InspiredNations.Exceptions.BlockNotChestException;
 import com.github.InspiredOne.InspiredNations.Governments.Implem.ChestShop;
-import com.github.InspiredOne.InspiredNations.Hud.Implem.Player.PlayerID;
 import com.github.InspiredOne.InspiredNations.Listeners.InspiredListener;
+import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
 
 public class ClaimChestShopListener extends InspiredListener<ClaimChestShopManager> {

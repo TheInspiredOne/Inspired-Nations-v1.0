@@ -3,8 +3,8 @@ package com.github.InspiredOne.InspiredNations.Listeners.Implem;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.github.InspiredOne.InspiredNations.Hud.Implem.Player.PlayerID;
 import com.github.InspiredOne.InspiredNations.Listeners.InspiredListener;
+import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
 import com.github.InspiredOne.InspiredNations.ToolBox.Point2D;
 
 public class ChunkoidListener<T extends ChunkoidManager<?>> extends InspiredListener<T> {

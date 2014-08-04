@@ -8,7 +8,7 @@ import com.github.InspiredOne.InspiredNations.Hud.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNations.Hud.Implem.IgnoreOfferOption;
 import com.github.InspiredOne.InspiredNations.Hud.Implem.JoinOwnerGovOption;
 import com.github.InspiredOne.InspiredNations.Hud.Implem.JoinSubjectGovOption;
-import com.github.InspiredOne.InspiredNations.Hud.Implem.Player.PlayerID;
+import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
 
 public class RequestsForOwner extends TabSelectOptionMenu<PlayerID> {
 
