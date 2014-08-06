@@ -63,7 +63,6 @@ public class PlayerData implements Serializable, Nameable, Notifyable, ItemBuyer
 	public Theme theme = new Theme();
 	public boolean TimerState = false;
 	public boolean chatState = true;
-	public transient ArrayList<ActionManager<?>> actionmanagers;
 	
 	public PlayerData(PlayerID id) {
 		this.id = id;

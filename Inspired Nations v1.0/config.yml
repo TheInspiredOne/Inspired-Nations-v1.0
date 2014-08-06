@@ -1,0 +1,19 @@
+base_cost_per_chunk: 10
+country_start_loan: 25000
+loan_per_country_resident: 100
+town_start_loan: 5000
+loan_per_town_resident: 100
+park_tax_multiplyer: 1.5
+federal_park_base_cost: .05
+military_base_cost: 500
+min_diamond_value: 100
+max_diamond_value: 10000
+tax_cycle_length: 7200
+player_npc_pop: 10
+npc_buy_prob: 1
+
+
+# Adjust this number to change the formating of the HUD. #
+hud_pre_message_space: 20
+
+exchange_multiplyer: 10000000

@@ -14,7 +14,6 @@ import com.github.InspiredOne.InspiredNations.Economy.NPC;
 import com.github.InspiredOne.InspiredNations.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNations.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNations.Exceptions.PlayerOfflineException;
-import com.github.InspiredOne.InspiredNations.Hud.MenuUpdateEvent;
 import com.github.InspiredOne.InspiredNations.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNations.ToolBox.IndexedSet;
 import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;

@@ -1,0 +1,10 @@
+name: InspiredNations
+main: com.github.InspiredOne.InspiredNationsClient.InspiredNations
+version: 1.0
+commands:
+  hud:
+    description: The HUD
+  map:
+    description: The Map
+  npc:
+    description: Makes the NPCs buy
