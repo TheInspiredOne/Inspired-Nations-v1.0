@@ -1,5 +1,10 @@
 package com.github.InspiredOne.InspiredNationsServer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -22,7 +27,38 @@ public class InspiredNationsServer {
 	
 	public static IndexedMap<PlayerID, PlayerData> playerdata = new IndexedMap<PlayerID, PlayerData>();
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
+		// Attach a shutdown hook for saving data.
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+				  @Override
+				  public void run() {
+						// Saves Data
+						try {
+							  File theDir = new File(System.getProperty("user.dir") + "/InspiredNations");
+							  // if the directory does not exist, create it
+							  if (!theDir.exists()) {
+								  try{
+									  theDir.mkdir();
+							     } catch(SecurityException se){
+							     }        
+							  }
+							File regionfile = new File(System.getProperty("user.dir") + "/InspiredNations", "data.yml");
+					        FileOutputStream regionOut = new FileOutputStream(regionfile);
+					        ObjectOutputStream rout = new ObjectOutputStream(regionOut);
+					        //rout.writeObject(InspiredNations.regiondata);
+					        rout.writeObject(InspiredNationsServer.playerdata);
+					        //rout.writeObject(InspiredNations.Exchange);
+					        //rout.writeObject(InspiredNations.taxTimer);
+					        rout.close();
+					        regionOut.close();
+						}
+						catch(Exception ex) {
+							ex.printStackTrace();
+						}
+				  }
+			  });
+		
 		try {
             Registry registry = null;
             try {
@@ -40,6 +76,24 @@ public class InspiredNationsServer {
         	e.printStackTrace();
         }
 		
+		// Loads Data
+		try {
+			File regionfile = new File(System.getProperty("user.dir")+ "/InspiredNations", "data.yml");
+	        FileInputStream regionIn = new FileInputStream(regionfile);
+	        ObjectInputStream rin = new ObjectInputStream(regionIn);
+	        //InspiredNations.regiondata = (MultiGovMap) rin.readObject();
+	        InspiredNationsServer.playerdata = (IndexedMap<PlayerID, PlayerData>) rin.readObject();
+	        //InspiredNations.Exchange = (MoneyExchange) rin.readObject();
+	        //InspiredNations.taxTimer = (TaxTimer) rin.readObject();
+	        rin.close();
+	        regionIn.close();
+		}
+		catch(Exception ex) {
+			
+		}
+		
+		
+		
 		  int delay = 1000; //milliseconds
 
 		  TimerTask task = new TimerTask() {
@@ -52,7 +106,9 @@ public class InspiredNationsServer {
 			}
 			  
 		  };
-		  new Timer().scheduleAtFixedRate(task, 5000, delay);
+		  Timer timer = new Timer();
+		  timer.scheduleAtFixedRate(task, 5000, delay);
+		  
 	}
 
 }

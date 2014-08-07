@@ -8,8 +8,12 @@ import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
-public class PlayerData implements PlayerDataInter{
+public class PlayerData implements PlayerDataInter {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1358248142526827092L;
 	private PlayerID id;
 	private String name;
 	
