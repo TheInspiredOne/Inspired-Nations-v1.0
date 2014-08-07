@@ -4,12 +4,16 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.Implem.ServerPortal;
+import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 
 public class InspiredNationsServer {
 
+	public static ArrayList<ClientID> clients = new ArrayList<ClientID>();
+	
 	public static void main(String[] args) {
 		try {
             Registry registry = null;
