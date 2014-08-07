@@ -56,6 +56,9 @@ public class ClientID implements Serializable {
 	public static String generateRegAddress(String hostname, int port) {
 		return hostname + ":" + port + ":"; 
 	}
+	public String getName() {
+		return ClientID.generateRegAddress(hostname, port);
+	}
 	
 	@Override
     public int hashCode() {

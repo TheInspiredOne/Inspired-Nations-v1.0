@@ -11,12 +11,16 @@ import java.util.TimerTask;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.Implem.ServerPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
+import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 
 public class InspiredNationsServer {
 
 	public static ArrayList<ClientID> clients = new ArrayList<ClientID>();
 	public static String hostname = "localhost";
 	public static int port = 1099;
+	
+	public static IndexedMap<PlayerID, PlayerData> playerdata = new IndexedMap<PlayerID, PlayerData>();
 	
 	public static void main(String[] args) {
 		try {
@@ -31,7 +35,7 @@ public class InspiredNationsServer {
             ServerPortalInter portal = new ServerPortal();
             ServerPortalInter stub = (ServerPortalInter) UnicastRemoteObject.exportObject(portal, 0);
             registry.rebind("portal", stub);
-            System.out.print("Server Portal Bound");
+            Log.info("Server Portal Bound");
         } catch (Exception e) {
         	e.printStackTrace();
         }
