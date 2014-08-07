@@ -3,6 +3,8 @@ package com.github.InspiredOne.InspiredNations;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,8 +29,6 @@ import com.github.InspiredOne.InspiredNations.Governments.GovFactory;
 import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNations.Governments.OwnerGov;
 import com.github.InspiredOne.InspiredNations.Governments.OwnerSubjectGov;
-import com.github.InspiredOne.InspiredNations.Listeners.ActionManager;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNations.ToolBox.Notifyable;
 import com.github.InspiredOne.InspiredNations.ToolBox.Payable;
@@ -36,12 +36,15 @@ import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
 import com.github.InspiredOne.InspiredNations.ToolBox.Point3D;
 import com.github.InspiredOne.InspiredNations.ToolBox.ProtectionLevels;
 import com.github.InspiredOne.InspiredNations.ToolBox.Relation;
+import com.github.InspiredOne.InspiredNations.ToolBox.ServerID;
 import com.github.InspiredOne.InspiredNations.ToolBox.Theme;
 import com.github.InspiredOne.InspiredNations.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNations.ToolBox.Messaging.Alert;
 import com.github.InspiredOne.InspiredNations.ToolBox.Messaging.MessageManager;
 import com.github.InspiredOne.InspiredNations.ToolBox.Tools.TextColor;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.PlayerClientInter;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.ClientPortalInter;
 
 
 public class PlayerData implements Serializable, Nameable, Notifyable, ItemBuyer{
@@ -88,32 +91,40 @@ public class PlayerData implements Serializable, Nameable, Notifyable, ItemBuyer
 		return this.getPlayerID().getName();
 	}
 	
-	public Player getPlayer() throws PlayerOfflineException {
+	public PlayerClientInter getPlayer() throws PlayerOfflineException, RemoteException, NotBoundException {
+		
 		InspiredNations plugin = InspiredNations.plugin;
 		
-		Player output = plugin.getServer().getPlayer(this.getPlayerID().getID());
-		if(output == null) {
-			throw new PlayerOfflineException();
+		PlayerClientInter output = null;
+		for(ServerID client:InspiredNations.clients) {
+			ClientPortalInter portal = client.getPortal();
+			try {
+				output = portal.getPlayer(this.getPlayerID());
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			if(output != null) {
+				return output;
+			}
 		}
-		else {
-			return output;
-		}
+		throw new PlayerOfflineException();
+
 	}
 	
 	public PlayerID getPlayerID() {
 		return id;
 	}
 	@Override
-	public Location getLocation() {
+	public Point3D getLocation() throws RemoteException, NotBoundException {
 		try {
 			return this.getPlayer().getLocation();
 		} catch (PlayerOfflineException e) {
-			return this.lastLoc.getLocation();
+			return this.lastLoc;
 		}
 	}
 	
-	public void setLocation(Location loc) {
-		this.lastLoc = new Point3D(loc);
+	public void setLocation(Location loc, ServerID server) {
+		this.lastLoc = new Point3D(loc, server);
 	}
 	
 	public void payNPC(BigDecimal mon, Currency monType, Payable accountFrom) {

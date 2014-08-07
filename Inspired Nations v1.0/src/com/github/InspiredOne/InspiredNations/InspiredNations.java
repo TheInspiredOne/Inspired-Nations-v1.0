@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,13 +20,20 @@ import com.github.InspiredOne.InspiredNations.Economy.Implem.ItemMarketplace;
 import com.github.InspiredOne.InspiredNations.Governments.GlobalGov;
 import com.github.InspiredOne.InspiredNations.Governments.GovFactory;
 import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNations.RemoteInterfaces.ServerPortalInter;
+import com.github.InspiredOne.InspiredNations.RemoteInterfaces.Implem.ServerPortal;
 import com.github.InspiredOne.InspiredNations.ToolBox.Config;
 import com.github.InspiredOne.InspiredNations.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNations.ToolBox.MultiGovMap;
 import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
+import com.github.InspiredOne.InspiredNations.ToolBox.ServerID;
+import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.ClientPortalInter;
 
 public class InspiredNations {
-
+	
+	public static ArrayList<ServerID> clients;
+	public static ServerPortal server = new ServerPortal();
 	public static InspiredNations plugin = (InspiredNations) Bukkit.getPluginManager().getPlugin("InspiredNations");
 	private StartStop SS = new StartStop(this); // Deals with start-up and shut-down
 	public static MultiGovMap regiondata = new MultiGovMap(); 
@@ -37,7 +45,23 @@ public class InspiredNations {
 	public static ArrayList<String> check = new ArrayList<String>();
 	
 	public static void main(String[] args) {
-		InspiredNations.plugin = new InspiredNations();
+		try {
+            Registry registry = null;
+            try {
+                registry = LocateRegistry.createRegistry(1099);
+            } catch (RemoteException e) {
+                registry = LocateRegistry.getRegistry(1099);
+                e.printStackTrace();
+            }
+            
+            ServerPortalInter portal = InspiredNations.server;
+            ServerPortalInter stub = (ServerPortalInter) UnicastRemoteObject.exportObject(portal, 0);
+            registry.rebind("portal", stub);
+            System.out.print("Portal Bound");
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+		ArrayList<ServerID> clients = new ArrayList<ServerID>();
 		plugin.onEnable();
 	}
 	

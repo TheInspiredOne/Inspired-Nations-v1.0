@@ -40,7 +40,7 @@ public final class PlayerID implements Serializable, Nameable {
 	
 	public String getName() {
 		try {
-			name = InspiredNations.plugin.getServer().getPlayer(ID).getName();
+			name = InspiredNations.portal.getPlayer(this).getName();
 		}
 		catch (Exception ex) {
 		}

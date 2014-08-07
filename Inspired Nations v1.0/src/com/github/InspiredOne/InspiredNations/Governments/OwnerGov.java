@@ -1,6 +1,8 @@
 package com.github.InspiredOne.InspiredNations.Governments;
 
 import java.math.BigDecimal;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
@@ -20,6 +22,7 @@ import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
 import com.github.InspiredOne.InspiredNations.ToolBox.Relation;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNations.ToolBox.Tools.TextColor;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.PlayerClientInter;
 
 public abstract class OwnerGov extends InspiredGov {
 	
@@ -101,11 +104,11 @@ public abstract class OwnerGov extends InspiredGov {
 		this.owners.remove(player);
 		
 		try {
-			Player playerreal = player.getPDI().getPlayer();
+			PlayerClientInter playerreal = player.getPDI().getPlayer();
 			if(playerreal.isConversing()) {
 				player.getPDI().kill = true;
 			}
-		} catch (PlayerOfflineException e) {
+		} catch (PlayerOfflineException | RemoteException | NotBoundException e) {
 			
 		}
 		if(InspiredNations.playerdata.get(player).getAccounts() == (this.getAccounts())) {

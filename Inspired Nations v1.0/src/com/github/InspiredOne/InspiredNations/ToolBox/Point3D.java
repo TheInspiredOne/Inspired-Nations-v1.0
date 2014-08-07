@@ -1,6 +1,8 @@
 package com.github.InspiredOne.InspiredNations.ToolBox;
 
 import java.io.Serializable;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -8,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import com.github.InspiredOne.InspiredNations.InspiredNations;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.LocationClientInter;
 
 public class Point3D implements Serializable, Cloneable {
 
@@ -20,11 +23,11 @@ public class Point3D implements Serializable, Cloneable {
 	public int z;
 	public WorldID world;
 	
-	public Point3D(Location location) {
+	public Point3D(Location location, ServerID server) {
 		this.x = location.getBlockX();
 		this.y = location.getBlockY();
 		this.z = location.getBlockZ();
-		this.world = new WorldID(location.getWorld());
+		this.world = new WorldID(location.getWorld(), server);
 	}
 	public Point3D(int x, int y, int z, WorldID world) {
 		this.x = x;
@@ -33,8 +36,9 @@ public class Point3D implements Serializable, Cloneable {
 		this.world = world;
 	}
 	
-	public Point3D(int x, int y, int z, World world) {
-		this(x, y, z, new WorldID(world));
+	public Point3D(int x, int y, int z, World world, ServerID server) {
+		this(x, y, z, new WorldID(world, server));
+		
 	}
 	@Override
     public int hashCode() {
@@ -76,8 +80,9 @@ public class Point3D implements Serializable, Cloneable {
     	return "("+this.x+", "+this.y + ", "+this.z+", "+ this.world.toString()+ ")";
     }
     
-    public Location getLocation() {
+    public LocationClientInter getLocation() throws RemoteException, NotBoundException {
+    	return world.getServer().getPortal().getWorld(world).getLocation(this);
     
-    	return new Location(InspiredNations.plugin.getServer().getWorld(this.world.toString()), x, y, z);
+    	//return new Location(InspiredNations.plugin.getServer().getWorld(this.world.toString()), x, y, z);
     }
 }

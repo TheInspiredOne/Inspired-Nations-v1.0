@@ -12,9 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.RMI.Config.ConfigInter;
 import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
-import com.github.InspiredOne.InspiredNationsClient.ConfigPorts.Implem.Config;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.ClientPortalInter;
 
 public class StartStop {
 
@@ -27,7 +26,7 @@ public class StartStop {
 	
 	public void Start() {
 		// Start This RMI server
-        try {
+/*        try {
             Registry registry = null;
             try {
                 registry = LocateRegistry.createRegistry(1099);
@@ -43,6 +42,25 @@ public class StartStop {
             
         } catch (Exception e) {
         	plugin.getLogger().info("Config Exception");
+            e.printStackTrace();
+        }*/
+		
+		try {
+            Registry registry = null;
+            try {
+                registry = LocateRegistry.createRegistry(1099);
+            } catch (RemoteException e) {
+                registry = LocateRegistry.getRegistry(1099);
+                e.printStackTrace();
+            }
+            
+            ClientPortalInter portal = InspiredNationsClient.client;
+            ClientPortalInter stub = (ClientPortalInter) UnicastRemoteObject.exportObject(portal, 0);
+            registry.rebind("portal", stub);
+            plugin.getLogger().info("Portal Bound");
+            
+        } catch (Exception e) {
+        	plugin.getLogger().info("Portal Exception");
             e.printStackTrace();
         }
 		

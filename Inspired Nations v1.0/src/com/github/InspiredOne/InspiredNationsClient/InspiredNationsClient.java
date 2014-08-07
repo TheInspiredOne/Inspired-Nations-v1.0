@@ -2,6 +2,10 @@
 package com.github.InspiredOne.InspiredNationsClient;
 
 import java.math.BigDecimal;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +46,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.InspiredOne.InspiredNations.Debug;
 import com.github.InspiredOne.InspiredNationsClient.StartStop;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.ClientPortalInter;
+import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.implem.ClientPortal;
 import com.github.InspiredOne.InspiredNations.PlayerData;
 import com.github.InspiredOne.InspiredNations.Economy.Currency;
 import com.github.InspiredOne.InspiredNations.Economy.MarketPlace;
@@ -56,6 +62,7 @@ import com.github.InspiredOne.InspiredNations.Governments.GovFactory;
 import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNations.Governments.Implem.ChestShop;
 import com.github.InspiredOne.InspiredNations.Regions.Implem.ShopRegion;
+import com.github.InspiredOne.InspiredNations.RemoteInterfaces.ServerPortalInter;
 import com.github.InspiredOne.InspiredNations.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNations.ToolBox.MultiGovMap;
 import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
@@ -64,6 +71,8 @@ import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuAlert;
 
 public class InspiredNationsClient extends JavaPlugin {
 
+	public static ClientPortal client = new ClientPortal();
+	public static ServerPortalInter server;
 	public static InspiredNationsClient plugin = (InspiredNationsClient) Bukkit.getPluginManager().getPlugin("InspiredNations");
 	public Logger logger = Logger.getLogger("Minecraft"); // Variable to communicate with console
 	private StartStop SS = new StartStop(this); // Deals with start-up and shut-down
@@ -80,6 +89,19 @@ public class InspiredNationsClient extends JavaPlugin {
 	public void onEnable() {
 
 		InspiredNationsClient.plugin = this;
+        String name = "portal";
+        Registry registry;
+		try {
+			registry = LocateRegistry.getRegistry("localhost", 0);
+	        InspiredNationsClient.server = (ServerPortalInter) registry.lookup(name);
+		} catch (RemoteException | NotBoundException e) {
+			System.out.print("Could not connect to InspiredNations Server. Disabling plugin.");
+			Bukkit.getPluginManager().disablePlugin(this);
+			e.printStackTrace();
+		}
+
+        
+        
 		taxTimer = new TaxTimer();
 		PluginManager pm = this.getServer().getPluginManager();
 		SS.Start();
@@ -344,13 +366,8 @@ public class InspiredNationsClient extends JavaPlugin {
 			
 			PlayerData PDI = InspiredNationsClient.playerdata.get(new PlayerID((Player) sender));
 			if (CommandLable.equalsIgnoreCase("hud")) {
-				// Handles Commands
-				try {
-					if(PDI.getPlayer().isConversing()) {
-						return false;
-					}
-				} catch (PlayerOfflineException e) {
-					e.printStackTrace();
+				if(((Player) sender).isConversing()) {
+					return false;
 				}
 				ConversationBuilder convo = new ConversationBuilder(PDI);
 				Conversation conversation = convo.HudConvo();
@@ -358,12 +375,8 @@ public class InspiredNationsClient extends JavaPlugin {
 				conversation.begin();
 			}
 			else if(CommandLable.equalsIgnoreCase("map")) {
-				try {
-					if(PDI.getPlayer().isConversing()) {
-						return false;
-					}
-				} catch (PlayerOfflineException e) {
-					e.printStackTrace();
+				if(((Player) sender).isConversing()) {
+					return false;
 				}
 				ConversationBuilder convo = new ConversationBuilder(PDI);
 				Conversation conversation = convo.MapConvo();
