@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="/home/jedidiah/.minecraft/InspiredNationsTest/InspiredNations.jar"/>
-    <options buildIfNeeded="true" compress="true" descriptionLocation="/Inspired Nations Remote v1.0/DescriptionFile.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <jar path="/home/jedidiah/.minecraft/InspiredNationsTest/plugins/InspiredNations.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/Inspired Nations v1.0/DescriptionFile.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
-    <manifest generateManifest="true" mainClassHandleIdentifier="=Inspired Nations Remote v1.0/src&lt;com.github.InspiredOne.InspiredNationsServer{InspiredNationsServer.java[InspiredNationsServer" manifestLocation="/Inspired Nations Remote v1.0/manifest.mf" manifestVersion="1.0" reuseManifest="false" saveManifest="true" usesManifest="true">
+    <manifest generateManifest="true" mainClassHandleIdentifier="=Inspired Nations v1.0/src&lt;com.github.InspiredOne.InspiredNationsServer{InspiredNationsServer.java[InspiredNationsServer" manifestLocation="/Inspired Nations v1.0/manifest.mf" manifestVersion="1.0" reuseManifest="false" saveManifest="true" usesManifest="true">
         <sealing sealJar="false">
             <packagesToSeal/>
             <packagesToUnSeal/>
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <javaElement handleIdentifier="=Inspired Nations Remote v1.0/src"/>
-        <file path="/Inspired Nations Remote v1.0/.project"/>
-        <file path="/Inspired Nations Remote v1.0/plugin.yml"/>
-        <file path="/Inspired Nations Remote v1.0/.classpath"/>
+        <javaElement handleIdentifier="=Inspired Nations v1.0/src"/>
+        <file path="/Inspired Nations v1.0/.project"/>
+        <file path="/Inspired Nations v1.0/DescriptionFile.jardesc"/>
+        <file path="/Inspired Nations v1.0/manifest.mf"/>
+        <file path="/Inspired Nations v1.0/.gitignore"/>
+        <file path="/Inspired Nations v1.0/.classpath"/>
+        <file path="/Inspired Nations v1.0/plugin.yml"/>
     </selectedElements>
 </jardesc>
