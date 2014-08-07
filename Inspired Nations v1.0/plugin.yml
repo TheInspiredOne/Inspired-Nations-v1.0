@@ -1,5 +1,5 @@
 name: InspiredNations
-main: com.github.InspiredOne.InspiredNationsClient.InspiredNations
+main: com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient
 version: 1.0
 commands:
   hud:
