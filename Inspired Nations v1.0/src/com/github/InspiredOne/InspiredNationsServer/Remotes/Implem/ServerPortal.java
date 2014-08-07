@@ -14,4 +14,15 @@ public class ServerPortal implements ServerPortalInter {
 		System.out.print("Client registered on Server");
 	}
 
+	@Override
+	public void unregsiterClient(ClientID id) throws RemoteException {
+		boolean contains = InspiredNationsServer.clients.remove(id);
+		if(contains) {
+			System.out.print("Client Removed Successfully");
+		}
+		else {
+			System.out.print("Client does not exist");
+		}
+	}
+
 }
