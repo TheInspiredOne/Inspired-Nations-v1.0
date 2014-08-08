@@ -80,7 +80,7 @@ public abstract class ActionMenu extends Menu {
 	// These methods are overridden by all the super classes. I wish there were a better
 	// way I could do this. Until then, ctrl-c and ctrl-v.
 	@Override
-	public void menuPersistent() {
+	public void menuPersistent() throws RemoteException {
 		this.setError(MenuError.NO_ERROR());
 		for(ActionManager<?> manager:this.getActionManager()) {
 			manager.stopListening();

@@ -62,4 +62,10 @@ public class ClientPlayerData implements ClientPlayerDataInter {
 	public PlayerID getPlayerID() throws RemoteException {
 		return this.id;
 	}
+
+	@Override
+	public void sendRawMessage(String msg) throws PlayerOfflineException,
+			RemoteException {
+		InspiredNationsClient.plugin.getServer().getPlayer(id.getID()).sendRawMessage(msg);
+	}
 }

@@ -8,6 +8,7 @@ import org.bukkit.conversations.Prompt;
 
 import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.MainHud;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
@@ -46,8 +47,9 @@ public abstract class Menu extends MessagePrompt {
 	}
 	/**
 	 * Loads menu persistent variabls suce as Acton Managers and state data.
+	 * @throws RemoteException 
 	 */
-	private final void loadMenuPersistent() {
+	private final void loadMenuPersistent() throws RemoteException {
 		if(!loaded) {
 			//this.PDI.getMsg().clearMenuVisible();
 			this.menuPersistent();
@@ -74,8 +76,9 @@ public abstract class Menu extends MessagePrompt {
 	public abstract void unloadPersist() throws RemoteException;
 	/**
 	 * Used to set up menuPersistent variables such as ActionManagers
+	 * @throws RemoteException 
 	 */
-	public abstract void menuPersistent();
+	public abstract void menuPersistent() throws RemoteException;
 	/**
 	 * Used to set up nonPersistent variables such as options
 	 * @throws RemoteException 
@@ -155,58 +158,61 @@ public abstract class Menu extends MessagePrompt {
 	
 	@Override
 	public final Prompt acceptInput(ConversationContext arg0, String arg) {
-		if(PDI.getKill()) {
-			PDI.setKill(false);
-			return Menu.END_OF_CONVERSATION;
-		}
-		if(arg == null) {
-			Menu output = this.getPassTo();
-			this.unloadNonPersist();
-			return output;
-		}
-		String[] args = arg.split(" ");
-		if (args[0].equalsIgnoreCase("say"))  {
-			if(args.length > 1) {
-				PDI.getMsg().sendChatMessage(arg.substring(4));
+		try {
+			if(PDI.getKill()) {
+				PDI.setKill(false);
+				return Menu.END_OF_CONVERSATION;
 			}
-			this.unloadNonPersist();
-			return this.getSelfPersist();
-		}
-		this.PDI.getMsg().clearMenuVisible();
-		if (arg.startsWith("/")) {
-			arg = arg.substring(1);
-		}
-		if (arg.equalsIgnoreCase("back")) {
-			return this.checkBack();
-		}
-		if (arg.equalsIgnoreCase("help")) {
-			return this.getHelp();
-		}
-		if (arg.equalsIgnoreCase("hud")) {
-			this.unloadNonPersist();
-			this.unloadMenuPersistent();
-			return new MainHud(PDI);
-		}
-		if (arg.equalsIgnoreCase("chat")) {
-			this.unloadNonPersist();
-			this.unloadMenuPersistent();
-			return new Chat(PDI, this.getSelfPersist());
-		}
-		if (arg.equalsIgnoreCase("exit")) {
-			try {
+			if(arg == null) {
+				Menu output = this.getPassTo();
+				this.unloadNonPersist();
+				return output;
+			}
+			String[] args = arg.split(" ");
+			if (args[0].equalsIgnoreCase("say"))  {
+				if(args.length > 1) {
+					PDI.getMsg().sendChatMessage(arg.substring(4));
+				}
+				this.unloadNonPersist();
+				return this.getSelfPersist();
+			}
+			this.PDI.getMsg().clearMenuVisible();
+			if (arg.startsWith("/")) {
+				arg = arg.substring(1);
+			}
+			if (arg.equalsIgnoreCase("back")) {
+				return this.checkBack();
+			}
+			if (arg.equalsIgnoreCase("help")) {
+				return this.getHelp();
+			}
+			if (arg.equalsIgnoreCase("hud")) {
+				this.unloadNonPersist();
+				this.unloadMenuPersistent();
+				return new MainHud(PDI);
+			}
+			if (arg.equalsIgnoreCase("chat")) {
+				this.unloadNonPersist();
+				this.unloadMenuPersistent();
+				return new Chat(PDI, this.getSelfPersist());
+			}
+			if (arg.equalsIgnoreCase("exit")) {
 				this.PDI.getMsg().setMissedSize(0);
 				for(Alert alert:PDI.getMsg().getMessages()) {
-					this.PDI.getPlayer().sendRawMessage(alert.getDisplayName(PDI.getPlayerID()));
+					this.PDI.sendRawMessage(alert.getDisplayName(PDI.getPlayerID()));
 				}
-				this.PDI.getPlayer().sendRawMessage(MenuTools.space());
-			} catch (PlayerOfflineException e) {
-				e.printStackTrace();
+				this.PDI.sendRawMessage(MenuTools.space());
+				this.unloadNonPersist();
+				this.unloadMenuPersistent();
+				return Menu.END_OF_CONVERSATION;
 			}
-			this.unloadNonPersist();
-			this.unloadMenuPersistent();
-			return Menu.END_OF_CONVERSATION;
+			return this.checkNext(arg);
 		}
-		return this.checkNext(arg);
+		catch (RemoteException ex) {
+			// Kill the plugin
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	/**
 	 * Looks at previous menu and determines if it should be skipped or not

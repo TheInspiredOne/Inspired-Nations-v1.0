@@ -10,5 +10,6 @@ public interface ClientPlayerDataInter extends Remote {
 	public String getName() throws PlayerOfflineException, RemoteException;
 	public boolean isConversing() throws PlayerOfflineException, RemoteException;
 	public void sendMessage(String msg) throws PlayerOfflineException, RemoteException;
+	public void sendRawMessage(String msg) throws PlayerOfflineException, RemoteException;
 	public PlayerID getPlayerID() throws RemoteException;
 }

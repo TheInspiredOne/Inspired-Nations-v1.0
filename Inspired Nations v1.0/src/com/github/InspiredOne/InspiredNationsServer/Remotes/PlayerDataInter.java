@@ -13,6 +13,7 @@ public interface PlayerDataInter extends Remote, Nameable, Serializable {
 	public MessageManagerInter getMsg() throws RemoteException;
 	public void setKill(boolean kill) throws RemoteException;
 	public boolean getKill() throws RemoteException;
+	public void sendRawMessage(String msg) throws RemoteException;
 	
 	/**
 	 * Used exclusively for the menu header.

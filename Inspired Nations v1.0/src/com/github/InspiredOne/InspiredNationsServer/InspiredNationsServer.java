@@ -13,12 +13,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.Implem.ServerPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
@@ -116,51 +110,4 @@ public class InspiredNationsServer {
 		  timer.scheduleAtFixedRate(task, 5000, delay);
 		  
 	}
-	
-	public class TempCommandListener implements CommandExecutor {
-
-		InspiredNationsClient plugin;
-		
-		public TempCommandListener(InspiredNationsClient instance) {
-			plugin = instance;
-		}
-		
-		@Override
-		public boolean onCommand(CommandSender sender, Command arg1, String CommandLable,
-				String[] arg3) {
-			if(!(sender instanceof Player)) {
-				InspiredNationsClient.logger.info("HUD cannot be called from console.");
-				return false;
-			}
-			
-			ClientPlayerData PDI = InspiredNationsClient.playerdata.get(new PlayerID((Player) sender));
-			if (CommandLable.equalsIgnoreCase("hud")) {
-				if(((Player) sender).isConversing()) {
-					return false;
-				}
-				ConversationBuilder convo = new ConversationBuilder(PDI);
-				Conversation conversation = convo.HudConvo();
-				PDI.setCon(conversation);
-				conversation.begin();
-			}
-			else if(CommandLable.equalsIgnoreCase("map")) {
-				if(((Player) sender).isConversing()) {
-					return false;
-				}
-				ConversationBuilder convo = new ConversationBuilder(PDI);
-				Conversation conversation = convo.MapConvo();
-				PDI.setCon(conversation);
-				conversation.begin();
-			}
-			else if(CommandLable.equalsIgnoreCase("npc")) {
-				for(NPC npc:PDI.npcs) {
-					npc.buyOut();
-				}
-			}
-			else return false;
-			return false;
-		}
-		
-	}
-
 }

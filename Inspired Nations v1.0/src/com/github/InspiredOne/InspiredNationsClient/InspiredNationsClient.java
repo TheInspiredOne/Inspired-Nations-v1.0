@@ -9,6 +9,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -18,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPortalInter;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.Implem.ClientPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
@@ -110,5 +116,63 @@ public class InspiredNationsClient extends JavaPlugin {
 				InspiredNationsClient.playerdata.put(ID, new ClientPlayerData(ID));
 			}
 		}
+	}
+	
+	public class TempCommandListener implements CommandExecutor {
+
+		InspiredNationsClient plugin;
+		
+		public TempCommandListener(InspiredNationsClient instance) {
+			plugin = instance;
+		}
+		
+		@Override
+		public boolean onCommand(CommandSender sender, Command arg1, String CommandLable,
+				String[] arg3) {
+			if(!(sender instanceof Player)) {
+				InspiredNationsClient.logger.info("HUD cannot be called from console.");
+				return false;
+			}
+			
+			PlayerDataInter PDI = null;
+			try {
+				PDI = InspiredNationsClient.server.getPlayer(new PlayerID((Player) sender));
+			} catch (RemoteException e) {
+				// TODO Kill Plugin
+				e.printStackTrace();
+			}
+			if (CommandLable.equalsIgnoreCase("hud")) {
+				if(((Player) sender).isConversing()) {
+					return false;
+				}
+				ConversationBuilder convo = new ConversationBuilder(PDI);
+				Conversation conversation = null;
+				try {
+					conversation = convo.HudConvo();
+				} catch (RemoteException e) {
+					// TODO Kill Plugin
+					e.printStackTrace();
+				}
+				InspiredNationsClient.playerdata.get(new PlayerID((Player) sender)).setCon(conversation);
+				conversation.begin();
+			}
+/*			else if(CommandLable.equalsIgnoreCase("map")) {
+				if(((Player) sender).isConversing()) {
+					return false;
+				}
+				ConversationBuilder convo = new ConversationBuilder(PDI);
+				Conversation conversation = convo.MapConvo();
+				PDI.setCon(conversation);
+				conversation.begin();
+			}*/
+/*			else if(CommandLable.equalsIgnoreCase("npc")) {
+				for(NPC npc:PDI.npcs) {
+					npc.buyOut();
+				}
+			}*/
+			else return false;
+			return false;
+		}
+		
 	}
 }

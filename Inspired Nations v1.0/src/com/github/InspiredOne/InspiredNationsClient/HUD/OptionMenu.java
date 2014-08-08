@@ -114,14 +114,14 @@ public abstract class OptionMenu extends ActionMenu {
 	// These methods are overridden by all the super classes. I wish there were a better
 	// way I could do this. Until then, ctrl-c and ctrl-v.
 	@Override
-	public void menuPersistent() {
+	public void menuPersistent() throws RemoteException {
 		for(ActionManager<?> manager:this.getActionManager()) {
 			manager.stopListening();
 		}
 
 		this.getActionManager().clear();
-		this.getActionManager().add(new TaxTimerManager<ActionMenu>(this));
-		this.getActionManager().add(new MenuUpdateManager<ActionMenu>(this));
+//		this.getActionManager().add(new TaxTimerManager<ActionMenu>(this));
+//		this.getActionManager().add(new MenuUpdateManager<ActionMenu>(this));
 		this.addActionManagers();
 		
 	}

@@ -43,6 +43,10 @@ public class PlayerData implements PlayerDataInter {
 		return kill;
 	}
 	
+	public void sendRawMessage(String msg) throws RemoteException {
+		this.getPlayer().
+	}
+	
 	public ClientPlayerDataInter getPlayer() throws PlayerOfflineException {
 		ClientPlayerDataInter output = null;
 		

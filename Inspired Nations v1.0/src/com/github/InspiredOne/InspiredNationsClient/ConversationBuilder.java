@@ -11,31 +11,35 @@
 package com.github.InspiredOne.InspiredNationsClient;
 
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.MainHud;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.ContextData;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 
 
 public class ConversationBuilder {
 	
 	// Grabbing the instance of the plugin.
 	InspiredNationsClient plugin;
-	ClientPlayerData PDI;
+	PlayerDataInter PDI;
 	HashMap<Object, Object> initSessionData = new HashMap<Object, Object>();
-	public ConversationBuilder(ClientPlayerData PDI) {
+	public ConversationBuilder(PlayerDataInter PDI) {
 		plugin = InspiredNationsClient.plugin;
 		this.PDI = PDI;
 		this.initSessionData.put(ContextData.Error, MenuError.NO_ERROR());
 		this.initSessionData.put(ContextData.Alert, MenuAlert.NO_ALERT());
 	}
 	
-	public Conversation HudConvo() {
+	public Conversation HudConvo() throws RemoteException {
 		Menu hud = new MainHud(PDI);
 		hud.PDI = this.PDI;
 		ConversationFactory HudConvo = new ConversationFactory(plugin)
@@ -47,7 +51,7 @@ public class ConversationBuilder {
 		return HudConvo.buildConversation((Conversable) plugin.getServer().getPlayer(PDI.getPlayerID().getID()));
 	}
 	
-	public Conversation MapConvo() {
+/*	public Conversation MapConvo() {
 		Menu map = new Map(PDI);
 		map.PDI = PDI;
 		ConversationFactory MapConvo = new ConversationFactory(plugin)
@@ -56,7 +60,7 @@ public class ConversationBuilder {
 		.withLocalEcho(false)
 		.withInitialSessionData(initSessionData);
 		return MapConvo.buildConversation((Conversable) plugin.getServer().getPlayer(PDI.getPlayerID().getID()));
-	}
+	}*/
 	
 	/*public Conversation CountryClaim(Player player) {
 		ConversationFactory CountryClaim = new ConversationFactory(plugin)
