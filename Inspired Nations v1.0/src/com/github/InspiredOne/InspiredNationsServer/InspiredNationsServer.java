@@ -10,14 +10,19 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.github.InspiredOne.InspiredNationsServer.Economy.MarketPlace;
+import com.github.InspiredOne.InspiredNationsServer.Economy.MoneyExchange;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Implem.ItemMarketplace;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.Implem.ServerPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.MultiGovMap;
 
 public class InspiredNationsServer {
 
@@ -26,6 +31,9 @@ public class InspiredNationsServer {
 	public static int port = 1099;
 	
 	public static IndexedMap<PlayerID, PlayerData> playerdata = new IndexedMap<PlayerID, PlayerData>();
+	public static MoneyExchange Exchange = new MoneyExchange();
+	public static MultiGovMap regiondata = new MultiGovMap(); 
+	public static List<MarketPlace<?>> Markets = new ArrayList<MarketPlace<?>>();
 	
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
@@ -46,9 +54,9 @@ public class InspiredNationsServer {
 							File regionfile = new File(System.getProperty("user.dir") + "/InspiredNations", "data.yml");
 					        FileOutputStream regionOut = new FileOutputStream(regionfile);
 					        ObjectOutputStream rout = new ObjectOutputStream(regionOut);
-					        //rout.writeObject(InspiredNations.regiondata);
+					        rout.writeObject(InspiredNationsServer.regiondata);
 					        rout.writeObject(InspiredNationsServer.playerdata);
-					        //rout.writeObject(InspiredNations.Exchange);
+					        rout.writeObject(InspiredNationsServer.Exchange);
 					        //rout.writeObject(InspiredNations.taxTimer);
 					        rout.close();
 					        regionOut.close();
@@ -81,15 +89,18 @@ public class InspiredNationsServer {
 			File regionfile = new File(System.getProperty("user.dir")+ "/InspiredNations", "data.yml");
 	        FileInputStream regionIn = new FileInputStream(regionfile);
 	        ObjectInputStream rin = new ObjectInputStream(regionIn);
-	        //InspiredNations.regiondata = (MultiGovMap) rin.readObject();
+	        InspiredNationsServer.regiondata = (MultiGovMap) rin.readObject();
 	        InspiredNationsServer.playerdata = (IndexedMap<PlayerID, PlayerData>) rin.readObject();
-	        //InspiredNations.Exchange = (MoneyExchange) rin.readObject();
+	        InspiredNationsServer.Exchange = (MoneyExchange) rin.readObject();
 	        //InspiredNations.taxTimer = (TaxTimer) rin.readObject();
 	        rin.close();
 	        regionIn.close();
 		}
 		catch(Exception ex) {
 			
+		}
+		if(InspiredNationsServer.Markets.isEmpty()) {
+			InspiredNationsServer.Markets.add(new ItemMarketplace());
 		}
 		
 		

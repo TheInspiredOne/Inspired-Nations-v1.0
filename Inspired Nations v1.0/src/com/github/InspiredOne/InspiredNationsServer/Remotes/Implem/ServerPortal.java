@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Log;
 import com.github.InspiredOne.InspiredNationsServer.PlayerData;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
@@ -41,7 +42,7 @@ public class ServerPortal implements ServerPortalInter {
 	}
 
 	@Override
-	public PlayerData getPlayer(PlayerID id) throws RemoteException {
+	public PlayerDataInter getPlayer(PlayerID id) throws RemoteException {
 		return InspiredNationsServer.playerdata.get(id);
 	}
 

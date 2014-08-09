@@ -4,17 +4,24 @@ import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
-public interface PlayerDataInter extends Remote, Nameable, Serializable {
+public interface PlayerDataInter extends Remote, Nameable, Notifyable, Serializable {
 	
 	public PlayerID getPlayerID() throws RemoteException;
 	public MessageManagerInter getMsg() throws RemoteException;
 	public void setKill(boolean kill) throws RemoteException;
 	public boolean getKill() throws RemoteException;
-	public void sendRawMessage(String msg) throws RemoteException;
-	
+	public void sendRawMessage(String msg) throws RemoteException, PlayerOfflineException;
+	public CurrencyPortalInter getCurrency() throws RemoteException;
+	public void setCurrency(Currency currency) throws RemoteException;
+	public AccountCollectionPortalInter getAccounts() throws RemoteException;
+	public void setAccounts(AccountCollection accounts)throws RemoteException;
 	/**
 	 * Used exclusively for the menu header.
 	 */

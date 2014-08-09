@@ -1,31 +1,41 @@
 package com.github.InspiredOne.InspiredNationsServer;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
+import com.github.InspiredOne.InspiredNationsServer.Economy.NPC;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Theme;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.MessageManager;
 
-public class PlayerData implements PlayerDataInter {
+public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1358248142526827092L;
 	private PlayerID id;
+	private AccountCollection accounts;
+	private Currency currency;
 	private String name;
 	private Theme theme = new Theme();
 	private MessageManager msg;
 	private boolean kill = false;
+	public List<NPC> npcs = new ArrayList<NPC>();
 	public boolean TimerState = false;
 	public boolean chatState = true;
 	
-	public PlayerData(PlayerID id) {
+	public PlayerData(PlayerID id) throws RemoteException {
 		this.id = id;
 		name = id.getName();
 		msg = new MessageManager(this);
@@ -33,6 +43,20 @@ public class PlayerData implements PlayerDataInter {
 
 	public PlayerID getId() {
 		return id;
+	}
+	@Override
+	public void sendNotification(Alert msg) throws RemoteException {
+		this.getMsg().receiveAlert(msg, true);
+	}
+	public AccountCollection getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(AccountCollection accounts) {
+		if(this.accounts.isLinked()) {
+			// TODO I have to figure out how to deal with linked account collections.
+		}
+		this.accounts = accounts;
 	}
 	
 	public void setKill(boolean kill) throws RemoteException {
@@ -43,17 +67,23 @@ public class PlayerData implements PlayerDataInter {
 		return kill;
 	}
 	
-	public void sendRawMessage(String msg) throws RemoteException {
-		this.getPlayer().
+	public void sendRawMessage(String msg) throws RemoteException, PlayerOfflineException {
+		this.getPlayer().sendRawMessage(msg);
 	}
 	
 	public ClientPlayerDataInter getPlayer() throws PlayerOfflineException {
 		ClientPlayerDataInter output = null;
 		
+		Debug.info("Isid  getPlayer of PlayerData");
+		Debug.info("client vecotr is :" + InspiredNationsServer.clients.size());
+		
 		for(ClientID client:InspiredNationsServer.clients) {
 			try {
+				Debug.info("Isid  getPlayer of PlayerData 2");
 				output = client.getClientPortal().getPlayer(id);
+				Debug.info("Isid  getPlayer of PlayerData 3");
 			} catch (RemoteException e) {
+				Debug.info("there was a remote exception in PlayerData");
 			}
 		}
 		if(output == null) {
@@ -92,6 +122,14 @@ public class PlayerData implements PlayerDataInter {
 
 	public void setTheme(Theme theme) {
 		this.theme = theme;
+	}
+	
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 	@Override

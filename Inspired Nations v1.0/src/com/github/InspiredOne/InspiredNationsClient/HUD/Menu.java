@@ -198,10 +198,17 @@ public abstract class Menu extends MessagePrompt {
 			}
 			if (arg.equalsIgnoreCase("exit")) {
 				this.PDI.getMsg().setMissedSize(0);
-				for(Alert alert:PDI.getMsg().getMessages()) {
-					this.PDI.sendRawMessage(alert.getDisplayName(PDI.getPlayerID()));
+				
+				try {
+					for(Alert alert:PDI.getMsg().getMessages()) {
+						this.PDI.sendRawMessage(alert.getDisplayName(PDI.getPlayerID()));
+					}
+					
+					this.PDI.sendRawMessage(MenuTools.space());
+				} catch (PlayerOfflineException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				this.PDI.sendRawMessage(MenuTools.space());
 				this.unloadNonPersist();
 				this.unloadMenuPersistent();
 				return Menu.END_OF_CONVERSATION;

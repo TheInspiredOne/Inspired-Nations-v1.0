@@ -43,6 +43,7 @@ public class InspiredNationsClient extends JavaPlugin {
     PluginDescriptionFile pdf;
     
     public TempPlayerListener pl = new TempPlayerListener();
+    public TempCommandListener cm = new TempCommandListener();
     public static IndexedMap<PlayerID, ClientPlayerData> playerdata = new IndexedMap<PlayerID, ClientPlayerData>();
 	
 	public void onEnable() {
@@ -83,6 +84,7 @@ public class InspiredNationsClient extends JavaPlugin {
         }
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(pl, this);
+		this.getCommand("hud").setExecutor(cm);
 	}
 	
 	public void onDisable() {
@@ -113,18 +115,16 @@ public class InspiredNationsClient extends JavaPlugin {
 		public void onPlayerJoin(PlayerJoinEvent event) {
 			PlayerID ID = new PlayerID(event.getPlayer());
 			if(!InspiredNationsClient.playerdata.containsKey(ID)) {
-				InspiredNationsClient.playerdata.put(ID, new ClientPlayerData(ID));
+				try {
+					InspiredNationsClient.playerdata.put(ID, new ClientPlayerData(ID));
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	public class TempCommandListener implements CommandExecutor {
-
-		InspiredNationsClient plugin;
-		
-		public TempCommandListener(InspiredNationsClient instance) {
-			plugin = instance;
-		}
 		
 		@Override
 		public boolean onCommand(CommandSender sender, Command arg1, String CommandLable,

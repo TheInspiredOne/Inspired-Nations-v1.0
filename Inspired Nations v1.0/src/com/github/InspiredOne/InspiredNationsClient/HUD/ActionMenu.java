@@ -87,8 +87,8 @@ public abstract class ActionMenu extends Menu {
 		}
 
 		this.getActionManager().clear();
-		this.getActionManager().add(new TaxTimerManager<ActionMenu>(this));
-		this.getActionManager().add(new MenuUpdateManager<ActionMenu>(this));
+//		this.getActionManager().add(new TaxTimerManager<ActionMenu>(this));
+//		this.getActionManager().add(new MenuUpdateManager<ActionMenu>(this));
 		this.addActionManagers();
 		
 	}

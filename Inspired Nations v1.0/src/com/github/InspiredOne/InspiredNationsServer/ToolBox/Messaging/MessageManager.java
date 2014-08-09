@@ -2,6 +2,7 @@ package com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,33 +14,35 @@ import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInte
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Log;
 import com.github.InspiredOne.InspiredNationsServer.PlayerData;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.MessageManagerInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 
-public class MessageManager implements Serializable, MessageManagerInter {
+public class MessageManager extends UnicastRemoteObject implements Serializable, MessageManagerInter {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5200407053459680313L;
 	
-	
+
 	private ArrayList<Alert> messages = new ArrayList<Alert>();
 	private PlayerData PDI;
 	transient BukkitRunnable Timer;
 	private int histLength = 50;
 	private int missedSize = 0;
-	public MessageManager(PlayerData PDI) {
+	public MessageManager(PlayerData PDI) throws RemoteException {
 		this.PDI = PDI;
 	}
 	
 	public ArrayList<Alert> getMessages() {
+		
 		return messages;
 	}
 	
 	public void receiveAlert(Alert alert, boolean refresh) throws RemoteException {
 		boolean incremented = false;
-		for(Alert alertTemp:messages) {
+		for(AlertPortalInter alertTemp:messages) {
 			if(!alertTemp.expired() && alert.getMessage(PDI).equals(alertTemp.getMessage(PDI))) {
 				alertTemp.incrementStack();
 				incremented = true;
@@ -81,8 +84,8 @@ public class MessageManager implements Serializable, MessageManagerInter {
 		try {
 			ClientPlayerDataInter player = PDI.getPlayer();
 			
-			for(Alert alert:messages) {
-				if((alert.menuVisible && !alert.expired()) || !player.isConversing()) {
+			for(AlertPortalInter alert:messages) {
+				if((alert.menuVisible() && !alert.expired()) || !player.isConversing()) {
 					output = output.concat(alert.getDisplayName(PDI.getId()) + "\n");
 				}
 			}
@@ -133,11 +136,11 @@ public class MessageManager implements Serializable, MessageManagerInter {
 		
 	}
 
-	public void clearMenuVisible() {
+	public void clearMenuVisible() throws RemoteException {
 		List<Error> remove = new ArrayList<Error>();
-		for(Alert alert:messages) {
-			if(alert.menuVisible) {
-				alert.expired = true;
+		for(AlertPortalInter alert:messages) {
+			if(alert.menuVisible()) {
+				alert.setExpired(true);
 			}
 			if(alert instanceof Error) {
 				remove.add((Error) alert);

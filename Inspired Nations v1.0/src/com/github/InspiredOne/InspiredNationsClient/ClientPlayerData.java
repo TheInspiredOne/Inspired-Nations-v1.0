@@ -1,6 +1,7 @@
 package com.github.InspiredOne.InspiredNationsClient;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import org.bukkit.conversations.Conversation;
@@ -11,13 +12,17 @@ import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
-public class ClientPlayerData implements ClientPlayerDataInter {
+public class ClientPlayerData extends UnicastRemoteObject implements ClientPlayerDataInter {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -339727338561336697L;
 	private PlayerID id;
 	public ArrayList<ActionManager<?>> actionmanagers;
 	private Conversation con;
 	
-	public ClientPlayerData(PlayerID id) {
+	public ClientPlayerData(PlayerID id) throws RemoteException{
 		this.id = id;
 		try {
 			InspiredNationsClient.server.registerPlayer(id);

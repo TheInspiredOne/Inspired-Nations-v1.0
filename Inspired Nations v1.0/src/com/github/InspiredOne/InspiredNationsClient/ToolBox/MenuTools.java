@@ -6,8 +6,12 @@ import java.rmi.RemoteException;
 import org.bukkit.ChatColor;
 
 import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
+import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.ProtectionLevels;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Relation;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 /**
@@ -28,16 +32,26 @@ public class MenuTools {
 	 * @return	the space required to clear the chat area for a menu
 	 */
 	public static String space() {
-		return Tools.repeat("\n ", Config.hudpremsgspace);
+		return repeat("\n ", 20); //TODO add config stuff here.
+	}
+	
+	// A method to simply repeat a string
+	public static String repeat(String entry, int multiple) {
+		String temp = "";
+		for (int i = 0; i < multiple; i++) {
+			temp = temp.concat(entry);
+		}
+		return temp;
 	}
 	
 	/**
 	 * Builds the divider to be used in the menus
 	 * @param text
 	 * @return
+	 * @throws RemoteException 
 	 */
-	public static String addDivider(String text, PlayerDataInter receiver) {
-		return text.concat(receiver.DIVIDER() + Tools.repeat("-", 53) + "\n" + ChatColor.RESET);
+	public static String addDivider(String text, PlayerDataInter receiver) throws RemoteException {
+		return text.concat(receiver.DIVIDER() + repeat("-", 53) + "\n" + ChatColor.RESET);
 	}
 	/**
 	 * Adds a line that shows the value of the player's wallet.
@@ -45,8 +59,8 @@ public class MenuTools {
 	 * @return
 	 */
 	public static String oneLineWallet(String text, PlayerDataInter PDI, Payable account) {
-		String output = text.concat(PDI.LABEL() + "Holdings: " + TextColor.VALUE(PDI) +
-				Tools.cut(account.getTotalMoney(PDI.getCurrency(), InspiredNations.Exchange.mcdown)) + TextColor.UNIT(PDI) +" " + PDI.getCurrency() + "\n");
+		String output = text.concat(PDI.LABEL() + "Holdings: " + PDI.VALUE() +
+				Tools.cut(account.getTotalMoney(PDI.getCurrency(), InspiredNationsServer.Exchange.mcdown)) + PDI.UNIT() +" " + PDI.getCurrency() + "\n");
 		return output;
 	}
 	/**
@@ -657,7 +671,7 @@ public class MenuTools {
 			return GovName;
 		}
 		public static final String makeMessage(Object msg, PlayerDataInter PDI) {
-			return "\n" + TextColor.ERROR(PDI) + msg.toString();
+			return "\n" + PDI.ERROR() + msg.toString();
 		}
 	}
 }
