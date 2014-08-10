@@ -3,11 +3,14 @@ package com.github.InspiredOne.InspiredNationsServer.Remotes;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
@@ -97,5 +100,15 @@ public interface PlayerDataInter extends Remote, Nameable, Notifyable, Serializa
 	/**
 	 * Used for Ally Nations and players
 	 */
-	public String ALLY() throws RemoteException;
+	public String ALLY() throws RemoteException; 
+	
+	public ThemeInter getTheme() throws RemoteException;
+	
+	List<OwnerGov> getCitizenship(Class<? extends InspiredGov> govType,
+			List<? extends InspiredGov> govDir) throws RemoteException;
+	List<OwnerGov> getCitizenship() throws RemoteException;
+	List<OwnerGov> getCitizenship(Class<? extends InspiredGov> class1)
+			throws RemoteException;
+	boolean isTimerState() throws RemoteException;
+	void setTimerState(boolean timerState) throws RemoteException;
 }

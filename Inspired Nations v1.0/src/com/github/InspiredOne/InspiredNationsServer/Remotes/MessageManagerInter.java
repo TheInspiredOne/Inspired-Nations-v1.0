@@ -15,5 +15,6 @@ public interface MessageManagerInter extends Remote {
 	public void clearMenuVisible() throws RemoteException;
 	public void receiveError(String msg) throws RemoteException;
 	public void receiveAlert(Alert alert, boolean refresh) throws RemoteException;
+	public String fullPush(PlayerDataInter player) throws RemoteException;
 	
 }

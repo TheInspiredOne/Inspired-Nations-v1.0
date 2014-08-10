@@ -19,6 +19,8 @@ import com.github.InspiredOne.InspiredNationsServer.Economy.Implem.ItemSellable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.CardboardBox;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
@@ -35,7 +37,7 @@ public class NPC implements Serializable, ItemBuyer {
 	HashMap<CardboardBox,Account> buy = new HashMap<CardboardBox, Account>();
 	MathContext mcdown = InspiredNationsServer.Exchange.mcdown;
 	MathContext mcup = InspiredNationsServer.Exchange.mcup;
-	public NPC() {
+	public NPC() throws RemoteException {
 		try {
 			this.accounts.addMoney(new BigDecimal(100), Currency.DEFAULT);
 		} catch (NegativeMoneyTransferException e) {
@@ -68,19 +70,19 @@ public class NPC implements Serializable, ItemBuyer {
 	}
 
 	@Override
-	public void sendNotification(Alert msg) {
+	public void sendNotification(AlertPortalInter msg) {
 		
 	}
 
 	@Override
-	public void transferMoney(BigDecimal amount, Currency monType,
+	public void transferMoney(BigDecimal amount, CurrencyPortalInter monType,
 			Payable target) throws BalanceOutOfBoundsException,
 			NegativeMoneyTransferException, RemoteException {
 		if(amount.compareTo(BigDecimal.ZERO) < 0) {
 			throw new NegativeMoneyTransferException();
 		}
 		if(amount.compareTo(this.getTotalMoney(monType, mcup)) <= 0) {
-			if(amount.compareTo(this.getTotalUnallocatedMoney(monType)) > 0) {
+			if(amount.compareTo(this.getTotalUnallocatedMoney(monType.getSelf())) > 0) {
 				amount = amount.subtract(accounts.getTotalMoney(monType, mcdown));
 				accounts.transferMoney(accounts.getTotalMoney(monType, mcup), monType, target);
 			}
@@ -108,13 +110,13 @@ public class NPC implements Serializable, ItemBuyer {
 	}
 
 	@Override
-	public void addMoney(BigDecimal amount, Currency monType)
-			throws NegativeMoneyTransferException {
+	public void addMoney(BigDecimal amount, CurrencyPortalInter monType)
+			throws NegativeMoneyTransferException, RemoteException {
 		this.accounts.addMoney(amount, monType);
 	}
 
 	@Override
-	public BigDecimal getTotalMoney(Currency valueType, MathContext round) {
+	public BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) {
 		BigDecimal output = accounts.getTotalMoney(valueType, round);
 		
 		for(Account account:buy.values()) {
@@ -169,8 +171,9 @@ public class NPC implements Serializable, ItemBuyer {
 	/**
 	 * A method that runs through the buy hashmap and purchases all the items
 	 * the npc can afford.
+	 * @throws RemoteException 
 	 */
-	public void buyOut() {
+	public void buyOut() throws RemoteException {
 		NodeRef noderef = new NodeRef();
 		noderef.allocateMoney(this);
 		Debug.info("Cardboardbox size: " + buy.size());

@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import com.github.InspiredOne.InspiredNationsServer.Config;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
 
 
 public class MoneyExchange implements Serializable{
@@ -43,7 +45,7 @@ public class MoneyExchange implements Serializable{
 	 * @param valueType	the type of currency you're using to get mon
 	 * @return
 	 */
-	public final BigDecimal getTransferValue(BigDecimal mon, Currency monType, Currency valueType, MathContext round) {
+	public final BigDecimal getTransferValue(BigDecimal mon, CurrencyPortalInter monType, Currency valueType, MathContext round) {
 		BigDecimal output = BigDecimal.ZERO;
 		BigDecimal B = Exchange.get(valueType);
 		BigDecimal A = Exchange.get(monType);
@@ -84,27 +86,27 @@ public class MoneyExchange implements Serializable{
 	/**
 	 * Gets the total amount of valueType you would recieve if you exchanged mon amount of monType
 	 * @param mon
-	 * @param monType
+	 * @param getType
 	 * @param valueType
 	 * @return
 	 */
-	public final BigDecimal getExchangeValue(BigDecimal mon, Currency monType, Currency valueType) {
+	public final BigDecimal getExchangeValue(BigDecimal mon, CurrencyPortalInter getType, CurrencyPortalInter valueType) {
 		//TODO I'm still not sure about having mcup here. Maybe it should be mcdown.
-		BigDecimal output = this.getExchangeValue(mon, monType, valueType, mcup);
+		BigDecimal output = this.getExchangeValue(mon, getType, valueType, mcup);
 		return output;
 	}
 	
-	public final BigDecimal getExchangeValue(BigDecimal mon, Currency monType, Currency valueType, MathContext round) {
+	public final BigDecimal getExchangeValue(BigDecimal mon, CurrencyPortalInter monType, CurrencyPortalInter getType, MathContext round) {
 		
 		BigDecimal output;
 		//TODO put these lines back into the else statement.
-		BigDecimal valueAmount = Exchange.get(valueType);
+		BigDecimal valueAmount = Exchange.get(getType);
 		BigDecimal monAmount = Exchange.get(monType);
 		//TODO end of the lines I need to put back in the else statement.
 		
 		//Remove if(monType.equals(valueType) when you figure it out
 		
-		if(monType.equals(valueType)) {
+		if(monType.equals(getType)) {
 			output = mon;
 		}
 		else {
@@ -115,11 +117,11 @@ public class MoneyExchange implements Serializable{
 		return output;
 	}
 	
-	public final BigDecimal exchange(BigDecimal mon, Currency monType, Currency valueType) {
+	public final BigDecimal exchange(BigDecimal mon, CurrencyPortalInter monType, CurrencyPortalInter valueType) throws RemoteException {
 		BigDecimal outputup = this.getExchangeValue(mon, monType, valueType, mcup);
 		BigDecimal outputdown = this.getExchangeValue(mon, monType, valueType, mcdown); //added outputdown
-		Exchange.put(monType, Exchange.get(monType).add(mon));
-		Exchange.put(valueType, Exchange.get(valueType).subtract(outputdown));
+		Exchange.put(monType.getSelf(), Exchange.get(monType).add(mon));
+		Exchange.put(valueType.getSelf(), Exchange.get(valueType).subtract(outputdown));
 		
 		return outputup;
 	}

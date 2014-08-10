@@ -1,6 +1,7 @@
 package com.github.InspiredOne.InspiredNationsServer.Economy.Nodes;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -55,7 +56,7 @@ public class PerfectCompNode extends Node {
 	}
 
 	@Override
-	public void buy(BigDecimal amount, Currency curren, NPC npc) {
+	public void buy(BigDecimal amount, Currency curren, NPC npc) throws RemoteException {
 		
 		double divisor = 0;
 		for(int i = 0; i < elems.length; i++){

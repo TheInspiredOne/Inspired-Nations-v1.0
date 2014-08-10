@@ -9,7 +9,9 @@ import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
@@ -31,21 +33,35 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 		this.curren = curren;
 		this.amount = BigDecimal.ZERO;
 	}
-	public CurrencyAccount(Currency curren, BigDecimal amount) {
-		this.curren = curren;
+	public CurrencyAccount(Currency curren2, BigDecimal amount) throws RemoteException {
+		this.curren = curren2;
+		this.amount = amount;
+	}
+	public CurrencyAccount(CurrencyPortalInter curren2, BigDecimal amount) throws RemoteException {
+		this.curren = curren2.getSelf();
 		this.amount = amount;
 	}
 	
+	public CurrencyAccount getSelf() {
+		return this;
+	}
+	
 	public CurrencyAccount clone() {
-		CurrencyAccount output = new CurrencyAccount(this.curren, this.amount);
+		CurrencyAccount output = null;
+		try {
+			output = new CurrencyAccount(this.curren, this.amount);
+		} catch (RemoteException e) {
+			//TODO KILL the plugin
+			e.printStackTrace();
+		}
 		return output;
 	}
 	
 	public Currency getCurrency() {
 		return curren;
 	}
-	public void setCurrency(Currency curren) { 
-		this.curren = curren;
+	public void setCurrency(CurrencyPortalInter curren) throws RemoteException { 
+		this.curren = curren.getSelf();
 	}
 	
 	@Override
@@ -68,7 +84,7 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public void transferMoney(BigDecimal amountTake, Currency monType,
+	public void transferMoney(BigDecimal amountTake, CurrencyPortalInter monType,
 			Payable target) throws BalanceOutOfBoundsException,
 			NegativeMoneyTransferException, RemoteException {
 		
@@ -87,8 +103,8 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public void addMoney(BigDecimal amountGive, Currency monType)
-			throws NegativeMoneyTransferException {
+	public void addMoney(BigDecimal amountGive, CurrencyPortalInter monType)
+			throws NegativeMoneyTransferException, RemoteException {
 		if(amountGive.compareTo(BigDecimal.ZERO) < 0 ) {
 			throw new NegativeMoneyTransferException();
 		}
@@ -98,12 +114,12 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public BigDecimal getTotalMoney(Currency valueType, MathContext round) {
-		return InspiredNationsServer.Exchange.getExchangeValue(amount, curren, valueType, InspiredNationsServer.Exchange.mcdown);
+	public BigDecimal getTotalMoney(CurrencyPortalInter getType, MathContext round) {
+		return InspiredNationsServer.Exchange.getExchangeValue(amount, curren, getType, InspiredNationsServer.Exchange.mcdown);
 	}
 	
 	@Override
-	public void sendNotification(Alert msg) throws RemoteException {
+	public void sendNotification(AlertPortalInter msg) throws RemoteException {
 		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
 			for(Account account:player.getAccounts()) {
 				if(account.getMoney().contains(this)) {
@@ -113,4 +129,5 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 			}
 		}
 	}
+
 }

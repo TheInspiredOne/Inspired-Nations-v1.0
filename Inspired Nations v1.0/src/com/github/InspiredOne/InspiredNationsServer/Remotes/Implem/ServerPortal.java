@@ -9,6 +9,7 @@ import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 
 public class ServerPortal implements ServerPortalInter {
 
@@ -44,6 +45,11 @@ public class ServerPortal implements ServerPortalInter {
 	@Override
 	public PlayerDataInter getPlayer(PlayerID id) throws RemoteException {
 		return InspiredNationsServer.playerdata.get(id);
+	}
+	
+	@Override
+	public IndexedMap<PlayerID, PlayerData> getPlayerData() throws RemoteException{
+		return InspiredNationsServer.playerdata;
 	}
 
 }

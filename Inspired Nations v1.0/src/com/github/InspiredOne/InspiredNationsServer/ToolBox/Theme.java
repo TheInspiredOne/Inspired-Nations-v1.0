@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import org.bukkit.ChatColor;
 
-public class Theme implements Serializable{
+import com.github.InspiredOne.InspiredNationsServer.Remotes.ThemeInter;
+
+public class Theme implements ThemeInter, Serializable{
 
 	/**
 	 * 

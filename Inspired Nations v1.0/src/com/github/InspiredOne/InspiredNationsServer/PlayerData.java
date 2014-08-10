@@ -11,11 +11,13 @@ import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Economy.NPC;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Theme;
-import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.MessageManager;
 
 public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
@@ -32,7 +34,7 @@ public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 	private MessageManager msg;
 	private boolean kill = false;
 	public List<NPC> npcs = new ArrayList<NPC>();
-	public boolean TimerState = false;
+	private boolean TimerState = false;
 	public boolean chatState = true;
 	
 	public PlayerData(PlayerID id) throws RemoteException {
@@ -45,8 +47,8 @@ public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 		return id;
 	}
 	@Override
-	public void sendNotification(Alert msg) throws RemoteException {
-		this.getMsg().receiveAlert(msg, true);
+	public void sendNotification(AlertPortalInter msg) throws RemoteException {
+		this.getMsg().receiveAlert(msg.getSelf(), true);
 	}
 	public AccountCollection getAccounts() {
 		return accounts;
@@ -92,6 +94,47 @@ public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 		else {
 			return output;
 		}
+	}
+	/**
+	 * Gets all governments in which a player is a citizen. Uses the HashSet input to check.
+	 * @param class1	type of government we're looking for
+	 * @return	a list off all the governments in which the player is a citizen
+	 * @param class1
+	 * @return
+	 * @throws RemoteException 
+	 */
+	@Override
+	public List<OwnerGov> getCitizenship(Class<? extends InspiredGov> class1) throws RemoteException {
+		return getCitizenship(class1, InspiredNationsServer.regiondata.get(class1));
+	}
+	
+	@Override
+	public List<OwnerGov> getCitizenship() throws RemoteException {
+		ArrayList<OwnerGov> output = new ArrayList<OwnerGov>();
+		for(InspiredGov gov:InspiredNationsServer.regiondata) {
+			if(gov.isSubject(this.getPlayerID())) {
+				output.add((OwnerGov) gov);
+			}
+		}
+		return output;
+	}
+	/**
+	 * Gets all governments in which a player is a citizen. Uses the HashSet input to check.
+	 * @param govType	type of government we're looking for
+	 * @param govDir	all the governments to check
+	 * @return	a list off all the governments in which the player is a citizen
+	 * @throws RemoteException 
+	 */
+	@Override
+	public List<OwnerGov> getCitizenship(Class<? extends InspiredGov> govType, List<? extends InspiredGov> govDir) throws RemoteException {
+		List<OwnerGov> output = new ArrayList<OwnerGov>();
+
+		for(InspiredGov gov:govDir) {
+			if(gov.isSubject(this.getPlayerID()) && gov.getClass().equals(govType)) {
+				output.add((OwnerGov) gov);
+			}
+		}
+		return output;
 	}
 
 	@Override
@@ -234,5 +277,15 @@ public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 
 	public MessageManager getMsg() {
 		return msg;
+	}
+
+	@Override
+	public boolean isTimerState() {
+		return TimerState;
+	}
+
+	@Override
+	public void setTimerState(boolean timerState) {
+		TimerState = timerState;
 	}
 }

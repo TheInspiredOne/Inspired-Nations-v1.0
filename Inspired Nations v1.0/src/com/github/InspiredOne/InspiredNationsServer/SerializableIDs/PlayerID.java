@@ -1,12 +1,15 @@
 package com.github.InspiredOne.InspiredNationsServer.SerializableIDs;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.UUID;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 
 /**
  * My own implementation to make changes in the player identification simple to deal
@@ -16,7 +19,7 @@ import org.bukkit.entity.Player;
  * @author Jedidiah Phillips
  *
  */
-public final class PlayerID implements Serializable {
+public final class PlayerID implements Serializable, Nameable {
 
 	private static final long serialVersionUID = 4523105693338266817L;
 	private final UUID ID;
@@ -63,5 +66,9 @@ public final class PlayerID implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	@Override
+	public String getDisplayName(PlayerID viewer) throws RemoteException {
+		return this.getName();
 	}
 }

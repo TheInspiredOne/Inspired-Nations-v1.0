@@ -160,4 +160,13 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 	public void setMissedSize(int size) throws RemoteException {
 		this.missedSize = size;
 	}
+
+	@Override
+	public String fullPush(PlayerDataInter player) throws RemoteException {
+		String output = "";
+		for(AlertPortalInter alert:PDI.getMsg().getMessages()) {
+			output = output.concat(alert.getDisplayName(PDI.getPlayerID())+ "\n");
+		}
+		return output;
+	}
 }

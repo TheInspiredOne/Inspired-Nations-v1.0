@@ -1,7 +1,6 @@
 package com.github.InspiredOne.InspiredNationsServer.Economy;
 
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -32,8 +31,11 @@ public final class Currency implements CurrencyPortalInter{
 
 		
 	}
+	public Currency getSelf() {
+		return this;
+	}
 	
-	public BigDecimal getExchangeRate(Currency output) {
+	public BigDecimal getExchangeRate(CurrencyPortalInter output) {
 		return InspiredNationsServer.Exchange.getExchangeValue(BigDecimal.ONE, this, output);
 	}
 

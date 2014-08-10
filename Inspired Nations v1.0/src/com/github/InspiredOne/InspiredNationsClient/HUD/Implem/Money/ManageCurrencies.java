@@ -1,21 +1,23 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.AccountCollection;
-import com.github.InspiredOne.InspiredNations.Economy.CurrencyAccount;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.PromptOption;
-import com.github.InspiredOne.InspiredNationsClient.Hud.TabSelectOptionMenu;
+import java.rmi.RemoteException;
 
-public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccount> {
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+
+
+public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccountPortalInter> {
 
 	Menu previous;
-	AccountCollection accounts;
-	Account account;
+	AccountCollectionPortalInter accounts;
+	AccountPortalInter account;
 
-	public ManageCurrencies(PlayerData PDI, Menu previous, Account account, AccountCollection accounts) {
+	public ManageCurrencies(PlayerDataInter PDI, Menu previous, AccountPortalInter account, AccountCollectionPortalInter accounts) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		this.account = account;
@@ -40,7 +42,7 @@ public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccount> {
 
 	@Override
 	public void addTabOptions() {
-		for(CurrencyAccount curren:account.getMoney()) {
+		for(CurrencyAccountPortalInter curren:account.getMoney()) {
 			this.taboptions.add(curren);
 		}
 		

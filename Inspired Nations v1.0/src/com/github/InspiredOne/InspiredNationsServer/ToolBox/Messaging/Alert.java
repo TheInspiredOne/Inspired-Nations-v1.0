@@ -39,6 +39,7 @@ public abstract class Alert implements AlertPortalInter {
 			return "Age";
 		}
 
+
 		@Override
 		public Comparator<AlertPortalInter> getComparator() {
 
@@ -63,6 +64,11 @@ public abstract class Alert implements AlertPortalInter {
 		calendar = Calendar.getInstance();
 	}
 
+	@Override
+	public Alert getSelf() throws RemoteException{
+		return this;
+	}
+	
 	@Override
 	public Calendar getCalendar() {
 		return this.calendar;

@@ -1,12 +1,14 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
+import com.github.InspiredOne.InspiredNationsServer.Economy.CurrencyAccount;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
 
@@ -36,12 +38,12 @@ public class AddCurrencyToAccountOption extends Option {
 	}
 
 	@Override
-	public Menu response(String input) {
+	public Menu response(String input) throws RemoteException {
 		if(account.containsCurrency(curren)) {
 			menu.setError(MenuError.ACCOUNT_ALREADY_HAS_THAT_CURRENCY(menu.getPlayerData()));
 		}
 		else {
-			this.account.getMoney().add(new CurrencyAccount(curren, BigDecimal.ZERO));	
+			this.account.addCurrencyAccount(new CurrencyAccount(curren, BigDecimal.ZERO));	
 		}
 		return menu;
 	}

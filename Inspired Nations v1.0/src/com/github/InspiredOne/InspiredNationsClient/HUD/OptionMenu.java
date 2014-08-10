@@ -7,7 +7,6 @@ import java.util.List;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 
 public abstract class OptionMenu extends ActionMenu {
@@ -101,15 +100,16 @@ public abstract class OptionMenu extends ActionMenu {
 	/**
 	 * Used to add text before the list of options.
 	 * @return	the text used before the options
+	 * @throws RemoteException 
 	 */
-	public abstract String getPreOptionText();
+	public abstract String getPreOptionText() throws RemoteException;
 
 	@Override
-	public void actionResponse() {
+	public void actionResponse() throws RemoteException {
 		
 	}
 	
-	public abstract void addOptions();
+	public abstract void addOptions() throws RemoteException;
 	
 	// These methods are overridden by all the super classes. I wish there were a better
 	// way I could do this. Until then, ctrl-c and ctrl-v.

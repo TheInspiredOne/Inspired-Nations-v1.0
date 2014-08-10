@@ -2,25 +2,26 @@ package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
 import java.math.BigDecimal;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Exceptions.BalanceOutOfBoundsException;
-import com.github.InspiredOne.InspiredNations.Exceptions.NegativeMoneyTransferException;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuAlert;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNations.ToolBox.Payable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Option;
-import com.github.InspiredOne.InspiredNationsClient.Hud.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
+import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuAlert;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+
 
 public class PayAccountOption extends Option {
 
 	Payable accountsFrom;
 	Payable accountTo;
-	PlayerData PDI;
+	PlayerDataInter PDI;
 	Nameable sender;
 	
-	public PayAccountOption(PlayerData PDI, OptionMenu menu, String label, Payable accountsFrom, Payable accountTo, Nameable sender) {
+	public PayAccountOption(PlayerDataInter PDI, OptionMenu menu, String label, Payable accountsFrom, Payable accountTo, Nameable sender) {
 		super(menu, label);
 		this.accountsFrom = accountsFrom;
 		this.accountTo = accountTo;

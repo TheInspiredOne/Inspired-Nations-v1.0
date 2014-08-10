@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
+import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
+import com.github.InspiredOne.InspiredNationsServer.Governments.GovFactory;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
@@ -19,7 +23,7 @@ public class ManageMoney extends OptionMenu {
 	public String getPreOptionText() {
 		BigDecimal total = BigDecimal.ZERO;
 		//TODO get rid of this line eventually
-		total = Tools.cut(PDI.getAccounts().getTotalMoney(PDI.getCurrency(), InspiredNations.Exchange.mcdown));
+		total = Tools.cut(PDI.getAccounts().getTotalMoney(PDI.getCurrency(), InspiredNationsServer.Exchange.mcdown));
 		String output = MenuTools.oneLineWallet("", PDI, PDI.getAccounts());
 		IndexedMap<Class<? extends InspiredGov>, BigDecimal> taxmap = PDI.getAccounts().getTaxes(PDI.getCurrency());
 		if(!taxmap.isEmpty()) {

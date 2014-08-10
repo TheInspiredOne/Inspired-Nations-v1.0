@@ -2,11 +2,11 @@ package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
 import java.util.ArrayList;
 
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Option;
-import com.github.InspiredOne.InspiredNationsClient.Hud.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
+import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 
 public class ChangeTabOrderOption<T extends Nameable> extends Option {
 

@@ -10,6 +10,7 @@ import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.MainHud;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
@@ -200,13 +201,8 @@ public abstract class Menu extends MessagePrompt {
 				this.PDI.getMsg().setMissedSize(0);
 				
 				try {
-					for(Alert alert:PDI.getMsg().getMessages()) {
-						this.PDI.sendRawMessage(alert.getDisplayName(PDI.getPlayerID()));
-					}
-					
-					this.PDI.sendRawMessage(MenuTools.space());
+					this.PDI.sendRawMessage(PDI.getMsg().fullPush(PDI) + MenuTools.space());
 				} catch (PlayerOfflineException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				this.unloadNonPersist();
@@ -259,9 +255,10 @@ public abstract class Menu extends MessagePrompt {
 	/**
 	 * Returns the prompt to go to when player uses "back"
 	 * @return the <code>Prompt</code> that lead to this menu
+	 * @throws RemoteException 
 	 * 
 	 */
-	public abstract Menu getPreviousMenu();
+	public abstract Menu getPreviousMenu() throws RemoteException;
 	/**
 	 * 
 	 * @param input	the <code>String</code> used to process the next <code>Prompt</code>
@@ -285,8 +282,9 @@ public abstract class Menu extends MessagePrompt {
 	/**
 	 * 
 	 * @return	the <code>String</code> to be used for the non-persistent header of the menu.
+	 * @throws RemoteException 
 	 */
-	public abstract String getHeader();
+	public abstract String getHeader() throws RemoteException;
 	/**
 	 * 
 	 * @return	the <code>String</code> to be used for the non-persistent filler of the menu

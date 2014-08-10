@@ -12,8 +12,9 @@ import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
 public interface CurrencyPortalInter extends Remote, Serializable, Nameable, Comparable<Currency> {
 
-	public BigDecimal getExchangeRate(Currency output) throws RemoteException;
+	public BigDecimal getExchangeRate(CurrencyPortalInter output) throws RemoteException;
 	public String getName() throws RemoteException;
 	public void setName(String name) throws NameAlreadyTakenException, RemoteException;
     public String getDisplayName(PlayerID viewer) throws RemoteException;
+    public Currency getSelf() throws RemoteException;
 }

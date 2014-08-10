@@ -1,19 +1,21 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.Debug;
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.AccountCollection;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.OptionMenu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.PromptOption;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+
 
 public class ManageAccount extends OptionMenu {
 
 	private Menu previous;
-	private Account account;
-	private AccountCollection accounts;
-	public ManageAccount(PlayerData PDI, Menu previous, Account account, AccountCollection accounts) {
+	private AccountPortalInter account;
+	private AccountCollectionPortalInter accounts;
+	public ManageAccount(PlayerDataInter PDI, Menu previous, AccountPortalInter account, AccountCollectionPortalInter accounts) throws RemoteException {
 		super(PDI);
 		this.account = account;
 		this.previous = previous;
@@ -26,7 +28,7 @@ public class ManageAccount extends OptionMenu {
 	}
 
 	@Override
-	public String getHeader() {
+	public String getHeader() throws RemoteException {
 		return "Manage " + account.getName();
 	}
 
@@ -47,19 +49,16 @@ public class ManageAccount extends OptionMenu {
 
 	@Override
 	public void addOptions() {
-		Debug.print("Inside Add Options 1");
 		this.options.add(new ChangeAutoExchangeOption(this, "Toggle Auto-Exchange", account));
 		this.options.add(new PromptOption(this, "Pay With " + account.getName(), new PayNav(PDI, new ManageAccount(PDI, previous, account, accounts), account)));
 		this.options.add(new RenameAccountOption(this, account, "Rename " + account.getName() + " <Name>"));
 		this.options.add(new PromptOption(this, "Transfer Money", new PickAccount(PDI, this, accounts, account)));
 		this.options.add(new RemoveAccountOption(new ManageAccounts(PDI, previous, this.accounts), "Remove Account", this.account, this.accounts));
-		Debug.print("Inside Add Options 2");
 		//PassByOptionMenu menu =  new ShareAccountNav(PDI, new ManageAccount(PDI, previous, account, accounts), this.account);
 		//Debug.print("Menu options null? " + (menu.getOptions() == null));
 		//if(menu.getOptions().size() != 0) {
 		//	this.options.add(new PromptOption(this, "Share Account", menu));
 		//}
-		Debug.print("Inside Add Options 3");
 		
 	}
 

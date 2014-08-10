@@ -8,21 +8,23 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
 import com.github.InspiredOne.InspiredNationsServer.Economy.CurrencyAccount;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
-import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 
 public interface AccountPortalInter extends Serializable, Nameable, Payable, Cloneable, Remote {
 
 	public String getTypeName() throws RemoteException;
+	public void addCurrencyAccount(CurrencyAccountPortalInter account) throws RemoteException;
 	/**
 	 * Sets the HashMap of all the money values
 	 * @param money	the HashMap to replace the current one
 	 */
+	public Account getSelf() throws RemoteException;
 	public void setMoney(ArrayList<CurrencyAccount> money) throws RemoteException;
 	public BigDecimal getMoney(CurrencyPortalInter getType, CurrencyPortalInter valueType) throws RemoteException;
 	public BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) throws RemoteException;
@@ -44,5 +46,5 @@ public interface AccountPortalInter extends Serializable, Nameable, Payable, Clo
 	boolean isShared() throws RemoteException;
 	public boolean containsCurrency(CurrencyPortalInter curren) throws RemoteException;
 	public String getDisplayName(PlayerID PDI) throws RemoteException;
-	public void sendNotification(Alert msg) throws RemoteException;
+	public void sendNotification(AlertPortalInter msg) throws RemoteException;
 }

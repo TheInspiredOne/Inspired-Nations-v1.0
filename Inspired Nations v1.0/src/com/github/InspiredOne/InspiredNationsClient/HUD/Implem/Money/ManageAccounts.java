@@ -1,18 +1,20 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.AccountCollection;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.PromptOption;
-import com.github.InspiredOne.InspiredNationsClient.Hud.TabSelectOptionMenu;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 
 public class ManageAccounts extends TabSelectOptionMenu<Account> {
 
 	Menu previous;
-	AccountCollection accounts;
+	AccountCollectionPortalInter accounts;
 	
-	public ManageAccounts(PlayerData PDI, Menu previous, AccountCollection accounts) {
+	public ManageAccounts(PlayerDataInter PDI, Menu previous, AccountCollectionPortalInter accounts) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		this.accounts = accounts;

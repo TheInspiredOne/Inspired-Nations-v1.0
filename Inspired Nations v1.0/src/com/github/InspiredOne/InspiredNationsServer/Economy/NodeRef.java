@@ -1,6 +1,7 @@
 package com.github.InspiredOne.InspiredNationsServer.Economy;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import org.bukkit.Material;
@@ -44,7 +45,7 @@ public class NodeRef {
 		});
 	}
 	
-	public void allocateMoney(NPC npc) { 
+	public void allocateMoney(NPC npc) throws RemoteException { 
 		BigDecimal money = npc.getTotalUnallocatedMoney(npc.getCurrency()).divide(new BigDecimal(5));
 		Debug.info(money.toString() + npc.getCurrency());
 		Debug.info("///////////////////////////New NPC\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");

@@ -11,11 +11,12 @@ import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBound
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedSet;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
-import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 
 public class AccountCollection extends IndexedSet<Account> implements AccountCollectionPortalInter {
@@ -39,7 +40,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	}
 	
 	@Override
-	public BigDecimal getTotalMoney(Currency valueType, MathContext round) {
+	public BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) {
 		BigDecimal output = BigDecimal.ZERO;
 		for(Account valueCheck:this) {
 			output = output.add(valueCheck.getTotalMoney(valueType, round));
@@ -47,7 +48,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 		return output;
 	}
 
-	public void transferMoney(BigDecimal amount, Currency monType, Payable accountTo) throws RemoteException, BalanceOutOfBoundsException, NegativeMoneyTransferException {
+	public void transferMoney(BigDecimal amount, CurrencyPortalInter monType, Payable accountTo) throws RemoteException, BalanceOutOfBoundsException, NegativeMoneyTransferException {
 		
 		if(this.getTotalMoney(monType, InspiredNationsServer.Exchange.mcdown).compareTo(amount) < 0) {
 			throw new BalanceOutOfBoundsException();
@@ -68,7 +69,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	}
 
 	@Override
-	public void addMoney(BigDecimal amount, Currency monType) throws NegativeMoneyTransferException {
+	public void addMoney(BigDecimal amount, CurrencyPortalInter monType) throws NegativeMoneyTransferException, RemoteException {
 		if(this.isEmpty()) {
 			this.add(new Account());
 		}
@@ -124,7 +125,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 		return output;
 	}
 	@Override
-	public void sendNotification(Alert msg) throws RemoteException {
+	public void sendNotification(AlertPortalInter msg) throws RemoteException {
 		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
 			if(player.getAccounts().equals(this)) {
 				player.sendNotification(msg);
@@ -133,18 +134,27 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	}
 	
 	
-	public IndexedMap<Class<? extends InspiredGov>, BigDecimal> getTaxes(Currency curren) {
+	public IndexedMap<Class<? extends InspiredGov>, BigDecimal> getTaxes(CurrencyPortalInter curren) throws RemoteException {
 		IndexedMap<Class<? extends InspiredGov>, BigDecimal> output = new IndexedMap<Class<? extends InspiredGov>, BigDecimal>();
 		for(InspiredGov gov:InspiredNationsServer.regiondata) {
 			if(gov.getAccounts() == (this)) {
 				if(output.containsKey(gov.getClass())) {
-					output.put(gov.getClass(), output.get(gov.getClass()).add(gov.currentTaxCycleValue(curren)));
+					output.put(gov.getClass(), output.get(gov.getClass()).add(gov.currentTaxCycleValue(curren.getSelf())));
 				}
 				else {
-					output.put(gov.getClass(), gov.currentTaxCycleValue(curren));
+					output.put(gov.getClass(), gov.currentTaxCycleValue(curren.getSelf()));
 				}
 			}
 		}
 		return output;
+	}
+	@Override
+	public AccountCollection getSelf() throws RemoteException {
+		return this;
+	}
+
+	@Override
+	public void addAccount(Account account) throws RemoteException {
+		this.add(account);
 	}
 }

@@ -1,22 +1,25 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.AccountCollection;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Option;
-import com.github.InspiredOne.InspiredNationsClient.Hud.OptionMenu;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
+import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
+
 
 public class NewAccountOption extends Option {
 
-	AccountCollection accounts;
-	public NewAccountOption(OptionMenu menu, String label, AccountCollection accounts) {
+	AccountCollectionPortalInter accounts;
+	public NewAccountOption(OptionMenu menu, String label, AccountCollectionPortalInter accounts) {
 		super(menu, label);
 		this.accounts = accounts;
 	}
 
 	@Override
-	public Menu response(String input) {
+	public Menu response(String input) throws RemoteException {
 		input = input.trim();
 		if(input.isEmpty()) {
 			menu.setError(MenuError.EMPTY_INPUT(menu.getPlayerData()));
@@ -28,7 +31,7 @@ public class NewAccountOption extends Option {
 				return menu.getSelfPersist();
 			}
 		}
-		accounts.add(new Account(input));
+		accounts.addAccount(new Account(input));
 		return menu.getSelfPersist();
 	}
 
