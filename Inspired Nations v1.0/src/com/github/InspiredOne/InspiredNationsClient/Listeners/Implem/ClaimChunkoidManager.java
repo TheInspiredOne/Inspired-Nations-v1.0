@@ -4,11 +4,11 @@ import com.github.InspiredOne.InspiredNations.Exceptions.BalanceOutOfBoundsExcep
 import com.github.InspiredOne.InspiredNations.Exceptions.InspiredGovTooStrongException;
 import com.github.InspiredOne.InspiredNations.Exceptions.InsufficientRefundAccountBalanceException;
 import com.github.InspiredOne.InspiredNations.Exceptions.RegionOutOfEncapsulationBoundsException;
-import com.github.InspiredOne.InspiredNations.Regions.Implem.ChunkRegion;
-import com.github.InspiredOne.InspiredNations.Regions.Implem.Chunkoid;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNations.ToolBox.Point2D;
 import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimChunkoid;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.ChunkRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.Chunkoid;
 
 public class ClaimChunkoidManager<T extends ClaimChunkoid> extends ChunkoidManager<T> {
 

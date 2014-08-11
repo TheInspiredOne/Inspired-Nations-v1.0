@@ -1,10 +1,10 @@
 package com.github.InspiredOne.InspiredNationsClient.Listeners.Implem;
 
 import com.github.InspiredOne.InspiredNations.Exceptions.PointsInDifferentWorldException;
-import com.github.InspiredOne.InspiredNations.Regions.Implem.PolygonPrism;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimPolygonPrism;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.PolygonPrism;
 
 public class ClaimPolygonPrismManager<T extends ClaimPolygonPrism> extends ActionManager<T> {
 

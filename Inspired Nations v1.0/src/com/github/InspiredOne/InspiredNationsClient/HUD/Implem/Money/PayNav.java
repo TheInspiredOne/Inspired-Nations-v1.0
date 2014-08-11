@@ -1,10 +1,9 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.ToolBox.Payable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickNavGeneral;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickPlayerGeneral;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
+
 
 public class PayNav extends PickNavGeneral {
 
@@ -15,7 +14,7 @@ public class PayNav extends PickNavGeneral {
 	 * @param accounts
 	 * @param back	the menu to return to after doing all of the payment stuff.
 	 */
-	public PayNav(PlayerData PDI, Menu back, Payable accounts) {
+	public PayNav(PlayerDataPortal PDI, Menu back, Payable accounts) {
 		super(PDI, back);
 		this.accounts = accounts;
 	}

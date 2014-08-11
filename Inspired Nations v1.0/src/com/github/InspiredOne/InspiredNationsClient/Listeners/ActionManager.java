@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 
 import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.HUD.ActionMenu;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 /**
  * Deals with menu inputs that are actions rather than chat entries. Each
  * <code>ActionManager</code> has a collection of <code>InspiredPlayerListener</code>s
@@ -56,7 +56,7 @@ public abstract class ActionManager<T extends ActionMenu> {
 		return menu;
 	}
 	
-	public PlayerDataInter getPlayerData() {
+	public PlayerDataPortal getPlayerData() {
 		return this.menu.getPlayerData();
 	}
 	/**

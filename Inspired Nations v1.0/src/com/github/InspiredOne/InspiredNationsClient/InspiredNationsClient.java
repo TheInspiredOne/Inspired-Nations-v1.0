@@ -21,9 +21,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPortalInter;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.Implem.ClientPortal;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
@@ -112,7 +113,7 @@ public class InspiredNationsClient extends JavaPlugin {
 	public class TempPlayerListener implements Listener {
 		
 		@EventHandler
-		public void onPlayerJoin(PlayerJoinEvent event) {
+		public void onPlayerJoin(PlayerJoinEvent event) throws PlayerOfflineException {
 			PlayerID ID = new PlayerID(event.getPlayer());
 			if(!InspiredNationsClient.playerdata.containsKey(ID)) {
 				try {
@@ -134,7 +135,7 @@ public class InspiredNationsClient extends JavaPlugin {
 				return false;
 			}
 			
-			PlayerDataInter PDI = null;
+			PlayerDataPortal PDI = null;
 			try {
 				PDI = InspiredNationsClient.server.getPlayer(new PlayerID((Player) sender));
 			} catch (RemoteException e) {

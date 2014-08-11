@@ -8,14 +8,14 @@ import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Governments.GovFactory;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 
 public class ManageMoney extends OptionMenu {
 	//private MathContext mcup = new MathContext(5, RoundingMode.UP);//this is temporary
 
-	public ManageMoney(PlayerDataInter PDI) throws RemoteException {
+	public ManageMoney(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 

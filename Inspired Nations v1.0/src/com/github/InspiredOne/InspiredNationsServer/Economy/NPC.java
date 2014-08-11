@@ -4,6 +4,7 @@ package com.github.InspiredOne.InspiredNationsServer.Economy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
@@ -19,8 +20,8 @@ import com.github.InspiredOne.InspiredNationsServer.Economy.Implem.ItemSellable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.CardboardBox;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
@@ -70,12 +71,12 @@ public class NPC implements Serializable, ItemBuyer {
 	}
 
 	@Override
-	public void sendNotification(AlertPortalInter msg) {
+	public void sendNotification(AlertPortal msg) {
 		
 	}
 
 	@Override
-	public void transferMoney(BigDecimal amount, CurrencyPortalInter monType,
+	public void transferMoney(BigDecimal amount, CurrencyPortal monType,
 			Payable target) throws BalanceOutOfBoundsException,
 			NegativeMoneyTransferException, RemoteException {
 		if(amount.compareTo(BigDecimal.ZERO) < 0) {
@@ -110,13 +111,13 @@ public class NPC implements Serializable, ItemBuyer {
 	}
 
 	@Override
-	public void addMoney(BigDecimal amount, CurrencyPortalInter monType)
+	public void addMoney(BigDecimal amount, CurrencyPortal monType)
 			throws NegativeMoneyTransferException, RemoteException {
 		this.accounts.addMoney(amount, monType);
 	}
 
 	@Override
-	public BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) {
+	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) {
 		BigDecimal output = accounts.getTotalMoney(valueType, round);
 		
 		for(Account account:buy.values()) {
@@ -147,11 +148,8 @@ public class NPC implements Serializable, ItemBuyer {
 	}*/
 
 	@Override
-	public Point3D getLocation() {
-		if(this.getPlayer() == null) {
-			return new Location(InspiredNations.plugin.getServer().getWorld("world"),0,0,0);
-		}
-		return this.getPlayer().getLocation();
+	public Point3D getLocation() throws RemoteException, NotBoundException {
+		return this.getPlayer().getLastLocation();
 	}
 
 	@Override
@@ -172,8 +170,9 @@ public class NPC implements Serializable, ItemBuyer {
 	 * A method that runs through the buy hashmap and purchases all the items
 	 * the npc can afford.
 	 * @throws RemoteException 
+	 * @throws NotBoundException 
 	 */
-	public void buyOut() throws RemoteException {
+	public void buyOut() throws RemoteException, NotBoundException {
 		NodeRef noderef = new NodeRef();
 		noderef.allocateMoney(this);
 		Debug.info("Cardboardbox size: " + buy.size());

@@ -2,7 +2,7 @@ package com.github.InspiredOne.InspiredNationsClient.Listeners;
 
 import org.bukkit.event.Listener;
 
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class InspiredListener<T extends ActionManager<?>> implements Listener {
 
@@ -12,7 +12,7 @@ public class InspiredListener<T extends ActionManager<?>> implements Listener {
 		this.setManager(manager);
 	}
 	
-	public PlayerDataInter getPlayerData() {
+	public PlayerDataPortal getPlayerData() {
 		return this.manager.getPlayerData();
 	}
 

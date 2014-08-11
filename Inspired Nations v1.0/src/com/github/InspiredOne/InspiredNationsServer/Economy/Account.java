@@ -3,6 +3,7 @@ package com.github.InspiredOne.InspiredNationsServer.Economy;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
@@ -10,16 +11,16 @@ import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 
-public class Account implements AccountPortalInter {
+public class Account implements AccountPortal {
 
 	
 	/**
@@ -32,11 +33,12 @@ public class Account implements AccountPortalInter {
 	private boolean AutoExchange = true;
 
 	
-	public Account() {
+	public Account() throws RemoteException {
 		//TODO remove these for later. figure out how to handle when a player is first joining a server with no
 		// currencies already
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
-	public Account(String name) {
+	public Account(String name) throws RemoteException {
 		this.setName(name);
 	}
 	
@@ -48,7 +50,13 @@ public class Account implements AccountPortalInter {
 		return typeName;
 	}
 	public Account clone() {
-		Account output = new Account();
+		Account output = null;
+		try {
+			output = new Account();
+		} catch (RemoteException e) {
+			// TODO Kill Plugin
+			e.printStackTrace();
+		}
 		output.name = this.name;
 		output.AutoExchange = this.AutoExchange;
 		ArrayList<CurrencyAccount> currenaccount = new ArrayList<CurrencyAccount>();
@@ -71,7 +79,7 @@ public class Account implements AccountPortalInter {
 		this.money = money;
 	}
 
-	public final BigDecimal getMoney(CurrencyPortalInter getType, CurrencyPortalInter valueType) throws RemoteException {
+	public final BigDecimal getMoney(CurrencyPortal getType, CurrencyPortal valueType) throws RemoteException {
 		MoneyExchange exch = InspiredNationsServer.Exchange;
 		CurrencyAccount curren = getCurrenAccount(getType);
 		boolean contains = curren != null;
@@ -85,7 +93,7 @@ public class Account implements AccountPortalInter {
 		}
 	}
 	
-	public final BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) {
+	public final BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) {
 		BigDecimal output = BigDecimal.ZERO;
 		for(CurrencyAccount curren:money) {
 			output = output.add(curren.getTotalMoney(valueType, round));
@@ -93,7 +101,7 @@ public class Account implements AccountPortalInter {
 		return output;
 	}
 	
-	public final void addMoney(BigDecimal mon, CurrencyPortalInter monType) throws NegativeMoneyTransferException, RemoteException {
+	public final void addMoney(BigDecimal mon, CurrencyPortal monType) throws NegativeMoneyTransferException, RemoteException {
 		if(mon.compareTo(BigDecimal.ZERO) < 0) {
 			throw new NegativeMoneyTransferException();
 		}
@@ -113,7 +121,7 @@ public class Account implements AccountPortalInter {
 		}
 	}
 	
-	public final void transferMoney(BigDecimal mon, CurrencyPortalInter monType, Payable accountTo) throws BalanceOutOfBoundsException, NegativeMoneyTransferException, RemoteException {
+	public final void transferMoney(BigDecimal mon, CurrencyPortal monType, Payable accountTo) throws BalanceOutOfBoundsException, NegativeMoneyTransferException, RemoteException {
 		if(getTotalMoney(monType, InspiredNationsServer.Exchange.mcdown).compareTo(mon) < 0) {
 			throw new BalanceOutOfBoundsException();
 		}
@@ -135,7 +143,7 @@ public class Account implements AccountPortalInter {
 		}
 	}
 	
-	public CurrencyAccount getCurrenAccount(CurrencyPortalInter monType) throws RemoteException {
+	public CurrencyAccount getCurrenAccount(CurrencyPortal monType) throws RemoteException {
 		CurrencyAccount account = new CurrencyAccount(monType.getSelf());
 		for(CurrencyAccount curren:this.money) {
 			if(curren.getCurrency().equals(monType)) {
@@ -195,7 +203,7 @@ public class Account implements AccountPortalInter {
 		return false;
 	}
 	
-	public boolean containsCurrency(CurrencyPortalInter curren) {
+	public boolean containsCurrency(CurrencyPortal curren) {
 		for(CurrencyAccount acc:this.money) {
 			if(acc.getCurrency().equals(curren)) {
 				return true;
@@ -218,7 +226,7 @@ public class Account implements AccountPortalInter {
 	}
 	
 	@Override
-	public void sendNotification(AlertPortalInter msg) throws RemoteException {
+	public void sendNotification(AlertPortal msg) throws RemoteException {
 		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
 			for(Account account: player.getAccounts()) {
 				if(account.equals(this)) {
@@ -228,7 +236,7 @@ public class Account implements AccountPortalInter {
 		}
 	}
 	@Override
-	public void addCurrencyAccount(CurrencyAccountPortalInter account)
+	public void addCurrencyAccount(CurrencyAccountPortal account)
 			throws RemoteException {
 		this.getMoney().add(account.getSelf());
 	}

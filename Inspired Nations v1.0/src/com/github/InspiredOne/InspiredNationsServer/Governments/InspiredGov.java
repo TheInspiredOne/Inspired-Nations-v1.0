@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Location;
 
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;

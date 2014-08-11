@@ -5,19 +5,19 @@ import java.rmi.RemoteException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
-public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccountPortalInter> {
+public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccountPortal> {
 
 	Menu previous;
-	AccountCollectionPortalInter accounts;
-	AccountPortalInter account;
+	AccountCollectionPortal accounts;
+	AccountPortal account;
 
-	public ManageCurrencies(PlayerDataInter PDI, Menu previous, AccountPortalInter account, AccountCollectionPortalInter accounts) throws RemoteException {
+	public ManageCurrencies(PlayerDataPortal PDI, Menu previous, AccountPortal account, AccountCollectionPortal accounts) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		this.account = account;
@@ -42,7 +42,7 @@ public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccountPortalI
 
 	@Override
 	public void addTabOptions() {
-		for(CurrencyAccountPortalInter curren:account.getMoney()) {
+		for(CurrencyAccountPortal curren:account.getMoney()) {
 			this.taboptions.add(curren);
 		}
 		

@@ -4,13 +4,13 @@ import java.rmi.RemoteException;
 
 import com.github.InspiredOne.InspiredNationsClient.Listeners.TabManager;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class Chat extends InputMenu {
 
 	Menu previous;
 	int framebase;
-	public Chat(PlayerDataInter PDI, Menu previous) throws RemoteException {
+	public Chat(PlayerDataPortal PDI, Menu previous) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		framebase = PDI.getMsg().getMessages().size() -1;

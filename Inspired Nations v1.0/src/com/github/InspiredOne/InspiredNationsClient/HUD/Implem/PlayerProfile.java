@@ -9,8 +9,9 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Player.RelationList;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Player.SettingsMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
+import com.github.InspiredOne.InspiredNationsServer.Debug;
 import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Relation;
 
@@ -18,16 +19,16 @@ import com.github.InspiredOne.InspiredNationsServer.ToolBox.Relation;
 
 public class PlayerProfile extends OptionMenu {
 	
-	PlayerDataInter PDITarget;
+	PlayerDataPortal PDITarget;
 	
-	public <T extends Datable<PlayerID>> PlayerProfile(PlayerDataInter PDI, T PDITarget) throws RemoteException {
+	public <T extends Datable<PlayerID>> PlayerProfile(PlayerDataPortal PDI, T PDITarget) throws RemoteException {
 		super(PDI);
-		
+		Debug.info("Inside constructor of PlayerProfile");
 		this.PDITarget = InspiredNationsClient.server.getPlayer(PDITarget.getData());
 	}
-	public <T extends Datable<PlayerID>> PlayerProfile(PlayerDataInter PDI, PlayerDataInter PDITarget) throws RemoteException {
+	public <T extends Datable<PlayerID>> PlayerProfile(PlayerDataPortal PDI, PlayerDataPortal PDITarget) throws RemoteException {
 		super(PDI);
-		
+		Debug.info("Inside constructor of PlayerProfile 2");
 		this.PDITarget = PDITarget;
 	}
 
@@ -65,9 +66,9 @@ public class PlayerProfile extends OptionMenu {
 	@Override
 	public String getPreOptionText() throws RemoteException {
 		String output = PDI.LABEL() + "Citizenship: ";
-		for(OwnerGov gov:this.PDITarget.getCitizenship()) {
+/*		for(OwnerGov gov:this.PDITarget.getCitizenship()) {
 			output = output.concat(gov.getDisplayName(PDI.getPlayerID()) + ", ");
-		}
+		}*/
 		if(output.length() > 0) {
 			output = output.substring(0,output.length() - 2) + "\n";
 		}
@@ -78,12 +79,15 @@ public class PlayerProfile extends OptionMenu {
 	@Override
 	public void addOptions() throws RemoteException {
 		// TODO Auto-generated method stub
+		Debug.info("Inside addOptions 1");
 		this.options.add(new PromptOption(this, "Ally List", new RelationList(PDI, PDITarget, Relation.ALLY)));
+		Debug.info("Inside addOptions 2");
 		this.options.add(new PromptOption(this, "Enemy List", new RelationList(PDI, PDITarget, Relation.ENEMY)));
-		
+		Debug.info("Inside addOptions 3");
 		if (this.PDITarget.equals(PDI)) {
 			this.options.add(new PromptOption(this, "Settings", new SettingsMenu(PDI)));
 		}
+		Debug.info("Inside addOptions 4");
 		
 	}
 

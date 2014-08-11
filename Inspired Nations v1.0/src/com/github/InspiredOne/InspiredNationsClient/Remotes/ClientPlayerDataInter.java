@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 
 public interface ClientPlayerDataInter extends Remote {
 	public String getName() throws PlayerOfflineException, RemoteException;
@@ -12,4 +13,5 @@ public interface ClientPlayerDataInter extends Remote {
 	public void sendMessage(String msg) throws PlayerOfflineException, RemoteException;
 	public void sendRawMessage(String msg) throws PlayerOfflineException, RemoteException;
 	public PlayerID getPlayerID() throws RemoteException;
+	public Point3D getLocation() throws RemoteException, PlayerOfflineException;
 }

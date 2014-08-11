@@ -1,13 +1,17 @@
-package com.github.InspiredOne.InspiredNationsServer.Economy;
+package com.github.InspiredOne.InspiredNationsClient.ToolBox;
+
+import java.rmi.RemoteException;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.github.InspiredOne.InspiredNationsServer.Remotes.TaxTimerPortal;
+
 public class TaxTimerEvent extends Event {
 	
 	private static final HandlerList handlers = new HandlerList();
-	private TaxTimer timer;
-	public TaxTimerEvent(TaxTimer timer) {
+	private TaxTimerPortal timer;
+	public TaxTimerEvent(TaxTimerPortal timer) {
 		this.timer = timer;
 	}
 
@@ -24,7 +28,7 @@ public class TaxTimerEvent extends Event {
         return handlers;
     }
 	
-	public int getTimeRemaining() {
+	public int getTimeRemaining() throws RemoteException {
 		return (int) Math.floor(timer.getFractionLeft()*timer.getCycleLength());
 	}
 

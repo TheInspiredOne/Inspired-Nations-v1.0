@@ -23,16 +23,16 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.MainHud;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.ContextData;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
 public class ConversationBuilder {
 	
 	// Grabbing the instance of the plugin.
 	InspiredNationsClient plugin;
-	PlayerDataInter PDI;
+	PlayerDataPortal PDI;
 	HashMap<Object, Object> initSessionData = new HashMap<Object, Object>();
-	public ConversationBuilder(PlayerDataInter PDI) {
+	public ConversationBuilder(PlayerDataPortal PDI) {
 		plugin = InspiredNationsClient.plugin;
 		this.PDI = PDI;
 		this.initSessionData.put(ContextData.Error, MenuError.NO_ERROR());

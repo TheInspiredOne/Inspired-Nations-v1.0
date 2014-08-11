@@ -6,15 +6,15 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class ManageAccounts extends TabSelectOptionMenu<Account> {
 
 	Menu previous;
-	AccountCollectionPortalInter accounts;
+	AccountCollectionPortal accounts;
 	
-	public ManageAccounts(PlayerDataInter PDI, Menu previous, AccountCollectionPortalInter accounts) throws RemoteException {
+	public ManageAccounts(PlayerDataPortal PDI, Menu previous, AccountCollectionPortal accounts) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		this.accounts = accounts;

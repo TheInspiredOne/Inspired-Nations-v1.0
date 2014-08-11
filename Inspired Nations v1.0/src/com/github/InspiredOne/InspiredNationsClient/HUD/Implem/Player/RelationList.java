@@ -7,16 +7,16 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.PlayerProfile;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Relation;
 
-public class RelationList extends TabSelectOptionMenu<PlayerDataInter> {
+public class RelationList extends TabSelectOptionMenu<PlayerDataPortal> {
 	
 	Relation status;
-	PlayerDataInter target;
+	PlayerDataPortal target;
 
-	public RelationList(PlayerDataInter PDI, PlayerDataInter target, Relation r) throws RemoteException {
+	public RelationList(PlayerDataPortal PDI, PlayerDataPortal target, Relation r) throws RemoteException {
 		super(PDI);
 		status = r;
 		this.target = target;
@@ -74,9 +74,9 @@ public class RelationList extends TabSelectOptionMenu<PlayerDataInter> {
 	
 	public class CustomAllyOption extends Option {
 		
-		PlayerDataInter targetPDI;
+		PlayerDataPortal targetPDI;
 		
-		public CustomAllyOption(OptionMenu menu, String label, PlayerDataInter playerData) {
+		public CustomAllyOption(OptionMenu menu, String label, PlayerDataPortal playerData) {
 			super(menu, label);
 			targetPDI = playerData;
 		}

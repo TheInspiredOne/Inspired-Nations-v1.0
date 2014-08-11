@@ -11,17 +11,17 @@ import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
 public class PayAccountOption extends Option {
 
 	Payable accountsFrom;
 	Payable accountTo;
-	PlayerDataInter PDI;
+	PlayerDataPortal PDI;
 	Nameable sender;
 	
-	public PayAccountOption(PlayerDataInter PDI, OptionMenu menu, String label, Payable accountsFrom, Payable accountTo, Nameable sender) {
+	public PayAccountOption(PlayerDataPortal PDI, OptionMenu menu, String label, Payable accountsFrom, Payable accountTo, Nameable sender) {
 		super(menu, label);
 		this.accountsFrom = accountsFrom;
 		this.accountTo = accountTo;

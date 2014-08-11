@@ -13,7 +13,7 @@ import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 /**
  * A menu where the options are listed in plain font except the one that is selected (it's bold).
@@ -37,7 +37,7 @@ public abstract class TabSelectOptionMenu<E extends Nameable> extends OptionMenu
 	public ArrayList<E> filteredoptions = new ArrayList<E>();
 	private E data;
 	private TabScrollManager<TabSelectOptionMenu<E>> manager;
-	public TabSelectOptionMenu(PlayerDataInter PDI) throws RemoteException {
+	public TabSelectOptionMenu(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 

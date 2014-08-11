@@ -14,4 +14,5 @@ public interface ClientPortalInter extends Remote {
 	public ClientPlayerDataInter getPlayer(PlayerID id) throws PlayerOfflineException, RemoteException;
     public ClientWorldPortalInter getWorld(WorldID world) throws RemoteException, NotBoundException;
     public ClientLocationPortalInter getLocation(Point3D point) throws RemoteException, NotBoundException;
+    public void triggerTaxTimer() throws RemoteException;
 }

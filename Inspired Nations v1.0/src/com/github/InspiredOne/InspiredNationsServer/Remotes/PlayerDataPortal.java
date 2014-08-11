@@ -1,6 +1,7 @@
 package com.github.InspiredOne.InspiredNationsServer.Remotes;
 
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -12,19 +13,21 @@ import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
-public interface PlayerDataInter extends Remote, Nameable, Notifyable, Serializable {
+public interface PlayerDataPortal extends Remote, Nameable, Notifyable, Serializable {
 	
 	public PlayerID getPlayerID() throws RemoteException;
-	public MessageManagerInter getMsg() throws RemoteException;
+	public MessageManagerPortal getMsg() throws RemoteException;
 	public void setKill(boolean kill) throws RemoteException;
 	public boolean getKill() throws RemoteException;
 	public void sendRawMessage(String msg) throws RemoteException, PlayerOfflineException;
-	public CurrencyPortalInter getCurrency() throws RemoteException;
+	public CurrencyPortal getCurrency() throws RemoteException;
 	public void setCurrency(Currency currency) throws RemoteException;
-	public AccountCollectionPortalInter getAccounts() throws RemoteException;
+	public AccountCollectionPortal getAccounts() throws RemoteException;
 	public void setAccounts(AccountCollection accounts)throws RemoteException;
+	public boolean getTimerState()throws RemoteException;
 	/**
 	 * Used exclusively for the menu header.
 	 */
@@ -102,7 +105,7 @@ public interface PlayerDataInter extends Remote, Nameable, Notifyable, Serializa
 	 */
 	public String ALLY() throws RemoteException; 
 	
-	public ThemeInter getTheme() throws RemoteException;
+	public ThemePortal getTheme() throws RemoteException;
 	
 	List<OwnerGov> getCitizenship(Class<? extends InspiredGov> govType,
 			List<? extends InspiredGov> govDir) throws RemoteException;
@@ -111,4 +114,5 @@ public interface PlayerDataInter extends Remote, Nameable, Notifyable, Serializa
 			throws RemoteException;
 	boolean isTimerState() throws RemoteException;
 	void setTimerState(boolean timerState) throws RemoteException;
+	Point3D getLastLocation() throws RemoteException, NotBoundException;
 }

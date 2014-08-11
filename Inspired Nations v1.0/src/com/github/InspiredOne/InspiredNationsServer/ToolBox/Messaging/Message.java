@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 import java.util.Locale;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class Message extends Alert implements Nameable {
 
@@ -12,16 +12,16 @@ public class Message extends Alert implements Nameable {
 	 * 
 	 */
 	private static final long serialVersionUID = 6130859000755211465L;
-	PlayerDataInter from;
+	PlayerDataPortal from;
 	String msg;
 	
-	public Message(boolean menuVisible, PlayerDataInter from, String msg) {
+	public Message(boolean menuVisible, PlayerDataPortal from, String msg) {
 		this.from = from;
 		this.menuVisible = menuVisible;
 		this.msg = msg;
 	}
 	
-	public String getMessage(PlayerDataInter receiver) throws RemoteException {
+	public String getMessage(PlayerDataPortal receiver) throws RemoteException {
 		return from.getDisplayName(receiver.getPlayerID()) + ": " + conditionForMoney(msg, from, receiver);
 	}
 	
@@ -38,7 +38,7 @@ public class Message extends Alert implements Nameable {
 	 * @param target	the player who sees the message;
 	 * @return
 	 */
-	public String conditionForMoney(String input, PlayerDataInter from, PlayerDataInter to) {
+	public String conditionForMoney(String input, PlayerDataPortal from, PlayerDataPortal to) {
 		String output = "";
 		if(input.contains("$")) {
 			String[] args = input.split(" ");

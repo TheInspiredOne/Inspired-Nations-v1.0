@@ -6,12 +6,12 @@ import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
 public class PlayerDirectory extends TabSelectOptionMenu<PlayerID> {
 
-	public PlayerDirectory(PlayerDataInter PDI) throws RemoteException {
+	public PlayerDirectory(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 

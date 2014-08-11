@@ -7,13 +7,13 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
 
 
 public class NewAccountOption extends Option {
 
-	AccountCollectionPortalInter accounts;
-	public NewAccountOption(OptionMenu menu, String label, AccountCollectionPortalInter accounts) {
+	AccountCollectionPortal accounts;
+	public NewAccountOption(OptionMenu menu, String label, AccountCollectionPortal accounts) {
 		super(menu, label);
 		this.accounts = accounts;
 	}

@@ -10,15 +10,15 @@ import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.MainHud;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 public abstract class Menu extends MessagePrompt {
 
 	// Conversation Persistent
 	private String footer;
-	public PlayerDataInter PDI;
+	public PlayerDataPortal PDI;
 	public InspiredNationsClient plugin;
 	// Menu Persistent: Only initialized once for this menu instance.
 	private boolean loaded = false;
@@ -27,7 +27,7 @@ public abstract class Menu extends MessagePrompt {
 	// Non-Persistent: Refreshed for every return back to this menu
 	
 	
-	public Menu(PlayerDataInter PDI) throws RemoteException {
+	public Menu(PlayerDataPortal PDI) throws RemoteException {
 		this.PDI = PDI;
 		this.plugin = InspiredNationsClient.plugin;
 		this.footer = MenuTools.addDivider("",PDI) + PDI.ENDINSTRU() + "Keywords: exit, chat, say, back, hud.";
@@ -315,7 +315,7 @@ public abstract class Menu extends MessagePrompt {
 		return PDI.getPlayerID() getCon().getContext();
 	}*/
 	
-	public final PlayerDataInter getPlayerData() {
+	public final PlayerDataPortal getPlayerData() {
 		return PDI;
 	}
 	public HelpMenu getHelp() {

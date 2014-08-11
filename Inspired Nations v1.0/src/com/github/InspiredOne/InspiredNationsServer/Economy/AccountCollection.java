@@ -3,6 +3,7 @@ package com.github.InspiredOne.InspiredNationsServer.Economy;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
@@ -10,29 +11,36 @@ import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedSet;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 
 
-public class AccountCollection extends IndexedSet<Account> implements AccountCollectionPortalInter {
+public class AccountCollection extends IndexedSet<Account> implements AccountCollectionPortal, Iterable<Account> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4596555858007834733L;
 	private String name;
 	
-	public AccountCollection(String name) {
+	public AccountCollection(String name) throws RemoteException {
 		this.name = name;
 		this.add(new Account());
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
 	
 	public AccountCollection clone() {
-		AccountCollection output = new AccountCollection(name);
+		AccountCollection output = null;
+		try {
+			output = new AccountCollection(name);
+		} catch (RemoteException e) {
+			// TODO Kill the plugin
+			e.printStackTrace();
+		}
 		for(Account acc:this) {
 			output.add(acc);
 		}
@@ -40,7 +48,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	}
 	
 	@Override
-	public BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) {
+	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) {
 		BigDecimal output = BigDecimal.ZERO;
 		for(Account valueCheck:this) {
 			output = output.add(valueCheck.getTotalMoney(valueType, round));
@@ -48,7 +56,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 		return output;
 	}
 
-	public void transferMoney(BigDecimal amount, CurrencyPortalInter monType, Payable accountTo) throws RemoteException, BalanceOutOfBoundsException, NegativeMoneyTransferException {
+	public void transferMoney(BigDecimal amount, CurrencyPortal monType, Payable accountTo) throws RemoteException, BalanceOutOfBoundsException, NegativeMoneyTransferException {
 		
 		if(this.getTotalMoney(monType, InspiredNationsServer.Exchange.mcdown).compareTo(amount) < 0) {
 			throw new BalanceOutOfBoundsException();
@@ -69,7 +77,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	}
 
 	@Override
-	public void addMoney(BigDecimal amount, CurrencyPortalInter monType) throws NegativeMoneyTransferException, RemoteException {
+	public void addMoney(BigDecimal amount, CurrencyPortal monType) throws NegativeMoneyTransferException, RemoteException {
 		if(this.isEmpty()) {
 			this.add(new Account());
 		}
@@ -125,7 +133,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 		return output;
 	}
 	@Override
-	public void sendNotification(AlertPortalInter msg) throws RemoteException {
+	public void sendNotification(AlertPortal msg) throws RemoteException {
 		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
 			if(player.getAccounts().equals(this)) {
 				player.sendNotification(msg);
@@ -134,7 +142,7 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	}
 	
 	
-	public IndexedMap<Class<? extends InspiredGov>, BigDecimal> getTaxes(CurrencyPortalInter curren) throws RemoteException {
+	public IndexedMap<Class<? extends InspiredGov>, BigDecimal> getTaxes(CurrencyPortal curren) throws RemoteException {
 		IndexedMap<Class<? extends InspiredGov>, BigDecimal> output = new IndexedMap<Class<? extends InspiredGov>, BigDecimal>();
 		for(InspiredGov gov:InspiredNationsServer.regiondata) {
 			if(gov.getAccounts() == (this)) {

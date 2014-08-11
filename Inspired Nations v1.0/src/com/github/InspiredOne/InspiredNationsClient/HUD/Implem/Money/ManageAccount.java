@@ -5,17 +5,17 @@ import java.rmi.RemoteException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
 public class ManageAccount extends OptionMenu {
 
 	private Menu previous;
-	private AccountPortalInter account;
-	private AccountCollectionPortalInter accounts;
-	public ManageAccount(PlayerDataInter PDI, Menu previous, AccountPortalInter account, AccountCollectionPortalInter accounts) throws RemoteException {
+	private AccountPortal account;
+	private AccountCollectionPortal accounts;
+	public ManageAccount(PlayerDataPortal PDI, Menu previous, AccountPortal account, AccountCollectionPortal accounts) throws RemoteException {
 		super(PDI);
 		this.account = account;
 		this.previous = previous;

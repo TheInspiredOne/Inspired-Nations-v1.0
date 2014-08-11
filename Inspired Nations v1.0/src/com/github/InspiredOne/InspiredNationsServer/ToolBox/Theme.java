@@ -1,12 +1,15 @@
 package com.github.InspiredOne.InspiredNationsServer.ToolBox;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import org.bukkit.ChatColor;
 
-import com.github.InspiredOne.InspiredNationsServer.Remotes.ThemeInter;
+import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.ThemePortal;
 
-public class Theme implements ThemeInter, Serializable{
+public class Theme implements ThemePortal, Serializable{
 
 	/**
 	 * 
@@ -33,8 +36,8 @@ public class Theme implements ThemeInter, Serializable{
 	private String ALLY = ChatColor.LIGHT_PURPLE + "";
 	
 	
-	public Theme() {
-		
+	public Theme() throws RemoteException{
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
 	
 	public String HEADER() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
 public class HelpMenu extends InputMenu {
@@ -14,7 +14,7 @@ public class HelpMenu extends InputMenu {
 	private ArrayList<String> docs = new ArrayList<String>();
 	private Menu previous;
 	
-	public HelpMenu(PlayerDataInter PDI, Menu previous) throws RemoteException {
+	public HelpMenu(PlayerDataPortal PDI, Menu previous) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 	}

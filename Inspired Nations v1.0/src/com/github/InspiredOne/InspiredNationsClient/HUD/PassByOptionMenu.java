@@ -2,7 +2,7 @@ package com.github.InspiredOne.InspiredNationsClient.HUD;
 
 import java.rmi.RemoteException;
 
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
 /**
@@ -12,7 +12,7 @@ import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
  */
 public abstract class PassByOptionMenu extends OptionMenu{
 
-	public PassByOptionMenu(PlayerDataInter PDI) throws RemoteException {
+	public PassByOptionMenu(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 	

@@ -13,12 +13,12 @@ import java.util.concurrent.TimeUnit;
 
 
 import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.SortTool;
 
-public abstract class Alert implements AlertPortalInter {
+public abstract class Alert implements AlertPortal {
 
 	/**
 	 * 
@@ -32,7 +32,7 @@ public abstract class Alert implements AlertPortalInter {
 		      Executors.newScheduledThreadPool(1);
     public transient ScheduledFuture<?> timerHandle;
 
-	transient public static SortTool<AlertPortalInter> ageSort = new SortTool<AlertPortalInter>() {
+	transient public static SortTool<AlertPortal> ageSort = new SortTool<AlertPortal>() {
 
 		@Override
 		public String getName() {
@@ -41,12 +41,12 @@ public abstract class Alert implements AlertPortalInter {
 
 
 		@Override
-		public Comparator<AlertPortalInter> getComparator() {
+		public Comparator<AlertPortal> getComparator() {
 
-			return new Comparator<AlertPortalInter>() {
+			return new Comparator<AlertPortal>() {
 
 				@Override
-				public int compare(AlertPortalInter o1, AlertPortalInter o2) {
+				public int compare(AlertPortal o1, AlertPortal o2) {
 					try {
 						return o1.getCalendar().compareTo(o2.getCalendar());
 					} catch (RemoteException e) {
@@ -96,7 +96,7 @@ public abstract class Alert implements AlertPortalInter {
 		return expired;
 	}
 
-	public abstract String getMessage(PlayerDataInter receiver)
+	public abstract String getMessage(PlayerDataPortal receiver)
 			throws RemoteException;
 
 	/**
@@ -134,8 +134,8 @@ public abstract class Alert implements AlertPortalInter {
 		 */
 	}
 
-	public static List<SortTool<AlertPortalInter>> getComparators() {
-		List<SortTool<AlertPortalInter>> output = new ArrayList<SortTool<AlertPortalInter>>();
+	public static List<SortTool<AlertPortal>> getComparators() {
+		List<SortTool<AlertPortal>> output = new ArrayList<SortTool<AlertPortal>>();
 		output.add(Alert.ageSort);
 		return output;
 	}

@@ -3,9 +3,9 @@ package com.github.InspiredOne.InspiredNationsClient.Listeners.Implem;
 import org.bukkit.block.Block;
 
 import com.github.InspiredOne.InspiredNations.Exceptions.BlockNotChestException;
-import com.github.InspiredOne.InspiredNations.Regions.Implem.ShopRegion;
 import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimChestShop;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.ShopRegion;
 
 public class ClaimChestShopManager extends ActionManager<ClaimChestShop> {
 

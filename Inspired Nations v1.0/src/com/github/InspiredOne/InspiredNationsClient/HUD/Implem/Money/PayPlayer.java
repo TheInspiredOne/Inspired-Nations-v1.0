@@ -1,19 +1,14 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools;
-import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNations.ToolBox.Payable;
-import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.PromptOption;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickPlayerGeneral;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class PayPlayer extends PickPlayerGeneral {
 
 	Payable accounts;
 	Menu back;
-	public PayPlayer(PlayerData PDI, Payable accounts, Menu back) {
+	public PayPlayer(PlayerDataPortal PDI, Payable accounts, Menu back) {
 		super(PDI, back);
 		this.accounts = accounts;
 		this.back = back;

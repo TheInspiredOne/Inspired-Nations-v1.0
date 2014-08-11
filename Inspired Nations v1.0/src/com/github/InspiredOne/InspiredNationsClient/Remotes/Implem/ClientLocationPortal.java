@@ -5,10 +5,11 @@ import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
+import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientLocationPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 
-public class ClientLocationPortal extends UnicastRemoteObject implements
+public class ClientLocationPortal implements
 		ClientLocationPortalInter {
 
 	/**
@@ -19,6 +20,7 @@ public class ClientLocationPortal extends UnicastRemoteObject implements
 	
 	public ClientLocationPortal(Point3D location) throws RemoteException {
 		this.location = location;
+		UnicastRemoteObject.exportObject(this, InspiredNationsClient.port);
 	}
 
 }

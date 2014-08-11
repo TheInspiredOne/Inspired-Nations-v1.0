@@ -3,7 +3,7 @@ package com.github.InspiredOne.InspiredNationsServer.Remotes;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface ThemeInter extends Remote {
+public interface ThemePortal extends Remote {
 
 
 	public String HEADER() throws RemoteException;

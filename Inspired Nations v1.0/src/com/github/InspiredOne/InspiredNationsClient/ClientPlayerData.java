@@ -11,6 +11,7 @@ import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineExce
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInter;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 
 public class ClientPlayerData extends UnicastRemoteObject implements ClientPlayerDataInter {
 
@@ -22,7 +23,7 @@ public class ClientPlayerData extends UnicastRemoteObject implements ClientPlaye
 	public ArrayList<ActionManager<?>> actionmanagers;
 	private Conversation con;
 	
-	public ClientPlayerData(PlayerID id) throws RemoteException{
+	public ClientPlayerData(PlayerID id) throws RemoteException, PlayerOfflineException{
 		this.id = id;
 		try {
 			InspiredNationsClient.server.registerPlayer(id);
@@ -72,5 +73,10 @@ public class ClientPlayerData extends UnicastRemoteObject implements ClientPlaye
 	public void sendRawMessage(String msg) throws PlayerOfflineException,
 			RemoteException {
 		InspiredNationsClient.plugin.getServer().getPlayer(id.getID()).sendRawMessage(msg);
+	}
+
+	@Override
+	public Point3D getLocation() throws RemoteException, PlayerOfflineException {
+		return new Point3D(this.getPlayer().getLocation(), InspiredNationsClient.id);
 	}
 }

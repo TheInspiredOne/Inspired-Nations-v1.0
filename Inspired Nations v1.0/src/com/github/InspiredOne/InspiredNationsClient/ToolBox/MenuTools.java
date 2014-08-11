@@ -12,7 +12,7 @@ import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.ProtectionLevels;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Relation;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
@@ -70,7 +70,7 @@ public class MenuTools {
 	 * @return
 	 * @throws RemoteException 
 	 */
-	public static String addDivider(String text, PlayerDataInter receiver) throws RemoteException {
+	public static String addDivider(String text, PlayerDataPortal receiver) throws RemoteException {
 		return text.concat(receiver.DIVIDER() + repeat("-", 53) + "\n" + ChatColor.RESET);
 	}
 	/**
@@ -79,7 +79,7 @@ public class MenuTools {
 	 * @return
 	 * @throws RemoteException 
 	 */
-	public static String oneLineWallet(String text, PlayerDataInter PDI, Payable account) throws RemoteException {
+	public static String oneLineWallet(String text, PlayerDataPortal PDI, Payable account) throws RemoteException {
 		String output = text.concat(PDI.LABEL() + "Holdings: " + PDI.VALUE() +
 				Tools.cut(account.getTotalMoney(PDI.getCurrency(), InspiredNationsServer.Exchange.mcdown)) + PDI.UNIT() +" " + PDI.getCurrency() + "\n");
 		return output;
@@ -91,7 +91,7 @@ public class MenuTools {
 	 * @return		the <code>String</code> processed to be in the menu
 	 * @throws RemoteException 
 	 */
-	public static String header(String msg, PlayerDataInter receiver) throws RemoteException {
+	public static String header(String msg, PlayerDataPortal receiver) throws RemoteException {
 		return addDivider(receiver.HEADER() + msg + "\n" + ChatColor.RESET, (receiver));
 	}
 
@@ -131,7 +131,7 @@ public class MenuTools {
 				private static final long serialVersionUID = 3618500001516080580L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return "";
 				}
 
@@ -154,7 +154,7 @@ public class MenuTools {
 
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					// TODO Auto-generated method stub
 					return makeMessage("The government " + gov.getName() + " has been deleted.", receiver);
 				}
@@ -178,7 +178,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -7757366529180653770L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 				
 					return makeMessage("You are now " + position + " of " + govadd.getDisplayName(receiver) + TextColor.ALERT(receiver) +".", receiver);
 				}
@@ -199,7 +199,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -6179796899976083043L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					
 					return makeMessage("You are now a " + position + " of " + govadd.getDisplayName(receiver) + TextColor.ALERT(receiver) +".", receiver);
 				}
@@ -212,7 +212,7 @@ public class MenuTools {
 			};
 		}
 		
-		public static Alert ALLY_TRIED_TO_HURT_YOU(final PlayerDataInter attacker) {
+		public static Alert ALLY_TRIED_TO_HURT_YOU(final PlayerDataPortal attacker) {
 			return new Alert() {
 
 				/**
@@ -221,7 +221,7 @@ public class MenuTools {
 				private static final long serialVersionUID = 6265029800715995613L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage(attacker.getDisplayName(receiver) + " is trying to hurt you.", receiver);
 				}
 
@@ -232,7 +232,7 @@ public class MenuTools {
 			};
 		}
 		
-		public static Alert CANT_HURT_ALLY(final PlayerDataInter target) {
+		public static Alert CANT_HURT_ALLY(final PlayerDataPortal target) {
 			return new Alert() {
 
 				/**
@@ -241,7 +241,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -3534863904446112401L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You cannot hurt your ally, " + target.getDisplayName(receiver) + TextColor.ALERT(receiver) +".", receiver);
 				}
 
@@ -261,7 +261,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -8887323195358324916L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You have been invited to be a "
 				+ position + " of " + govinvite.getDisplayName(receiver)+ TextColor.ALERT(receiver)+ ".", receiver);
 				}
@@ -282,7 +282,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -4462019551522672864L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					if(re.equals(Relation.ALLY)) {
 						return makeMessage(gov.getDisplayName(receiver) + receiver.ALERT() + " has allied you.", receiver);
 					}
@@ -313,7 +313,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -1606958062365777950L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					if(re.equals(Relation.ALLY)) {
 						return makeMessage("You have successfully allied " + govre.getDisplayName(receiver) + TextColor.ALERT(receiver) + ".", receiver);
 					}
@@ -338,7 +338,7 @@ public class MenuTools {
 		}
 
 		
-		public static Alert CANNOT_HURT(final InspiredGov gov, final PlayerDataInter target) {
+		public static Alert CANNOT_HURT(final InspiredGov gov, final PlayerDataPortal target) {
 			return new Alert() {
 
 				/**
@@ -347,7 +347,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -4462019551522672864L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You cannot hurt "+target.getDisplayName(receiver.getPlayerID())+ receiver.ALERT() +
 							" here in " + gov + receiver.ALERT()+". "
 							 + "Their protection is too high.", (receiver));
@@ -360,7 +360,7 @@ public class MenuTools {
 				
 			};
 		}
-		public static Alert TRIED_TO_HURT_YOU(final PlayerDataInter attacker) {
+		public static Alert TRIED_TO_HURT_YOU(final PlayerDataPortal attacker) {
 			return new Alert() {
 
 				/**
@@ -369,7 +369,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -1606958062365777950L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) throws RemoteException {
+				public String getMessage(PlayerDataPortal receiver) throws RemoteException {
 					return makeMessage(attacker.getDisplayName(receiver.getPlayerID()) + receiver.ALERT() + " tried to hurt you.", receiver);
 				}
 
@@ -389,7 +389,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -2499830621442259952L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You cannot interact in " + attacked.getDisplayName(receiver) 
 							+ receiver.ALERT()+". Their protection is too high.", (receiver));
 				}
@@ -410,7 +410,7 @@ public class MenuTools {
 				private static final long serialVersionUID = 6630552666164107410L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You are no longer " + govlost.getOwnerPositionName() + " of " + govlost.getName(), (receiver));
 				}
 
@@ -431,7 +431,7 @@ public class MenuTools {
 				private static final long serialVersionUID = 5356796387575937695L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You are no longer " + govlost.getSubjectPositionName()
 							+ " of " + govlost.getName() + ".", (receiver));
 				}
@@ -453,7 +453,7 @@ public class MenuTools {
 				private static final long serialVersionUID = 2410593640115800320L;
 
 				@Override
-				public String getMessage(PlayerDataInter reciever) {
+				public String getMessage(PlayerDataPortal reciever) {
 					return makeMessage(msg, (reciever));
 				}
 
@@ -473,7 +473,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -8470406903932530715L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage(region.getTypeName() + " of " + gov.getDisplayName(receiver) + TextColor.ALERT(receiver) +
 							" successfully modified.", (receiver));
 				}
@@ -495,7 +495,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -8611525947131654856L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					BigDecimal converted = Tools.cut(InspiredNations.Exchange.getExchangeValue(amount, curren, receiver.getCurrency()));
 					return makeMessage(sender.getDisplayName(receiver) + makeMessage(" paid you " +TextColor.VALUE(receiver)+ converted + " "
 							+ TextColor.UNIT(receiver) + receiver.getCurrency() + TextColor.ALERT(receiver)+ ".",(receiver)), (receiver));
@@ -518,7 +518,7 @@ public class MenuTools {
 				private static final long serialVersionUID = 8894522114770201993L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					BigDecimal converted = Tools.cut(InspiredNations.Exchange.getExchangeValue(amount, curren, receiver.getCurrency()));
 					return makeMessage(sender.getDisplayName(receiver), receiver) + makeMessage(TextColor.ALERT(receiver) + " paid " + TextColor.VALUE(receiver) + converted +
 							" " + TextColor.UNIT(receiver) + receiver.getCurrency() + TextColor.ALERT(receiver) + " to " + paid.getDisplayName(receiver)
@@ -542,7 +542,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -4291314964430337719L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					
 					return makeMessage("You have entered " + gov.getDisplayName(receiver), receiver) +
 							makeMessage(".", receiver);
@@ -565,7 +565,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -2487985662361164037L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage("You have exited " + gov.getDisplayName(receiver),receiver) +
 							makeMessage(".", receiver);
 				}
@@ -586,7 +586,7 @@ public class MenuTools {
 				private static final long serialVersionUID = -7797465337304908395L;
 
 				@Override
-				public String getMessage(PlayerDataInter receiver) {
+				public String getMessage(PlayerDataPortal receiver) {
 					return makeMessage(gov.getTypeName() + " created successfully.", receiver);
 				}
 
@@ -597,7 +597,7 @@ public class MenuTools {
 			};
 		}
 		
-		public static String makeMessage(Object input, PlayerDataInter reciever) {
+		public static String makeMessage(Object input, PlayerDataPortal reciever) {
 			return TextColor.ALERT(reciever) + input.toString();
 		}
 
@@ -608,82 +608,82 @@ public class MenuTools {
 		public static String NO_ERROR() {
 			return "";
 		}
-		public static String HELP_PAGE_NOT_AVAILABLE(int maxPages, PlayerDataInter PDI) {
+		public static String HELP_PAGE_NOT_AVAILABLE(int maxPages, PlayerDataPortal PDI) {
 			return makeMessage("There are only " + maxPages + " pages to this help document. Inputs must be positive.", PDI);
 		}
-		public static String ACCOUNT_ALREADY_LINKED(PlayerDataInter PDI) {
+		public static String ACCOUNT_ALREADY_LINKED(PlayerDataPortal PDI) {
 			return makeMessage("The account is already linked.", PDI);
 		}
-		public static String INVALID_NUMBER_INPUT(PlayerDataInter PDI) {
+		public static String INVALID_NUMBER_INPUT(PlayerDataPortal PDI) {
 			return makeMessage("Your entry must be a number.", PDI);
 		}
-		public static String OUT_OF_RANGE_NUMBER_INPUT(PlayerDataInter PDI) {
+		public static String OUT_OF_RANGE_NUMBER_INPUT(PlayerDataPortal PDI) {
 			return makeMessage("That is not an option.", PDI);
 		}
-		public static String NOT_AN_OPTION(PlayerDataInter PDI) {
+		public static String NOT_AN_OPTION(PlayerDataPortal PDI) {
 			return makeMessage("That is not an option.", PDI);
 		}
-		public static String NAME_ALREADY_TAKEN(Class<? extends InspiredGov> gov, PlayerDataInter PDI) {
+		public static String NAME_ALREADY_TAKEN(Class<? extends InspiredGov> gov, PlayerDataPortal PDI) {
 			
 			String GovName = getTypeName(gov);
 			return makeMessage("That " + GovName + " name is already taken.", PDI);
 		}
-		public static String MONEY_NAME_ALREADY_TAKEN(PlayerDataInter PDI) {
+		public static String MONEY_NAME_ALREADY_TAKEN(PlayerDataPortal PDI) {
 			return makeMessage("That currency name is already in use.", PDI);
 		}
-		public static String MONEY_MULTIPLYER_TOO_LARGE(PlayerDataInter PDI) {
+		public static String MONEY_MULTIPLYER_TOO_LARGE(PlayerDataPortal PDI) {
 			return makeMessage("Your currency is too inflated.", PDI);
 		}
-		public static String MONEY_MULTIPLYER_TOO_SMALL(PlayerDataInter PDI) {
+		public static String MONEY_MULTIPLYER_TOO_SMALL(PlayerDataPortal PDI) {
 			return makeMessage("Your currency is too valuable.", PDI);
 		}
-		public static String ACCOUNT_NAME_ALREADY_TAKEN(PlayerDataInter PDI) {
+		public static String ACCOUNT_NAME_ALREADY_TAKEN(PlayerDataPortal PDI) {
 			return makeMessage("That account name is already in use.", PDI);
 		}
-		public static String NO_MATCHES_FOUND(PlayerDataInter PDI) {
+		public static String NO_MATCHES_FOUND(PlayerDataPortal PDI) {
 			return makeMessage("There are no matches found.", PDI);
 		}
-		public static String NO_SUB_GOVS_UNDER_THIS_GOV(PlayerDataInter PDI) {
+		public static String NO_SUB_GOVS_UNDER_THIS_GOV(PlayerDataPortal PDI) {
 			return makeMessage("There are no governments under the control of this government.", PDI);
 		}
-		public static String NOT_ENOUGH_MONEY(PlayerDataInter PDI) {
+		public static String NOT_ENOUGH_MONEY(PlayerDataPortal PDI) {
 			return makeMessage("There is not enough money.", PDI);
 		}
-		public static String GOV_TOO_STRONG(InspiredGov gov, PlayerDataInter PDI) {
+		public static String GOV_TOO_STRONG(InspiredGov gov, PlayerDataPortal PDI) {
 			return makeMessage("The "+gov.getTypeName()+", " +gov.getName()+", is in the way.", PDI);
 		}
-		public static String CLAIM_OUT_OF_BOUNDS(InspiredGov gov, PlayerDataInter PDI) {
+		public static String CLAIM_OUT_OF_BOUNDS(InspiredGov gov, PlayerDataPortal PDI) {
 			return makeMessage("Your claim goes outside of the " + gov.getTypeName() +", " + gov.getName() + ".", PDI);
 		}
-		public static String NEGATIVE_AMOUNTS_NOT_ALLOWED(BigDecimal useInstead, PlayerDataInter PDI) {
+		public static String NEGATIVE_AMOUNTS_NOT_ALLOWED(BigDecimal useInstead, PlayerDataPortal PDI) {
 			return makeMessage("You can't use negative values here. Use " + useInstead.abs() + " instead.", PDI);
 		}
-		public static String CUBOID_NOT_FULLY_SELECTED(PlayerDataInter PDI) {
+		public static String CUBOID_NOT_FULLY_SELECTED(PlayerDataPortal PDI) {
 			return makeMessage("You have not selected both points of the cuboid.", PDI);
 		}
-		public static String POINTS_IN_DIFFERENT_WORLDS(PlayerDataInter PDI) {
+		public static String POINTS_IN_DIFFERENT_WORLDS(PlayerDataPortal PDI) {
 			return makeMessage("Your selected points were in different worlds.", PDI);
 		}
-		public static String POLYGON_NOT_SIMPLE_SHAPE(PlayerDataInter PDI) {
+		public static String POLYGON_NOT_SIMPLE_SHAPE(PlayerDataPortal PDI) {
 			return makeMessage("The polygon you selected is not simple. This means that some of the sides"
 					+ " cross. Make sure you select each corner in order.", PDI);
 		}
-		public static String SELECTION_MUST_BE_CHEST(PlayerDataInter PDI) {
+		public static String SELECTION_MUST_BE_CHEST(PlayerDataPortal PDI) {
 			return makeMessage("You may only select chests for your shop.", PDI);
 		}
-		public static String NEGATIVE_PROTECTION_LEVEL_NOT_ALLOWED(PlayerDataInter PDI) {
+		public static String NEGATIVE_PROTECTION_LEVEL_NOT_ALLOWED(PlayerDataPortal PDI) {
 			return makeMessage("Negative numbers are not allowed for protection levels.", PDI);
 		}
-		public static String NEGATIVE_MILITARY_LEVEL_NOT_ALLOWED(PlayerDataInter PDI) {
+		public static String NEGATIVE_MILITARY_LEVEL_NOT_ALLOWED(PlayerDataPortal PDI) {
 			return makeMessage("Negative numbers are not allowed for military levels.", PDI);
 		}
-		public static String EMPTY_INPUT(PlayerDataInter PDI) {
+		public static String EMPTY_INPUT(PlayerDataPortal PDI) {
 			return makeMessage("Your input was blank.", PDI);
 		}
-		public static String ACCOUNT_ALREADY_HAS_THAT_CURRENCY(PlayerDataInter PDI) {
+		public static String ACCOUNT_ALREADY_HAS_THAT_CURRENCY(PlayerDataPortal PDI) {
 			return makeMessage("The account already has that currency.", PDI);
 		}
-		public static String ACCOUNT_COLLECTION_NOT_LINKED(PlayerDataInter PDI) {
+		public static String ACCOUNT_COLLECTION_NOT_LINKED(PlayerDataPortal PDI) {
 			return makeMessage("This account is not linked to any other accounts.", PDI);
 		}
 		private static final String getTypeName(Class<? extends InspiredGov> gov) {
@@ -691,7 +691,7 @@ public class MenuTools {
 			GovName = GovFactory.getGovInstance(gov).getTypeName();
 			return GovName;
 		}
-		public static final String makeMessage(Object msg, PlayerDataInter PDI) {
+		public static final String makeMessage(Object msg, PlayerDataPortal PDI) {
 			return "\n" + PDI.ERROR() + msg.toString();
 		}
 	}

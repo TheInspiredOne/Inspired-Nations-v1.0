@@ -1,6 +1,8 @@
 package com.github.InspiredOne.InspiredNationsServer.Economy;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -9,33 +11,32 @@ import com.github.InspiredOne.InspiredNationsServer.Config;
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 
 	
-public final class Currency implements CurrencyPortalInter{
+public final class Currency implements CurrencyPortal, Comparable<Currency>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2855995345401677901L;
 	private String name;
-	public static final Currency DEFAULT = new Currency("Coin");;
+	public static Currency DEFAULT;
 	
 
-	public Currency(String name) {
+	public Currency(String name) throws RemoteException {
 		//TODO Remove later, figure out when to add a currency to the exchange
 		//InspiredNations.Exchange.registerCurrency(this, new BigDecimal(500));
 		this.name = name;
-
-		
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
 	public Currency getSelf() {
 		return this;
 	}
 	
-	public BigDecimal getExchangeRate(CurrencyPortalInter output) {
+	public BigDecimal getExchangeRate(CurrencyPortal output) {
 		return InspiredNationsServer.Exchange.getExchangeValue(BigDecimal.ONE, this, output);
 	}
 
@@ -45,7 +46,7 @@ public final class Currency implements CurrencyPortalInter{
 	}
 	
 	@Override
-	public void setName(String name) throws NameAlreadyTakenException {
+	public void setName(String name) throws NameAlreadyTakenException, RemoteException {
 		Currency test = new Currency(name);
 		if(InspiredNationsServer.Exchange.getExchangeMap().containsKey(test)) {
 			throw new NameAlreadyTakenException();

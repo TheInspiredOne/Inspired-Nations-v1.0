@@ -5,11 +5,11 @@ import java.rmi.RemoteException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class ToggleTimerOption extends Option {
 	
-	PlayerDataInter PDI;
+	PlayerDataPortal PDI;
 
 	public ToggleTimerOption(OptionMenu menu, String label, String description) {
 		super(menu, label, description);

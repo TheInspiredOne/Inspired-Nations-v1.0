@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 /**
  * A <code>PromptOption</code> provides the basic structure of an option that simply
@@ -15,7 +15,7 @@ import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
 public class PromptOption extends Option {
 
 	Menu nextPrompt;
-	PlayerDataInter PDI;
+	PlayerDataPortal PDI;
 	
 	public PromptOption(OptionMenu menu, String lable, Menu nextPrompt, OptionUnavail reason) {
 		super(menu, lable, reason);

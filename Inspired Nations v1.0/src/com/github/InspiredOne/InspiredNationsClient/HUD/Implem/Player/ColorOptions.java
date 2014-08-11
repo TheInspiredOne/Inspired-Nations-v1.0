@@ -12,14 +12,14 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Player.ColorOptio
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Player.CustomTheme.TextCatagory;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
 public class ColorOptions extends TabSelectOptionMenu<Color> {
 	
 	TextCatagory section;
 	
-	public ColorOptions(PlayerDataInter PDI, TextCatagory tc) throws RemoteException {
+	public ColorOptions(PlayerDataPortal PDI, TextCatagory tc) throws RemoteException {
 		super(PDI);
 		section = tc;
 		

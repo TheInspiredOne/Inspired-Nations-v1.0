@@ -1,13 +1,14 @@
 package com.github.InspiredOne.InspiredNationsServer.Economy;
 
 import java.math.BigDecimal;
+import java.rmi.Remote;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Implem.Buyer;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 
 
-public interface Sellable extends Nameable {
+public interface Sellable extends Nameable, Remote {
 
 	/**
 	 * Handles the physical transfer of the item ownership. For items with multiple

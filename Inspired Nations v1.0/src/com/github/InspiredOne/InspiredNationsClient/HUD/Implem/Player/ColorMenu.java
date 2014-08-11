@@ -5,12 +5,12 @@ import java.rmi.RemoteException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
 public class ColorMenu extends OptionMenu {
 
-	public ColorMenu(PlayerDataInter PDI) throws RemoteException {
+	public ColorMenu(PlayerDataPortal PDI) throws RemoteException {
 		
 		super(PDI);
 		

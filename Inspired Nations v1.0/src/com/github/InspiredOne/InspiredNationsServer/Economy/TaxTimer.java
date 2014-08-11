@@ -1,16 +1,25 @@
-
 package com.github.InspiredOne.InspiredNationsServer.Economy;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.InspiredOne.InspiredNationsServer.Config;
+import com.github.InspiredOne.InspiredNationsServer.Debug;
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
+import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.TaxTimerPortal;
+import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
+import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
-public class TaxTimer implements Serializable {
+public class TaxTimer implements TaxTimerPortal, Serializable {
 	
 	/**
 	 * 
@@ -24,9 +33,10 @@ public class TaxTimer implements Serializable {
 	public boolean taxreadout = true;
 
 	
-	public TaxTimer(){
+	public TaxTimer() throws RemoteException {
 		cycleLength = Config.taxtimertime;
 		countdown = cycleLength;
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 		
 	}
 	
@@ -58,36 +68,41 @@ public class TaxTimer implements Serializable {
 	
 	public void startTimer() {
 		
-		new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				TaxTimerEvent event = new TaxTimerEvent(InspiredNations.taxTimer);
-				if(taxreadout) {
-					Bukkit.getServer().getPluginManager().callEvent(event);
-				}
-				double rand = 100.*Math.random();
-				if(rand < Config.npcbuyprob) {
-					for(PlayerID PDItemp:InspiredNations.playerdata) {
-						try {
-							PDItemp.getPDI().getPlayer();
-							for(NPC npc:PDItemp.getPDI().npcs) {
-								npc.buyOut();
-							}	
-						}
-						catch (Exception ex) {
-							
+		   final TimerTask timer = new TimerTask() {
+			   public void run() { 
+				   Debug.info("Printing out tax timer info: " + InspiredNationsServer.taxTimer.getFractionLeft());
+				   for(ClientID client:InspiredNationsServer.clients) {
+					   try {
+						client.getClientPortal().triggerTaxTimer();
+					} catch (RemoteException e) {
+						// TODO Kill The Plugin?
+						e.printStackTrace();
+					}
+				   }
+				   double rand = 100.*Math.random();
+					if(rand < Config.npcbuyprob) {
+						for(PlayerData PDItemp:InspiredNationsServer.playerdata.values()) {
+							try {
+								PDItemp.getPlayer();
+								for(NPC npc:PDItemp.npcs) {
+									npc.buyOut();
+								}	
+							}
+							catch (Exception ex) {
+								
+							}
 						}
 					}
-				}
-				countdown--;
-				if(countdown == 0) {
-					countdown = cycleLength;
-					collectTaxes();
-				}
-			}
-			
-		}.runTaskTimer(InspiredNations.plugin, 0, 20);		
+					countdown--;
+					if(countdown == 0) {
+						countdown = cycleLength;
+	//					collectTaxes();
+					}
+				   
+			   }
+		   };
+		   
+		  Alert.scheduler.scheduleAtFixedRate(timer, 0, 1, TimeUnit.SECONDS);
 	}
 	
 	public double getFractionLeft() {

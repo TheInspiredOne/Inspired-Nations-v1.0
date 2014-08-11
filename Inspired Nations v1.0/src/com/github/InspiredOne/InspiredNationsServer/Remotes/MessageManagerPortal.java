@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
-public interface MessageManagerInter extends Remote {
+public interface MessageManagerPortal extends Remote {
 
 	public int getMissedSize() throws RemoteException;
 	public void setMissedSize(int size) throws RemoteException;
@@ -15,6 +15,6 @@ public interface MessageManagerInter extends Remote {
 	public void clearMenuVisible() throws RemoteException;
 	public void receiveError(String msg) throws RemoteException;
 	public void receiveAlert(Alert alert, boolean refresh) throws RemoteException;
-	public String fullPush(PlayerDataInter player) throws RemoteException;
+	public String fullPush(PlayerDataPortal player) throws RemoteException;
 	
 }

@@ -7,8 +7,10 @@ import java.util.List;
 
 import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
+import com.github.InspiredOne.InspiredNationsClient.Listeners.Implem.MenuUpdateManager;
+import com.github.InspiredOne.InspiredNationsClient.Listeners.Implem.TaxTimerManager;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public abstract class ActionMenu extends Menu {
 
@@ -16,7 +18,7 @@ public abstract class ActionMenu extends Menu {
 	// Menu Persistent
 //	protected List<ActionManager<?>> managers = new ArrayList<ActionManager<?>>();
 	
-	public ActionMenu(PlayerDataInter PDI) throws RemoteException {
+	public ActionMenu(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 
@@ -87,8 +89,8 @@ public abstract class ActionMenu extends Menu {
 		}
 
 		this.getActionManager().clear();
-//		this.getActionManager().add(new TaxTimerManager<ActionMenu>(this));
-//		this.getActionManager().add(new MenuUpdateManager<ActionMenu>(this));
+		this.getActionManager().add(new TaxTimerManager<ActionMenu>(this));
+		this.getActionManager().add(new MenuUpdateManager<ActionMenu>(this));
 		this.addActionManagers();
 		
 	}

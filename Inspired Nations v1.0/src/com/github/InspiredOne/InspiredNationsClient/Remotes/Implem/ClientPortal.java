@@ -3,12 +3,15 @@ package com.github.InspiredOne.InspiredNationsClient.Remotes.Implem;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import org.bukkit.Bukkit;
+
 import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientLocationPortalInter;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInter;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPortalInter;
 import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientWorldPortalInter;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.TaxTimerEvent;
 import com.github.InspiredOne.InspiredNationsServer.Debug;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
@@ -45,5 +48,13 @@ public class ClientPortal implements ClientPortalInter {
 			throws RemoteException, NotBoundException {
 		return new ClientLocationPortal(point);
 	}
+
+	@Override
+	public void triggerTaxTimer() throws RemoteException {
+		TaxTimerEvent event = new TaxTimerEvent(InspiredNationsClient.server.getTaxTimer());
+		Bukkit.getServer().getPluginManager().callEvent(event);
+	}
+	
+	
 
 }

@@ -9,14 +9,14 @@ import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 
-public interface AlertPortalInter extends Remote, Nameable, Serializable {
+public interface AlertPortal extends Remote, Nameable, Serializable {
 
 	public boolean expired() throws RemoteException;
 	public void setExpired(boolean exp) throws RemoteException;
 	public Calendar getCalendar() throws RemoteException;
 	public boolean menuVisible() throws RemoteException;
 	public Alert getSelf() throws RemoteException;
-	public abstract String getMessage(PlayerDataInter receiver) throws RemoteException;
+	public abstract String getMessage(PlayerDataPortal receiver) throws RemoteException;
 	
 	/**
 	 * Returns true if the alert should remain after the player switches to a new menu.

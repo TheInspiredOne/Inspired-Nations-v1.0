@@ -14,11 +14,11 @@ import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInte
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Log;
 import com.github.InspiredOne.InspiredNationsServer.PlayerData;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.MessageManagerInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.MessageManagerPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
-public class MessageManager extends UnicastRemoteObject implements Serializable, MessageManagerInter {
+public class MessageManager extends UnicastRemoteObject implements Serializable, MessageManagerPortal {
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 	
 	public void receiveAlert(Alert alert, boolean refresh) throws RemoteException {
 		boolean incremented = false;
-		for(AlertPortalInter alertTemp:messages) {
+		for(AlertPortal alertTemp:messages) {
 			if(!alertTemp.expired() && alert.getMessage(PDI).equals(alertTemp.getMessage(PDI))) {
 				alertTemp.incrementStack();
 				incremented = true;
@@ -68,7 +68,7 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 			private static final long serialVersionUID = 9202786487465493637L;
 
 			@Override
-			public String getMessage(PlayerDataInter receiver) {
+			public String getMessage(PlayerDataPortal receiver) {
 				return msg;
 			}
 
@@ -84,7 +84,7 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 		try {
 			ClientPlayerDataInter player = PDI.getPlayer();
 			
-			for(AlertPortalInter alert:messages) {
+			for(AlertPortal alert:messages) {
 				if((alert.menuVisible() && !alert.expired()) || !player.isConversing()) {
 					output = output.concat(alert.getDisplayName(PDI.getId()) + "\n");
 				}
@@ -126,7 +126,7 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 					pdi.getMsg().receiveAlert(new Message(true, PDI, msg), true);
 				}
 				else {
-					pdi.getMsg().receiveAlert(new Message(pdi.chatState, PDI, msg), true);
+					pdi.getMsg().receiveAlert(new Message(pdi.isChatState(), PDI, msg), true);
 				}
 			}
 			catch (PlayerOfflineException ex) {
@@ -138,7 +138,7 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 
 	public void clearMenuVisible() throws RemoteException {
 		List<Error> remove = new ArrayList<Error>();
-		for(AlertPortalInter alert:messages) {
+		for(AlertPortal alert:messages) {
 			if(alert.menuVisible()) {
 				alert.setExpired(true);
 			}
@@ -162,9 +162,9 @@ public class MessageManager extends UnicastRemoteObject implements Serializable,
 	}
 
 	@Override
-	public String fullPush(PlayerDataInter player) throws RemoteException {
+	public String fullPush(PlayerDataPortal player) throws RemoteException {
 		String output = "";
-		for(AlertPortalInter alert:PDI.getMsg().getMessages()) {
+		for(AlertPortal alert:PDI.getMsg().getMessages()) {
 			output = output.concat(alert.getDisplayName(PDI.getPlayerID())+ "\n");
 		}
 		return output;

@@ -7,11 +7,11 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.PlayerDirectory;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.ToggleTimerOption;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class SettingsMenu extends OptionMenu {
 
-	public SettingsMenu(PlayerDataInter PDI) throws RemoteException {
+	public SettingsMenu(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 		// TODO Auto-generated constructor stub
 	}

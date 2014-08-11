@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public abstract class InputMenu extends ActionMenu {
 
 	public List<String> tabOptions = new ArrayList<String>();
 	
-	public InputMenu(PlayerDataInter PDI) throws RemoteException {
+	public InputMenu(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 	

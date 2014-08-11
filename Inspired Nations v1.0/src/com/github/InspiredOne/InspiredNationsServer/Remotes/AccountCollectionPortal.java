@@ -13,17 +13,17 @@ import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTran
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
-public interface AccountCollectionPortalInter extends Remote,  Payable, 
-Notifyable, Iterable<Account> {
+public interface AccountCollectionPortal extends Remote,  Payable, 
+Notifyable {
 	
-	public BigDecimal getTotalMoney(CurrencyPortalInter valueType, MathContext round) throws RemoteException;
+	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) throws RemoteException;
 	public AccountCollection getSelf() throws RemoteException;
-	public void transferMoney(BigDecimal amount, CurrencyPortalInter monType, Payable accountTo) throws BalanceOutOfBoundsException, NegativeMoneyTransferException, RemoteException;
-	public void addMoney(BigDecimal amount, CurrencyPortalInter monType) throws NegativeMoneyTransferException, RemoteException;
+	public void transferMoney(BigDecimal amount, CurrencyPortal monType, Payable accountTo) throws BalanceOutOfBoundsException, NegativeMoneyTransferException, RemoteException;
+	public void addMoney(BigDecimal amount, CurrencyPortal monType) throws NegativeMoneyTransferException, RemoteException;
 	public String getName() throws RemoteException;
 	public void setName(String name) throws RemoteException;
 	public String getDisplayName(PlayerID PID) throws RemoteException;
 	public boolean isLinked() throws RemoteException;
-	public void sendNotification(AlertPortalInter msg) throws RemoteException;
+	public void sendNotification(AlertPortal msg) throws RemoteException;
 	public void addAccount(Account account) throws RemoteException;
 }

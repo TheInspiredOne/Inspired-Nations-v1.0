@@ -3,20 +3,21 @@ package com.github.InspiredOne.InspiredNationsServer.Economy;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
-public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
+public class CurrencyAccount implements CurrencyAccountPortal, Cloneable {
 
 	/**
 	 * Currency Discipline
@@ -29,15 +30,16 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	private Currency curren;
 	private BigDecimal amount;
 	
-	public CurrencyAccount(Currency curren) {
+	public CurrencyAccount(Currency curren) throws RemoteException {
 		this.curren = curren;
 		this.amount = BigDecimal.ZERO;
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
 	public CurrencyAccount(Currency curren2, BigDecimal amount) throws RemoteException {
 		this.curren = curren2;
 		this.amount = amount;
 	}
-	public CurrencyAccount(CurrencyPortalInter curren2, BigDecimal amount) throws RemoteException {
+	public CurrencyAccount(CurrencyPortal curren2, BigDecimal amount) throws RemoteException {
 		this.curren = curren2.getSelf();
 		this.amount = amount;
 	}
@@ -60,7 +62,7 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	public Currency getCurrency() {
 		return curren;
 	}
-	public void setCurrency(CurrencyPortalInter curren) throws RemoteException { 
+	public void setCurrency(CurrencyPortal curren) throws RemoteException { 
 		this.curren = curren.getSelf();
 	}
 	
@@ -70,7 +72,7 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public void setName(String name) throws NameAlreadyTakenException {
+	public void setName(String name) throws NameAlreadyTakenException, RemoteException {
 		curren.setName(name);
 	}
 
@@ -84,7 +86,7 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public void transferMoney(BigDecimal amountTake, CurrencyPortalInter monType,
+	public void transferMoney(BigDecimal amountTake, CurrencyPortal monType,
 			Payable target) throws BalanceOutOfBoundsException,
 			NegativeMoneyTransferException, RemoteException {
 		
@@ -103,7 +105,7 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public void addMoney(BigDecimal amountGive, CurrencyPortalInter monType)
+	public void addMoney(BigDecimal amountGive, CurrencyPortal monType)
 			throws NegativeMoneyTransferException, RemoteException {
 		if(amountGive.compareTo(BigDecimal.ZERO) < 0 ) {
 			throw new NegativeMoneyTransferException();
@@ -114,12 +116,12 @@ public class CurrencyAccount implements CurrencyAccountPortalInter, Cloneable {
 	}
 
 	@Override
-	public BigDecimal getTotalMoney(CurrencyPortalInter getType, MathContext round) {
+	public BigDecimal getTotalMoney(CurrencyPortal getType, MathContext round) {
 		return InspiredNationsServer.Exchange.getExchangeValue(amount, curren, getType, InspiredNationsServer.Exchange.mcdown);
 	}
 	
 	@Override
-	public void sendNotification(AlertPortalInter msg) throws RemoteException {
+	public void sendNotification(AlertPortal msg) throws RemoteException {
 		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
 			for(Account account:player.getAccounts()) {
 				if(account.getMoney().contains(this)) {

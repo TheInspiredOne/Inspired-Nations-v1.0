@@ -6,12 +6,13 @@ import java.util.List;
 import com.github.InspiredOne.InspiredNationsClient.HUD.HelpMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class MainHud extends OptionMenu {
 	
 
-	public MainHud(PlayerDataInter PDI) throws RemoteException {
+	public MainHud(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 		help = new HelpMenu(PDI, this).addPage(
 				"Welcome to the main HUD. This documentation will help get you "
@@ -59,49 +60,49 @@ public class MainHud extends OptionMenu {
 	}
 
 	@Override
-	public void addOptions() {
-/*		this.options.add(new PromptOption(this, "Map", new Map(PDI)));
-		
-		boolean showMarket = false;
-		for(MarketPlace<?> mark:InspiredNations.Markets) {
-			if(!mark.getSales(PDI).isEmpty()) {
-				showMarket = true;
-			}
-		}
-		
-		if(!InspiredNations.Markets.isEmpty()) {
-			if(showMarket) {
-				this.options.add(new PromptOption(this, "Market", new PickMarketplace(PDI)));
-			}
-		}
-		
-
+	public void addOptions() throws RemoteException {
+//		this.options.add(new PromptOption(this, "Map", new Map(PDI)));
+//		
+//		boolean showMarket = false;
+//		for(MarketPlace<?> mark:InspiredNations.Markets) {
+//			if(!mark.getSales(PDI).isEmpty()) {
+//				showMarket = true;
+//			}
+//		}
+//		
+//		if(!InspiredNations.Markets.isEmpty()) {
+//			if(showMarket) {
+//				this.options.add(new PromptOption(this, "Market", new PickMarketplace(PDI)));
+//			}
+//		}
+//		
+//
 		this.options.add(new PromptOption(this, "Player Directory", new PlayerDirectory(PDI)));
-		this.options.add(new PromptOption(this, "Citizenship", new PlayerCitizenship(PDI)));
-		this.options.add(new PromptOption(this, "Manage Money", new ManageMoney(PDI),
-				"(" + Tools.cut(PDI.getTotalMoney(PDI.getCurrency(), InspiredNations.Exchange.mcdown)) + " "+ PDI.getCurrency() + ")"));
-		
-		//this.options.add(new getMoneyOption(this, "Get 1000 " + PDI.getCurrency().getName(), PDI));
-
-		
-		
-		List<Class<? extends OwnerGov>> array = InspiredNations.global.getAllSubGovs();
-		array.remove(InspiredNations.global.getClass());
-		for(Class<? extends OwnerGov> gov:array) {
-			OwnerGov govobj = (OwnerGov) GovFactory.getGovInstance(gov);
-			if(!PDI.getOwnership(gov).isEmpty()) {
-				this.options.add(new PromptOption(this, "Manage Government", new ManageAll(PDI, this)));
-				break;
-			}
-		}
-	
-		for(Class<? extends OwnerGov> gov:array) {
-			OwnerGov govobj = (OwnerGov) GovFactory.getGovInstance(gov);
-			if(!PDI.getCitizenship(govobj.getSuperGov()).isEmpty()) {
-				this.options.add(new PromptOption(this, "New Government", new NewAll(PDI, this)));
-				break;
-			}
-		}*/
+//		this.options.add(new PromptOption(this, "Citizenship", new PlayerCitizenship(PDI)));
+//		this.options.add(new PromptOption(this, "Manage Money", new ManageMoney(PDI),
+//				"(" + Tools.cut(PDI.getTotalMoney(PDI.getCurrency(), InspiredNations.Exchange.mcdown)) + " "+ PDI.getCurrency() + ")"));
+//		
+//		//this.options.add(new getMoneyOption(this, "Get 1000 " + PDI.getCurrency().getName(), PDI));
+//
+//		
+//		
+//		List<Class<? extends OwnerGov>> array = InspiredNations.global.getAllSubGovs();
+//		array.remove(InspiredNations.global.getClass());
+//		for(Class<? extends OwnerGov> gov:array) {
+//			OwnerGov govobj = (OwnerGov) GovFactory.getGovInstance(gov);
+//			if(!PDI.getOwnership(gov).isEmpty()) {
+//				this.options.add(new PromptOption(this, "Manage Government", new ManageAll(PDI, this)));
+//				break;
+//			}
+//		}
+//	
+//		for(Class<? extends OwnerGov> gov:array) {
+//			OwnerGov govobj = (OwnerGov) GovFactory.getGovInstance(gov);
+//			if(!PDI.getCitizenship(govobj.getSuperGov()).isEmpty()) {
+//				this.options.add(new PromptOption(this, "New Government", new NewAll(PDI, this)));
+//				break;
+//			}
+//		}
 	}
 
 	@Override

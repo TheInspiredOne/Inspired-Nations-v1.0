@@ -10,12 +10,12 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Player.CustomTheme.TextCatagory;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
 public class CustomTheme extends TabSelectOptionMenu<TextCatagory> {
 
-	public CustomTheme(PlayerDataInter PDI) throws RemoteException {
+	public CustomTheme(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 
@@ -494,9 +494,9 @@ public class CustomTheme extends TabSelectOptionMenu<TextCatagory> {
 	
 	public abstract class TextCatagory implements Nameable {
 		
-		PlayerDataInter PDI;
+		PlayerDataPortal PDI;
 		
-		public TextCatagory(PlayerDataInter PDI) {
+		public TextCatagory(PlayerDataPortal PDI) {
 			this.PDI = PDI;
 		}
 

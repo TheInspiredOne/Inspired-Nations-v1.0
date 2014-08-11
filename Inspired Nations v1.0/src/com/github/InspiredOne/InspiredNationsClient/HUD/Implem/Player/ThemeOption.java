@@ -6,11 +6,11 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public abstract class ThemeOption extends Option {
 	
-	PlayerDataInter PDI;
+	PlayerDataPortal PDI;
 	
 	public ThemeOption(OptionMenu menu, String label, OptionUnavail reason) {
 		super(menu, label, reason);

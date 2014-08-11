@@ -1,5 +1,6 @@
 package com.github.InspiredOne.InspiredNationsServer;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -13,14 +14,15 @@ import com.github.InspiredOne.InspiredNationsServer.Economy.NPC;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortalInter;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Theme;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.MessageManager;
 
-public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
+public class PlayerData implements PlayerDataPortal {
 
 	/**
 	 * 
@@ -28,26 +30,30 @@ public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 	private static final long serialVersionUID = 1358248142526827092L;
 	private PlayerID id;
 	private AccountCollection accounts;
-	private Currency currency;
+	private Currency currency = Currency.DEFAULT;
 	private String name;
 	private Theme theme = new Theme();
 	private MessageManager msg;
 	private boolean kill = false;
 	public List<NPC> npcs = new ArrayList<NPC>();
 	private boolean TimerState = false;
-	public boolean chatState = true;
+	private boolean chatState = true;
+
+	private Point3D lastLoc;
 	
 	public PlayerData(PlayerID id) throws RemoteException {
 		this.id = id;
 		name = id.getName();
 		msg = new MessageManager(this);
+		this.accounts = new AccountCollection(name);
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
 
 	public PlayerID getId() {
 		return id;
 	}
 	@Override
-	public void sendNotification(AlertPortalInter msg) throws RemoteException {
+	public void sendNotification(AlertPortal msg) throws RemoteException {
 		this.getMsg().receiveAlert(msg.getSelf(), true);
 	}
 	public AccountCollection getAccounts() {
@@ -287,5 +293,27 @@ public class PlayerData extends UnicastRemoteObject implements PlayerDataInter {
 	@Override
 	public void setTimerState(boolean timerState) {
 		TimerState = timerState;
+	}
+
+	@Override
+	public boolean getTimerState() throws RemoteException {
+		return this.TimerState;
+	}
+
+	public boolean isChatState() {
+		return chatState;
+	}
+
+	public void setChatState(boolean chatState) {
+		this.chatState = chatState;
+	}
+
+	@Override
+	public Point3D getLastLocation() throws RemoteException, NotBoundException {
+		try {
+			return this.getPlayer().getLocation();
+		} catch (PlayerOfflineException e) {
+			return this.lastLoc;
+		}
 	}
 }

@@ -6,18 +6,18 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortalInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
 
 
 public class ChangeAutoExchangeOption extends Option {
-	private AccountPortalInter account;
+	private AccountPortal account;
 	public ChangeAutoExchangeOption(OptionMenu menu, String label,
 			OptionUnavail reason) {
 		super(menu, label, reason);
 		
 	}
 
-	public ChangeAutoExchangeOption(OptionMenu menu, String label, AccountPortalInter account) throws RemoteException {
+	public ChangeAutoExchangeOption(OptionMenu menu, String label, AccountPortal account) throws RemoteException {
 		super(menu, label, ": " + account.isAutoExchange());
 		this.account = account;
 	}

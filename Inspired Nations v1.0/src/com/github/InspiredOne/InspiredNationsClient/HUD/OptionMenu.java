@@ -7,13 +7,13 @@ import java.util.List;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataInter;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public abstract class OptionMenu extends ActionMenu {
 
 	public List<Option> options;
 	
-	public OptionMenu(PlayerDataInter PDI) throws RemoteException {
+	public OptionMenu(PlayerDataPortal PDI) throws RemoteException {
 		super(PDI);
 	}
 
@@ -69,7 +69,7 @@ public abstract class OptionMenu extends ActionMenu {
 		}
 	}
 	
-	public static String optionsToText(List<Option> options, PlayerDataInter PDI) throws RemoteException {
+	public static String optionsToText(List<Option> options, PlayerDataPortal PDI) throws RemoteException {
 		String output = "";
 		int iter = 1;
 		
