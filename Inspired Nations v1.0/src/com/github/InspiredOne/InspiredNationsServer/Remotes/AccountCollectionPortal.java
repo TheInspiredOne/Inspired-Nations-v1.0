@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
@@ -13,8 +14,8 @@ import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTran
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
-public interface AccountCollectionPortal extends Remote,  Payable, 
-Notifyable {
+public interface AccountCollectionPortal extends Remote, Payable, 
+Notifyable, Nameable {
 	
 	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) throws RemoteException;
 	public AccountCollection getSelf() throws RemoteException;
@@ -26,4 +27,7 @@ Notifyable {
 	public boolean isLinked() throws RemoteException;
 	public void sendNotification(AlertPortal msg) throws RemoteException;
 	public void addAccount(Account account) throws RemoteException;
+	public AccountPortal get(int index) throws RemoteException;
+	public int getSize() throws RemoteException;
+	public void add(AccountPortal account) throws RemoteException;
 }

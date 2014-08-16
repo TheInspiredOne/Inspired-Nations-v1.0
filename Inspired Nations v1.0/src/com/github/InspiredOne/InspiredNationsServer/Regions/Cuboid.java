@@ -151,7 +151,6 @@ public class Cuboid extends NonCummulativeRegion {
 
 	@Override
 	public boolean IsIn(Region region) {
-		Debug.print("in Cuboid.IsIn(Region) 1");
 		Point3D point;
 		for(int x = this.pointmin.x; x <= this.pointmax.x; x++) {
 			for(int y = this.pointmin.y; y <= this.pointmax.y; y++) {
@@ -163,20 +162,7 @@ public class Cuboid extends NonCummulativeRegion {
 				}
 			}
 		}
-		Debug.print("in Cuboid.IsIn(Region) 2");
 		return true;
-	}
-	
-	public void fill() {
-		Point3D point;
-		for(int x = this.pointmin.x; x <= this.pointmax.x; x++) {
-			for(int y = this.pointmin.y; y <= this.pointmax.y; y++) {
-				for(int z = this.pointmin.z; z <= this.pointmax.z; z++) {
-					point = new Point3D(x, y, z, this.pointmax.world);
-					point.getLocation().getBlock().setType(Material.BEDROCK);
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -205,11 +191,10 @@ public class Cuboid extends NonCummulativeRegion {
 	}
 
 	@Override
-	public Location getCharacteristicPoint() {
+	public Point3D getCharacteristicPoint() {
 		double xavg = (this.pointmax.x + this.pointmin.x)/2.0;
 		double yavg = (this.pointmax.y + this.pointmin.y)/2.0;
 		double zavg = (this.pointmax.z + this.pointmin.z)/2.0;
-		Location locout = new Location(this.getWorld().getWorld(),xavg,yavg,zavg);
-		return locout;
+		return new Point3D((int) xavg,(int) yavg,(int) zavg, this.getWorld());
 	}
 }

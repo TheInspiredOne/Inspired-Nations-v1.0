@@ -7,7 +7,10 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.HelpMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money.ManageMoney;
+import com.github.InspiredOne.InspiredNationsServer.Economy.MoneyExchange;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 
 public class MainHud extends OptionMenu {
 	
@@ -79,8 +82,8 @@ public class MainHud extends OptionMenu {
 //
 		this.options.add(new PromptOption(this, "Player Directory", new PlayerDirectory(PDI)));
 //		this.options.add(new PromptOption(this, "Citizenship", new PlayerCitizenship(PDI)));
-//		this.options.add(new PromptOption(this, "Manage Money", new ManageMoney(PDI),
-//				"(" + Tools.cut(PDI.getTotalMoney(PDI.getCurrency(), InspiredNations.Exchange.mcdown)) + " "+ PDI.getCurrency() + ")"));
+		this.options.add(new PromptOption(this, "Manage Money", new ManageMoney(PDI),
+				"(" + Tools.cut(PDI.getTotalMoney(PDI.getCurrency(), MoneyExchange.mcdown)) + " "+ PDI.getCurrency() + ")"));
 //		
 //		//this.options.add(new getMoneyOption(this, "Get 1000 " + PDI.getCurrency().getName(), PDI));
 //

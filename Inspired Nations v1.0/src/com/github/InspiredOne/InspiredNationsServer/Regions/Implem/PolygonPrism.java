@@ -9,18 +9,13 @@ import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Exceptions.NotSimplePolygonException;
-import com.github.InspiredOne.InspiredNations.Exceptions.PointsInDifferentWorldException;
-import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNations.Hud.Menu;
-import com.github.InspiredOne.InspiredNations.Hud.Implem.ClaimAndUnclaimLand.ClaimPolygonPrism;
-import com.github.InspiredOne.InspiredNations.Regions.Cuboid;
-import com.github.InspiredOne.InspiredNations.Regions.CummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.NonCummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.Region;
-import com.github.InspiredOne.InspiredNations.ToolBox.Point3D;
-import com.github.InspiredOne.InspiredNations.ToolBox.WorldID;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.PointsInDifferentWorldException;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Cuboid;
+import com.github.InspiredOne.InspiredNationsServer.Regions.CummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.NonCummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Region;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.WorldID;
 
 public class PolygonPrism extends NonCummulativeRegion {
 
@@ -328,7 +323,7 @@ public class PolygonPrism extends NonCummulativeRegion {
 	}
 
 	@Override
-	public Location getCharacteristicPoint() {
+	public Point3D getCharacteristicPoint() {
 		double yavg = (this.getMaxHieght()+this.getMinHieght())/2.0;
 		double zsum = 0;
 		double xsum = 0;
@@ -338,6 +333,6 @@ public class PolygonPrism extends NonCummulativeRegion {
 		}
 		double xavg = xsum/this.polygon.npoints;
 		double zavg = zsum/this.polygon.npoints;
-		return new Location(this.world.getWorld(), xavg, yavg, zavg);
+		return new Point3D((int) xavg, (int) yavg, (int) zavg, this.world);
 	}
 }

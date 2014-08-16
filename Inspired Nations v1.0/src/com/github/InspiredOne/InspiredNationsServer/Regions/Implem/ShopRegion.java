@@ -7,18 +7,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Exceptions.BlockNotChestException;
-import com.github.InspiredOne.InspiredNations.Exceptions.PointsInDifferentWorldException;
-import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNations.Hud.Menu;
-import com.github.InspiredOne.InspiredNations.Hud.Implem.ClaimAndUnclaimLand.ClaimChestShop;
-import com.github.InspiredOne.InspiredNations.Regions.Cuboid;
-import com.github.InspiredOne.InspiredNations.Regions.CummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.NonCummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.Region;
-import com.github.InspiredOne.InspiredNations.ToolBox.Point3D;
-import com.github.InspiredOne.InspiredNations.ToolBox.WorldID;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.BlockNotChestException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.PointsInDifferentWorldException;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Cuboid;
+import com.github.InspiredOne.InspiredNationsServer.Regions.CummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.NonCummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Region;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.WorldID;
+
 
 public class ShopRegion extends NonCummulativeRegion {
 
@@ -195,8 +192,8 @@ public class ShopRegion extends NonCummulativeRegion {
 	}
 
 	@Override
-	public Location getCharacteristicPoint() {
-		return one.getLocation();
+	public Point3D getCharacteristicPoint() {
+		return one;
 	}
 
 }

@@ -15,6 +15,7 @@ public interface ServerPortalInter extends Remote {
 	public void registerPlayer(PlayerID id) throws RemoteException, PlayerOfflineException;
 	public PlayerDataPortal getPlayer(PlayerID id) throws RemoteException;
 	public TaxTimerPortal getTaxTimer() throws RemoteException;
+	public MoneyExchangePortal getExchange() throws RemoteException;
 	public IndexedMap<PlayerID, PlayerData> getPlayerData() throws RemoteException;
 	
 }

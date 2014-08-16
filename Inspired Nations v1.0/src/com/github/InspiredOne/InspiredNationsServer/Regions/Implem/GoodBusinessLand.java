@@ -3,11 +3,10 @@ package com.github.InspiredOne.InspiredNationsServer.Regions.Implem;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNations.Governments.Implem.GoodBusiness;
-import com.github.InspiredOne.InspiredNations.Regions.Cuboid;
-import com.github.InspiredOne.InspiredNations.Regions.InspiredRegion;
-import com.github.InspiredOne.InspiredNations.Regions.Region;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Cuboid;
+import com.github.InspiredOne.InspiredNationsServer.Regions.InspiredRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Region;
 
 public class GoodBusinessLand extends InspiredRegion {
 

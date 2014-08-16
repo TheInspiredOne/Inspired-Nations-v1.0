@@ -1,19 +1,21 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.CurrencyAccount;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools;
-import com.github.InspiredOne.InspiredNations.ToolBox.Payable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.TabSelectOptionMenu;
+import java.rmi.RemoteException;
 
-public class PickCurrencyCollection extends TabSelectOptionMenu<CurrencyAccount> {
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
+
+public class PickCurrencyCollection extends TabSelectOptionMenu<CurrencyAccountPortal> {
 
 	Menu previous;
-	Account account;
+	AccountPortal account;
 	Payable accountFrom;
-	public PickCurrencyCollection(PlayerData PDI, Menu previous, Account account, Payable accountFrom) {
+	public PickCurrencyCollection(PlayerDataPortal PDI, Menu previous, AccountPortal account, Payable accountFrom) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		this.account = account;
@@ -26,7 +28,7 @@ public class PickCurrencyCollection extends TabSelectOptionMenu<CurrencyAccount>
 	}
 
 	@Override
-	public String postTabListPreOptionsText() {
+	public String postTabListPreOptionsText() throws RemoteException {
 		return MenuTools.oneLineWallet("", PDI, accountFrom);
 	}
 
@@ -36,11 +38,10 @@ public class PickCurrencyCollection extends TabSelectOptionMenu<CurrencyAccount>
 	}
 
 	@Override
-	public void addTabOptions() {
-		for(CurrencyAccount curren:account.getMoney()) {
-			this.taboptions.add(curren);
+	public void addTabOptions() throws RemoteException {
+		for(int i=0; i<account.getCurrencySize(); i++) {
+			this.taboptions.add(account.getCurrency(i));
 		}
-		
 	}
 
 	@Override

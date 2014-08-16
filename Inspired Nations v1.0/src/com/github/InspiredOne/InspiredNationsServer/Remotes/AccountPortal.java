@@ -47,4 +47,7 @@ public interface AccountPortal extends Serializable, Nameable, Payable, Cloneabl
 	public boolean containsCurrency(CurrencyPortal curren) throws RemoteException;
 	public String getDisplayName(PlayerID PDI) throws RemoteException;
 	public void sendNotification(AlertPortal msg) throws RemoteException;
+	public int getCurrencySize() throws RemoteException;
+	public CurrencyAccountPortal getCurrency(int index) throws RemoteException;
+	public void removeCurrency(CurrencyPortal portal) throws RemoteException;
 }

@@ -7,9 +7,10 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
-public class ManageAccounts extends TabSelectOptionMenu<Account> {
+public class ManageAccounts extends TabSelectOptionMenu<AccountPortal> {
 
 	Menu previous;
 	AccountCollectionPortal accounts;
@@ -35,16 +36,16 @@ public class ManageAccounts extends TabSelectOptionMenu<Account> {
 		return "Manage Accounts";
 	}
 	@Override
-	public void addTabOptions() {
-		for(Account account:accounts) {
-			this.taboptions.add(account);
+	public void addTabOptions() throws RemoteException {
+		for(int i = 0; i<accounts.getSize(); i++) {
+			this.taboptions.add(accounts.get(i));
 		}
 	}
 
 	@Override
 	public void addOptions() {
 		if(taboptions.size() > 0) {
-			this.options.add(new ChangeTabOrderOption<>(new ManageAccounts(PDI, previous, accounts), "Change Account Order <+/->", PDI.getAccounts(), this.getData()));
+			this.options.add(new ChangeTabOrderOption<AccountPortal>(new ManageAccounts(PDI, previous, accounts), "Change Account Order <+/->", PDI.getAccounts(), this.getData()));
 			this.options.add(new PromptOption(this, "Manage " + this.getData().getName() + " account", new ManageAccount(PDI, previous, this.getData(), accounts)));
 			this.options.add(new PromptOption(this, "Pay With " + this.getData().getName(), new PayNav(PDI, this, this.getData())));
 			this.options.add(new PromptOption(this, "Manage Currencies In " +this.getData().getName(), new ManageCurrencies(PDI, this,this.getData(), accounts)));

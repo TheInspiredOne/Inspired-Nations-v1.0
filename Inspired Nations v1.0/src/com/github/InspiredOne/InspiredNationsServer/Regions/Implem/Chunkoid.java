@@ -59,12 +59,12 @@ public class Chunkoid extends CummulativeRegion<ChunkRegion> {
 		output.setRegions((HashSet<ChunkRegion>) this.getRegions().clone());
 		return output;
 	}
-	public void addChunk(Chunk chunk) {
-		Point2D position = new Point2D(chunk);
+	public void addChunk(Chunk chunk, ClientID client) {
+		Point2D position = new Point2D(chunk, client);
 		addChunk(position);
 	}
 	
-	public void addChunk(Point2D position, ClientID id) {
+	public void addChunk(Point2D position) {
 		ChunkRegion chunk = new ChunkRegion(position);
 		addChunk(chunk);
 	}
@@ -73,8 +73,8 @@ public class Chunkoid extends CummulativeRegion<ChunkRegion> {
 		this.getRegions().add(region);	
 	}
 	
-	public void removeChunk(Chunk chunk) {
-		Point2D position = new Point2D(chunk);
+	public void removeChunk(Chunk chunk, ClientID client) {
+		Point2D position = new Point2D(chunk, client);
 		removeChunk(position);
 	}
 	public void removeChunk(Point2D position) {

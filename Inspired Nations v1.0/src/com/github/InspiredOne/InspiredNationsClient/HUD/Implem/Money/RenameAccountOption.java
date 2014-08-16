@@ -1,11 +1,14 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.OptionMenu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.RenameNameableOption;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.RenameNameableOption;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuError;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
 
 public class RenameAccountOption extends RenameNameableOption {
 
@@ -24,9 +27,10 @@ public class RenameAccountOption extends RenameNameableOption {
 	}
 
 	@Override
-	public String validate(String input) {
-		for(Account account:menu.PDI.getAccounts()) {
-			
+	public String validate(String input) throws RemoteException {
+		AccountCollectionPortal accounts = menu.PDI.getAccounts();
+		for(int i = 0; i < accounts.getSize(); i++) {
+			AccountPortal account = accounts.get(i);
 			if(account.getName().equalsIgnoreCase(input) && account != nameholder) {
 				return MenuError.ACCOUNT_NAME_ALREADY_TAKEN(menu.PDI);
 			}

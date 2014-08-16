@@ -41,9 +41,9 @@ public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccountPortal>
 	}
 
 	@Override
-	public void addTabOptions() {
-		for(CurrencyAccountPortal curren:account.getMoney()) {
-			this.taboptions.add(curren);
+	public void addTabOptions() throws RemoteException {
+		for(int i = 0; i < account.getCurrencySize(); i++) {
+			this.taboptions.add(account.getCurrency(i));
 		}
 		
 	}

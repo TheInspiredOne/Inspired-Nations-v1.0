@@ -1,22 +1,25 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickPlayerGeneral;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickPlayerGeneral;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
+import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
 public class PickPlayerToShare extends PickPlayerGeneral {
 
-	Account account;
+	AccountPortal account;
 	
-	public PickPlayerToShare(PlayerData PDI, Menu previous, Account account) {
+	public PickPlayerToShare(PlayerDataPortal PDI, Menu previous, AccountPortal account) throws RemoteException {
 		super(PDI, previous);
 		this.account = account;
 	}
 
 	@Override
-	public boolean check(PlayerID player) {
+	public boolean check(PlayerID player) throws RemoteException {
 		if(PDI.getPlayerID().equals(player)) {
 			return false;
 		}
@@ -36,8 +39,8 @@ public class PickPlayerToShare extends PickPlayerGeneral {
 	}
 
 	@Override
-	public void addOptions() {
-		this.options.add(new ShareAccountOption(this, "Share Account With " + this.getData(), account, this.getData().getPDI().getAccounts()));
+	public void addOptions() throws RemoteException {
+		this.options.add(new ShareAccountOption(this, "Share Account With " + this.getData(), account, InspiredNationsClient.server.getPlayer(this.getData()).getAccounts()));
 		
 	}
 

@@ -1,24 +1,26 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.Currency;
-import com.github.InspiredOne.InspiredNationsClient.Hud.OptionMenu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickCurrencyGeneral;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickCurrencyGeneral;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class PickCurrencyToAdd extends PickCurrencyGeneral {
 
-	Account account;
+	AccountPortal account;
 	OptionMenu previous;
 	
-	public PickCurrencyToAdd(PlayerData PDI, OptionMenu previous, Account account) {
+	public PickCurrencyToAdd(PlayerDataPortal PDI, OptionMenu previous, AccountPortal account) throws RemoteException {
 		super(PDI, previous);
 		this.account = account;
 		this.previous = previous;
 	}
 
 	@Override
-	public boolean check(Currency curren) {
+	public boolean check(CurrencyPortal curren) throws RemoteException {
 		if(account.containsCurrency(curren)) {
 			return false;
 		}

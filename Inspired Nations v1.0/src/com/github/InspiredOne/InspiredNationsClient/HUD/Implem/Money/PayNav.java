@@ -1,6 +1,7 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickNavGeneral;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 

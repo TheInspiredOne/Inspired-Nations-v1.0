@@ -1,36 +1,36 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.InspiredNations;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.Currency;
-import com.github.InspiredOne.InspiredNations.Economy.CurrencyAccount;
-import com.github.InspiredOne.InspiredNations.Exceptions.BalanceOutOfBoundsException;
-import com.github.InspiredOne.InspiredNations.Exceptions.NegativeMoneyTransferException;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.OptionUnavail;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Option;
-import com.github.InspiredOne.InspiredNationsClient.Hud.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
+import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
+import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
+import com.github.InspiredOne.InspiredNationsServer.Economy.MoneyExchange;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
 
 public class RemoveCurrencyOption extends Option {
 
-	Account account;
-	CurrencyAccount curren;
+	AccountPortal account;
+	CurrencyAccountPortal curren;
 	
 	public RemoveCurrencyOption(OptionMenu menu, String label,
-			OptionUnavail reason, Account account, CurrencyAccount curren) {
+			OptionUnavail reason, AccountPortal account, CurrencyAccountPortal curren) {
 		super(menu, label, reason);
 		this.account = account;
 		this.curren = curren;
 	}
 
-	public RemoveCurrencyOption(OptionMenu menu, String label, Account account, CurrencyAccount curren) {
+	public RemoveCurrencyOption(OptionMenu menu, String label, AccountPortal account, CurrencyAccountPortal curren) {
 		super(menu, label);
 		this.account = account;
 		this.curren = curren;
 	}
 
 	public RemoveCurrencyOption(OptionMenu menu, String label,
-			String description, Account account, CurrencyAccount curren) {
+			String description, AccountPortal account, CurrencyAccountPortal curren) {
 		super(menu, label, description);
 		this.account = account;
 		this.curren = curren;
@@ -39,10 +39,10 @@ public class RemoveCurrencyOption extends Option {
 	@Override
 	public Menu response(String input) {
 		boolean trans = account.isAutoExchange();
-		this.account.getMoney().remove(curren);
+		this.account.remove(curren);
 		account.setAutoExchange(true);
 		try {
-			curren.transferMoney(curren.getTotalMoney(curren.getCurrency(), InspiredNations.Exchange.mcdown), curren.getCurrency(), account);
+			curren.transferMoney(curren.getTotalMoney(curren.getCurrency(), MoneyExchange.mcdown), curren.getCurrency(), account);
 		} catch (BalanceOutOfBoundsException e) {
 			e.printStackTrace();
 		} catch (NegativeMoneyTransferException e) {

@@ -240,4 +240,16 @@ public class Account implements AccountPortal {
 			throws RemoteException {
 		this.getMoney().add(account.getSelf());
 	}
+	@Override
+	public int getCurrencySize() throws RemoteException {
+		return this.getMoney().size();
+	}
+	@Override
+	public CurrencyAccountPortal getCurrency(int index) throws RemoteException {
+		return this.getMoney().get(index);
+	}
+	@Override
+	public void removeCurrency(CurrencyPortal portal) throws RemoteException {
+		this.getMoney().remove(portal.getSelf());
+	}
 }

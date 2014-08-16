@@ -2,16 +2,13 @@ package com.github.InspiredOne.InspiredNationsServer.Regions.Implem;
 
 import org.bukkit.Location;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNations.Governments.Implem.ChestShop;
-import com.github.InspiredOne.InspiredNations.Governments.Implem.SignShop;
-import com.github.InspiredOne.InspiredNations.Hud.Menu;
-import com.github.InspiredOne.InspiredNations.Hud.Implem.ClaimAndUnclaimLand.ClaimSignShop;
-import com.github.InspiredOne.InspiredNations.Regions.CummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.NonCummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.Region;
-import com.github.InspiredOne.InspiredNations.ToolBox.Point3D;
+import com.github.InspiredOne.InspiredNationsServer.PlayerData;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNationsServer.Regions.CummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.NonCummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Region;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
+
 
 public class SignShopRegion extends Region {
 
@@ -100,8 +97,8 @@ public class SignShopRegion extends Region {
 	}
 		
 	@Override
-	public Location getCharacteristicPoint() {
-		return loca.getLocation();
+	public Point3D getCharacteristicPoint() {
+		return loca;
 	}
 
 }

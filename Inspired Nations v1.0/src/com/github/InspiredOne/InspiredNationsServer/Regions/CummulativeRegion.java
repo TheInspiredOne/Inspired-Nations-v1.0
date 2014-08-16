@@ -5,7 +5,9 @@ import java.util.HashSet;
 
 import org.bukkit.Location;
 
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.WorldID;
 
 public abstract class CummulativeRegion<T extends NonCummulativeRegion> extends Region {
 
@@ -66,7 +68,6 @@ public abstract class CummulativeRegion<T extends NonCummulativeRegion> extends 
 	}
 	@Override
 	public boolean IsIn(NonCummulativeRegion region) {
-		Debug.print("in CummulativeRegion.IsIn(NonCummulativeRegion))");
 		for(NonCummulativeRegion test:this.getRegions()) {
 			if(!test.IsIn(region)) {
 				return false;
@@ -77,7 +78,6 @@ public abstract class CummulativeRegion<T extends NonCummulativeRegion> extends 
 	
 	@Override
 	public boolean IsIn(CummulativeRegion<?> region) {
-		Debug.print("in CummulativeRegion.IsIn(CummulativeRegion)");
 		for(NonCummulativeRegion test:this.getRegions()) {
 			if(!test.IsIn(region)) {
 				return false;
@@ -106,15 +106,15 @@ public abstract class CummulativeRegion<T extends NonCummulativeRegion> extends 
 	public abstract <E extends InspiredGov> Menu getUnclaimMenu(PlayerData PDI, Menu previous, E gov);
 
 	@Override
-	public Location getCharacteristicPoint() {
+	public Point3D getCharacteristicPoint() {
 		double zsum = 0;
 		double ysum = 0;
 		double xsum = 0;
 		HashMap<WorldID, Integer> counter = new HashMap<WorldID, Integer>();
 		for(NonCummulativeRegion reg:this.regions) {
-			zsum = zsum + reg.getCharacteristicPoint().getZ();
-			ysum = ysum + reg.getCharacteristicPoint().getY();
-			xsum = xsum + reg.getCharacteristicPoint().getX();
+			zsum = zsum + reg.getCharacteristicPoint().z;
+			ysum = ysum + reg.getCharacteristicPoint().y;
+			xsum = xsum + reg.getCharacteristicPoint().x;
 			if(counter.containsKey(reg.getWorld())) {
 				counter.put(reg.getWorld(), counter.get(reg.getWorld()) + 1);
 			}
@@ -132,7 +132,7 @@ public abstract class CummulativeRegion<T extends NonCummulativeRegion> extends 
 				highestFreq = world;
 			}
 		}
-		return new Location(highestFreq.getWorld(), xavg, yavg, zavg);
+		return new Point3D((int) xavg,(int) yavg,(int) zavg, highestFreq);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.github.InspiredOne.InspiredNationsServer;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,10 +13,14 @@ import com.github.InspiredOne.InspiredNationsClient.Remotes.ClientPlayerDataInte
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Economy.NPC;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
@@ -315,5 +321,23 @@ public class PlayerData implements PlayerDataPortal {
 		} catch (PlayerOfflineException e) {
 			return this.lastLoc;
 		}
+	}
+	
+	@Override
+	public void transferMoney(BigDecimal amount, CurrencyPortal monType,
+			Payable target) throws BalanceOutOfBoundsException,
+			NegativeMoneyTransferException, RemoteException {
+			this.accounts.transferMoney(amount, monType, target);
+	}
+
+	@Override
+	public void addMoney(BigDecimal amount, CurrencyPortal monType)
+			throws NegativeMoneyTransferException, RemoteException {
+		this.accounts.addMoney(amount, monType);
+	}
+
+	@Override
+	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) {
+		return this.accounts.getTotalMoney(valueType, round);
 	}
 }

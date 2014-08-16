@@ -1,20 +1,23 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Economy.AccountCollection;
-import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools;
-import com.github.InspiredOne.InspiredNations.ToolBox.Payable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.PromptOption;
-import com.github.InspiredOne.InspiredNationsClient.Hud.TabSelectOptionMenu;
+import java.rmi.RemoteException;
 
-public class PickAccount extends TabSelectOptionMenu<Account> {
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
+import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
-	AccountCollection accounts;
+
+public class PickAccount extends TabSelectOptionMenu<AccountPortal> {
+
+	AccountCollectionPortal accounts;
 	Payable accountFrom;
 	Menu previous;
-	public PickAccount(PlayerData PDI, Menu previous, AccountCollection collection, Payable accountFrom) {
+	public PickAccount(PlayerDataPortal PDI, Menu previous, AccountCollectionPortal collection, Payable accountFrom) throws RemoteException {
 		super(PDI);
 		this.accounts = collection;
 		this.previous = previous;
@@ -27,7 +30,7 @@ public class PickAccount extends TabSelectOptionMenu<Account> {
 	}
 
 	@Override
-	public String postTabListPreOptionsText() {
+	public String postTabListPreOptionsText() throws RemoteException {
 		return MenuTools.oneLineWallet("", PDI, accountFrom);
 	}
 
@@ -37,15 +40,15 @@ public class PickAccount extends TabSelectOptionMenu<Account> {
 	}
 
 	@Override
-	public void addTabOptions() {
-		for(Account account:accounts) {
-			this.taboptions.add(account);
+	public void addTabOptions() throws RemoteException {
+		for(int i = 0; i<accounts.getSize(); i++) {
+			this.taboptions.add(accounts.get(i));
 		}
 		
 	}
 
 	@Override
-	public void addOptions() {
+	public void addOptions() throws RemoteException {
 		this.options.add(new PromptOption(this, "Pick Currency Account", new PickCurrencyCollection(PDI, this, this.getData(), accountFrom)));
 		this.options.add(new PayAccountOption(PDI, this, "Transfer Money <amount>", accountFrom, this.getData(), PDI));		
 	}

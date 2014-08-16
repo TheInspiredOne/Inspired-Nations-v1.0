@@ -45,6 +45,7 @@ public abstract class RenameNameableOption extends Option {
 	 * Looks at the input and checks to make sure it is correct.
 	 * @param input
 	 * @return
+	 * @throws RemoteException 
 	 */
-	public abstract String validate(String input);
+	public abstract String validate(String input) throws RemoteException;
 }

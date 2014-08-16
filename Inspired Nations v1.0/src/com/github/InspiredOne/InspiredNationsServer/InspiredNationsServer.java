@@ -33,7 +33,7 @@ public class InspiredNationsServer {
 	public static int port = 1099;
 
 	public static IndexedMap<PlayerID, PlayerData> playerdata = new IndexedMap<PlayerID, PlayerData>();
-	public static MoneyExchange Exchange = new MoneyExchange();
+	public static MoneyExchange Exchange;
 	public static MultiGovMap regiondata = new MultiGovMap();
 	public static TaxTimer taxTimer;
 	public static List<MarketPlace<?>> Markets = new ArrayList<MarketPlace<?>>();
@@ -72,6 +72,7 @@ public class InspiredNationsServer {
 			}
 		});
 
+		// Stores the ServerPortal in the registry
 		try {
 			Registry registry = null;
 			try {
@@ -90,6 +91,7 @@ public class InspiredNationsServer {
 			e.printStackTrace();
 		}
 		taxTimer = new TaxTimer();
+		Exchange = new MoneyExchange();
 		// Loads Data
 		try {
 			File regionfile = new File(System.getProperty("user.dir")

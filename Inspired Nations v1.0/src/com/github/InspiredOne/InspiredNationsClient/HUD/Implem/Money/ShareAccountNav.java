@@ -1,16 +1,17 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.InspiredNations;
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickNavGeneral;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickPlayerGeneral;
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickNavGeneral;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickPlayerGeneral;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class ShareAccountNav extends PickNavGeneral {
 
-	Account account;
-	public ShareAccountNav(PlayerData PDI, Menu previous, Account account) {
+	AccountPortal account;
+	public ShareAccountNav(PlayerDataPortal PDI, Menu previous, AccountPortal account) {
 		super(PDI, previous);
 		this.account = account;
 	}
@@ -31,7 +32,7 @@ public class ShareAccountNav extends PickNavGeneral {
 	}
 
 	@Override
-	public PickPlayerGeneral getPlayerMenu() {
+	public PickPlayerGeneral getPlayerMenu() throws RemoteException {
 		return new PickPlayerToShare(PDI, this, account);
 	}
 

@@ -1,23 +1,20 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Account;
-import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNations.ToolBox.Datable;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.MenuLoops.FindAddress.PickGovGeneral;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickGovGeneral;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class PickGovernmentToShare extends PickGovGeneral {
 
-	Account account;
+	AccountPortal account;
 	
-	public PickGovernmentToShare(PlayerData PDI, Menu previous, Menu next, Account account,
+	public PickGovernmentToShare(PlayerDataPortal PDI, Menu previous, Menu next, AccountPortal account,
 			Datable<InspiredGov> superGov) {
 		super(PDI, previous, next, superGov);
 		this.account = account;
 	}
 
-	public PickGovernmentToShare(PlayerData PDI, Menu previous, Menu next, Account account) {
+	public PickGovernmentToShare(PlayerDataPortal PDI, Menu previous, Menu next, AccountPortal account) {
 		super(PDI, previous, next);
 		this.account = account;
 	}

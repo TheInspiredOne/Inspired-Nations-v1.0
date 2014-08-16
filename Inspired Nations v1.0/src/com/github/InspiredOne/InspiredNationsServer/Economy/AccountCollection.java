@@ -12,6 +12,7 @@ import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBound
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
@@ -164,5 +165,15 @@ public class AccountCollection extends IndexedSet<Account> implements AccountCol
 	@Override
 	public void addAccount(Account account) throws RemoteException {
 		this.add(account);
+	}
+
+	@Override
+	public int getSize() throws RemoteException {
+		return this.getSize();
+	}
+
+	@Override
+	public void add(AccountPortal account) throws RemoteException {
+		this.add(account.getSelf());
 	}
 }

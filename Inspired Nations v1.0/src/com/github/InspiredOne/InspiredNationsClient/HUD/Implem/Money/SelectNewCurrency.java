@@ -1,16 +1,18 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
-import com.github.InspiredOne.InspiredNations.InspiredNations;
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Economy.Currency;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Menu;
-import com.github.InspiredOne.InspiredNationsClient.Hud.TabSelectOptionMenu;
+import java.rmi.RemoteException;
 
-public class SelectNewCurrency extends TabSelectOptionMenu<Currency> {
+import com.github.InspiredOne.InspiredNationsClient.InspiredNationsClient;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
+
+public class SelectNewCurrency extends TabSelectOptionMenu<CurrencyPortal> {
 
 	Menu previous;
 	
-	public SelectNewCurrency(PlayerData PDI, Menu previous) {
+	public SelectNewCurrency(PlayerDataPortal PDI, Menu previous) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 	}
@@ -31,11 +33,10 @@ public class SelectNewCurrency extends TabSelectOptionMenu<Currency> {
 	}
 
 	@Override
-	public void addTabOptions() {
-		for(Currency curren:InspiredNations.Exchange.getExchangeMap().keySet()) {
-			this.taboptions.add(curren);
+	public void addTabOptions() throws RemoteException {
+		for(int i=0; i < InspiredNationsClient.server.getExchange().getSize(); i++) {
+			this.taboptions.add(InspiredNationsClient.server.getExchange().getCurrency(i));
 		}
-		
 	}
 
 	@Override

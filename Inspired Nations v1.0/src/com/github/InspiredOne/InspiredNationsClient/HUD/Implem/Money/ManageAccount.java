@@ -33,7 +33,7 @@ public class ManageAccount extends OptionMenu {
 	}
 
 	@Override
-	public Menu getPreviousMenu() {
+	public Menu getPreviousMenu() throws RemoteException {
 		return new ManageAccounts(PDI, previous, accounts);
 	}
 
@@ -48,7 +48,7 @@ public class ManageAccount extends OptionMenu {
 	}
 
 	@Override
-	public void addOptions() {
+	public void addOptions() throws RemoteException {
 		this.options.add(new ChangeAutoExchangeOption(this, "Toggle Auto-Exchange", account));
 		this.options.add(new PromptOption(this, "Pay With " + account.getName(), new PayNav(PDI, new ManageAccount(PDI, previous, account, accounts), account)));
 		this.options.add(new RenameAccountOption(this, account, "Rename " + account.getName() + " <Name>"));

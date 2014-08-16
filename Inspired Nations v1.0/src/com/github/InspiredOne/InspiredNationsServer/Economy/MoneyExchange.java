@@ -5,22 +5,29 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 
 import com.github.InspiredOne.InspiredNationsServer.Config;
+import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.MoneyExchangePortal;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
 
 
-public class MoneyExchange implements Serializable{
+public class MoneyExchange implements Serializable, MoneyExchangePortal{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3674609233229292913L;
-	public MathContext mcup = new MathContext(50, RoundingMode.UP);
-	public MathContext mcdown = new MathContext(50, RoundingMode.DOWN);
+	public static MathContext mcup = new MathContext(50, RoundingMode.UP);
+	public static MathContext mcdown = new MathContext(50, RoundingMode.DOWN);
+	public MoneyExchange() throws RemoteException {
+		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
+	}
 
-	private HashMap<Currency, BigDecimal> Exchange = new HashMap<Currency, BigDecimal>();
+	private IndexedMap<Currency, BigDecimal> Exchange = new IndexedMap<Currency, BigDecimal>();
 	
 	public void registerCurrency(Currency currency, BigDecimal diamondValue) {
 		
@@ -126,9 +133,22 @@ public class MoneyExchange implements Serializable{
 		return outputup;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public final HashMap<Currency, BigDecimal> getExchangeMap() {
-		return (HashMap<Currency, BigDecimal>) this.Exchange.clone();
+		HashMap<Currency, BigDecimal> output = new HashMap<Currency, BigDecimal>();
+		for(Currency curren:this.Exchange) {
+			output.put(curren, this.Exchange.get(curren));
+		}
+		return output;
+	}
+
+	@Override
+	public int getSize() throws RemoteException {
+		return this.Exchange.size();
+	}
+
+	@Override
+	public CurrencyPortal getCurrency(int index) throws RemoteException {
+		return this.Exchange.getIndex(index);
 	}
 	
 }

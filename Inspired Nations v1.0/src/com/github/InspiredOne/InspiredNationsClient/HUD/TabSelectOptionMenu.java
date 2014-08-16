@@ -196,8 +196,9 @@ public abstract class TabSelectOptionMenu<E extends Nameable> extends OptionMenu
 	/**
 	 * Used to insert text between tab options and input options
 	 * @return	the text to be inserted
+	 * @throws RemoteException 
 	 */
-	public abstract String postTabListPreOptionsText();
+	public abstract String postTabListPreOptionsText() throws RemoteException;
 	
 	public abstract void addTabOptions() throws RemoteException;
 	

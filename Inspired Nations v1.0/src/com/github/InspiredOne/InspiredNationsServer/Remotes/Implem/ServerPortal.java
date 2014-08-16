@@ -6,6 +6,7 @@ import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineExce
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Log;
 import com.github.InspiredOne.InspiredNationsServer.PlayerData;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.MoneyExchangePortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.TaxTimerPortal;
@@ -57,6 +58,11 @@ public class ServerPortal implements ServerPortalInter {
 	@Override
 	public TaxTimerPortal getTaxTimer() throws RemoteException {
 		return InspiredNationsServer.taxTimer;
+	}
+
+	@Override
+	public MoneyExchangePortal getExchange() throws RemoteException {
+		return InspiredNationsServer.Exchange;
 	}
 
 }

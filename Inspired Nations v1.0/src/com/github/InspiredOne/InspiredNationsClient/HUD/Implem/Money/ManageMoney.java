@@ -3,7 +3,10 @@ package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.MainHud;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Governments.GovFactory;
@@ -27,12 +30,12 @@ public class ManageMoney extends OptionMenu {
 		String output = MenuTools.oneLineWallet("", PDI, PDI.getAccounts());
 		IndexedMap<Class<? extends InspiredGov>, BigDecimal> taxmap = PDI.getAccounts().getTaxes(PDI.getCurrency());
 		if(!taxmap.isEmpty()) {
-			output = output.concat(TextColor.SUBHEADER(this.getPlayerData()) + "Taxes\n");
+			output = output.concat(PDI.SUBHEADER() + "Taxes\n");
 		}
 		for(Class<? extends InspiredGov> govtype:taxmap) {
 			InspiredGov gov = GovFactory.getGovInstance(govtype);
-			output = output.concat(TextColor.VALUEDESCRI(this.getPlayerData()) + gov.getTypeName() + ": " + TextColor.VALUE(this.getPlayerData()) +
-					Tools.cut(taxmap.get(govtype))) + TextColor.UNIT(this.getPlayerData()) + " " + PDI.getCurrency() +"\n";
+			output = output.concat(PDI.VALUEDESCRI() + gov.getTypeName() + ": " + PDI.VALUE() +
+					Tools.cut(taxmap.get(govtype))) + PDI.UNIT() + " " + PDI.getCurrency() +"\n";
 		}
 		
 		
@@ -55,12 +58,12 @@ public class ManageMoney extends OptionMenu {
 	}
 
 	@Override
-	public Menu getPreviousMenu() {
+	public Menu getPreviousMenu() throws RemoteException {
 		return new MainHud(PDI);
 	}
 
 	@Override
-	public void addOptions() {
+	public void addOptions() throws RemoteException {
 		this.options.add(new PromptOption(this, "Pay", new PayNav(PDI, this, PDI)));
 		this.options.add(new PromptOption(this, "Manage Accounts", new ManageAccounts(PDI, this, PDI.getAccounts())));
 	}

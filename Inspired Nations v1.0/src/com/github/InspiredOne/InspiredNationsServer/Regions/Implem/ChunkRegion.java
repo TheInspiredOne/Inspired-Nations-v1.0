@@ -5,17 +5,18 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Exceptions.PointsInDifferentWorldException;
-import com.github.InspiredOne.InspiredNations.Governments.InspiredGov;
-import com.github.InspiredOne.InspiredNations.Hud.Menu;
-import com.github.InspiredOne.InspiredNations.Regions.Cuboid;
-import com.github.InspiredOne.InspiredNations.Regions.CummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.NonCummulativeRegion;
-import com.github.InspiredOne.InspiredNations.Regions.Region;
-import com.github.InspiredOne.InspiredNations.ToolBox.Point2D;
-import com.github.InspiredOne.InspiredNations.ToolBox.Point3D;
-import com.github.InspiredOne.InspiredNations.ToolBox.WorldID;
+import com.github.InspiredOne.InspiredNationsServer.PlayerData;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.PointsInDifferentWorldException;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Cuboid;
+import com.github.InspiredOne.InspiredNationsServer.Regions.CummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.NonCummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Region;
+import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point2D;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.WorldID;
+
 
 public class ChunkRegion extends NonCummulativeRegion {
 
@@ -28,8 +29,8 @@ public class ChunkRegion extends NonCummulativeRegion {
 	
 	Point2D coordinate;
 	
-	public ChunkRegion(Chunk chunk) {
-		coordinate = new Point2D(chunk.getX(), chunk.getZ(), chunk.getWorld());
+	public ChunkRegion(Chunk chunk, ClientID client) {
+		coordinate = new Point2D(chunk.getX(), chunk.getZ(), chunk.getWorld(), client);
 	}
 	public ChunkRegion(Point2D chunk) {
 		coordinate = chunk;
@@ -149,7 +150,7 @@ public class ChunkRegion extends NonCummulativeRegion {
 		return !(this.coordinate == null);
 	}
 	@Override
-	public Location getCharacteristicPoint() {
+	public Point3D getCharacteristicPoint() {
 		return this.getBoundingCuboid().getCharacteristicPoint();
 	}
 }
