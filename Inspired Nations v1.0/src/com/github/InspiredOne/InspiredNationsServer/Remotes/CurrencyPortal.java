@@ -16,5 +16,5 @@ public interface CurrencyPortal extends Remote, Serializable, Nameable {
 	public String getName() throws RemoteException;
 	public void setName(String name) throws NameAlreadyTakenException, RemoteException;
     public String getDisplayName(PlayerID viewer) throws RemoteException;
-    public Currency getSelf() throws RemoteException;
+    public int getID() throws RemoteException;
 }

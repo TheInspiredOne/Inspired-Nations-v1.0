@@ -340,4 +340,10 @@ public class PlayerData implements PlayerDataPortal {
 	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) {
 		return this.accounts.getTotalMoney(valueType, round);
 	}
+
+	public static PlayerData resolve(PlayerDataPortal player) throws RemoteException {
+		PlayerID id = player.getPlayerID();
+		PlayerData output = InspiredNationsServer.playerdata.get(id);
+		return output;
+	}
 }

@@ -26,7 +26,7 @@ public class NewAccountOption extends Option {
 			menu.setError(MenuError.EMPTY_INPUT(menu.getPlayerData()));
 			return menu.getSelfPersist();
 		}
-		for(int i=0; i< accounts.getSize(); i++) {
+		for(int i=0; i< accounts.getSizeOf(); i++) {
 			AccountPortal account = accounts.get(i);
 			if(account.getName().equalsIgnoreCase(input)) {
 				menu.setError(MenuError.ACCOUNT_NAME_ALREADY_TAKEN(menu.getPlayerData()));

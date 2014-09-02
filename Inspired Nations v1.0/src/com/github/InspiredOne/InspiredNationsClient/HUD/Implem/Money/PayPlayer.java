@@ -22,7 +22,7 @@ public class PayPlayer extends PickPlayerGeneral {
 	}
 
 	@Override
-	public Menu getPreviousPrompt() {
+	public Menu getPreviousPrompt() throws RemoteException {
 		return new PayNav(PDI, back, accounts);
 	}
 

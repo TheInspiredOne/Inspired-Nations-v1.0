@@ -37,13 +37,13 @@ public class ManageAccounts extends TabSelectOptionMenu<AccountPortal> {
 	}
 	@Override
 	public void addTabOptions() throws RemoteException {
-		for(int i = 0; i<accounts.getSize(); i++) {
+		for(int i = 0; i<accounts.getSizeOf(); i++) {
 			this.taboptions.add(accounts.get(i));
 		}
 	}
 
 	@Override
-	public void addOptions() {
+	public void addOptions() throws RemoteException {
 		if(taboptions.size() > 0) {
 			this.options.add(new ChangeTabOrderOption<AccountPortal>(new ManageAccounts(PDI, previous, accounts), "Change Account Order <+/->", PDI.getAccounts(), this.getData()));
 			this.options.add(new PromptOption(this, "Manage " + this.getData().getName() + " account", new ManageAccount(PDI, previous, this.getData(), accounts)));

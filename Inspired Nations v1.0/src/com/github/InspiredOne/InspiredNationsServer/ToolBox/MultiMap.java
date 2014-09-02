@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.github.InspiredOne.InspiredNationsServer.Debug;
+
 /**
  * My own implementation of a map that maps to a Set. If the key is not present, then
  * the map adds a Set with a single entry. Every subsequent addition to the key
@@ -151,6 +153,7 @@ public class MultiMap<T, K> implements Map<T, List<K>>, Serializable, Iterable<K
 
 	@Override
 	public Iterator<K> iterator() {
+		Debug.print("inside multipmap iterator();");
 		return new MultiMapIterator<K>(this);
 	}
 }

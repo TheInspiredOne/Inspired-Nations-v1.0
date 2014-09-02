@@ -83,7 +83,7 @@ public class MainHud extends OptionMenu {
 		this.options.add(new PromptOption(this, "Player Directory", new PlayerDirectory(PDI)));
 //		this.options.add(new PromptOption(this, "Citizenship", new PlayerCitizenship(PDI)));
 		this.options.add(new PromptOption(this, "Manage Money", new ManageMoney(PDI),
-				"(" + Tools.cut(PDI.getTotalMoney(PDI.getCurrency(), MoneyExchange.mcdown)) + " "+ PDI.getCurrency() + ")"));
+				"(" + Tools.cut(PDI.getTotalMoney(PDI.getCurrency(), MoneyExchange.mcdown)) + " "+ PDI.getCurrency().getName() + ")"));
 //		
 //		//this.options.add(new getMoneyOption(this, "Get 1000 " + PDI.getCurrency().getName(), PDI));
 //

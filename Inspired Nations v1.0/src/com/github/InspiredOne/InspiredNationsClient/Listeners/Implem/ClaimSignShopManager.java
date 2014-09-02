@@ -1,7 +1,7 @@
 package com.github.InspiredOne.InspiredNationsClient.Listeners.Implem;
 
 import com.github.InspiredOne.InspiredNations.Debug;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimSignShop;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.ClaimAndUnclaimLand.ClaimSignShop;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 
 public class ClaimSignShopManager extends ActionManager<ClaimSignShop> {

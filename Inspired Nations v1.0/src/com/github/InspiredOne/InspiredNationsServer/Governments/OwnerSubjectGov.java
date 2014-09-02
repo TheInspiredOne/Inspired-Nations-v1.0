@@ -14,8 +14,9 @@ import com.github.InspiredOne.InspiredNations.ToolBox.Relation;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNations.ToolBox.Tools.TextColor;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.OwnerSubjectGovPortal;
 
-public abstract class OwnerSubjectGov extends OwnerGov {
+public abstract class OwnerSubjectGov extends OwnerGov implements OwnerSubjectGovPortal{
 
 	/**
 	 * 

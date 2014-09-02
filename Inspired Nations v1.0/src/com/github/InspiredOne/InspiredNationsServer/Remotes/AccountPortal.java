@@ -16,7 +16,7 @@ import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTran
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 
 
-public interface AccountPortal extends Serializable, Nameable, Payable, Cloneable, Remote {
+public interface AccountPortal extends Serializable, Nameable, Payable, Cloneable, Remote, Reorderable {
 
 	public String getTypeName() throws RemoteException;
 	public void addCurrencyAccount(CurrencyAccountPortal account) throws RemoteException;
@@ -24,7 +24,7 @@ public interface AccountPortal extends Serializable, Nameable, Payable, Cloneabl
 	 * Sets the HashMap of all the money values
 	 * @param money	the HashMap to replace the current one
 	 */
-	public Account getSelf() throws RemoteException;
+	public int getID() throws RemoteException;
 	public void setMoney(ArrayList<CurrencyAccount> money) throws RemoteException;
 	public BigDecimal getMoney(CurrencyPortal getType, CurrencyPortal valueType) throws RemoteException;
 	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) throws RemoteException;
@@ -50,4 +50,5 @@ public interface AccountPortal extends Serializable, Nameable, Payable, Cloneabl
 	public int getCurrencySize() throws RemoteException;
 	public CurrencyAccountPortal getCurrency(int index) throws RemoteException;
 	public void removeCurrency(CurrencyPortal portal) throws RemoteException;
+	public void removeCurrency(CurrencyAccountPortal curren) throws RemoteException;
 }

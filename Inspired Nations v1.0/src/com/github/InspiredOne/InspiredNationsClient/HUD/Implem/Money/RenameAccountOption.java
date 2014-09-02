@@ -29,7 +29,7 @@ public class RenameAccountOption extends RenameNameableOption {
 	@Override
 	public String validate(String input) throws RemoteException {
 		AccountCollectionPortal accounts = menu.PDI.getAccounts();
-		for(int i = 0; i < accounts.getSize(); i++) {
+		for(int i = 0; i < accounts.getSizeOf(); i++) {
 			AccountPortal account = accounts.get(i);
 			if(account.getName().equalsIgnoreCase(input) && account != nameholder) {
 				return MenuError.ACCOUNT_NAME_ALREADY_TAKEN(menu.PDI);

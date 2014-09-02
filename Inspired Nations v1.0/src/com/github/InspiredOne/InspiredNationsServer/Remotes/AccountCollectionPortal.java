@@ -15,7 +15,7 @@ import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
 public interface AccountCollectionPortal extends Remote, Payable, 
-Notifyable, Nameable {
+Notifyable, Nameable, Reorderable {
 	
 	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) throws RemoteException;
 	public AccountCollection getSelf() throws RemoteException;
@@ -28,6 +28,8 @@ Notifyable, Nameable {
 	public void sendNotification(AlertPortal msg) throws RemoteException;
 	public void addAccount(Account account) throws RemoteException;
 	public AccountPortal get(int index) throws RemoteException;
-	public int getSize() throws RemoteException;
+	public int getSizeOf() throws RemoteException;
 	public void add(AccountPortal account) throws RemoteException;
+	public void removeAccount(AccountPortal account) throws RemoteException;
+	public String getTaxesText(PlayerDataPortal player) throws RemoteException;
 }

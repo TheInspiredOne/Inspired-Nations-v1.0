@@ -1,9 +1,14 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickGovGeneral;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.InspiredGovPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 
@@ -15,17 +20,17 @@ public class PickGovToPay extends PickGovGeneral {
 		super(PDI, previous, next);
 		this.accounts = accountsFrom;
 	}
-	public PickGovToPay(PlayerDataPortal PDI, Payable accountsFrom, Menu previous, Menu next, Datable<InspiredGov> superGov) {
+	public PickGovToPay(PlayerDataPortal PDI, Payable accountsFrom, Menu previous, Menu next, Datable<InspiredGovPortal> superGov) throws RemoteException {
 		super(PDI, previous, next, superGov);
 		this.accounts = accountsFrom;
 	}
 
 	@Override
-	public boolean check(InspiredGov gov) {
+	public boolean check(InspiredGovPortal gov) {
 		return true;
 	}
 	@Override
-	public String postTabListPreOptionsText() {
+	public String postTabListPreOptionsText() throws RemoteException {
 		return MenuTools.oneLineWallet("", PDI, accounts);
 	}
 	@Override

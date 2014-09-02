@@ -1,8 +1,11 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress;
 
+import java.rmi.RemoteException;
+
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.InspiredGovPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 /**
@@ -10,11 +13,11 @@ import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
  * @author Jedidiah E. Phillips
  *
  */
-public abstract class PickGovGeneral extends TabSelectOptionMenu<InspiredGov> {
+public abstract class PickGovGeneral extends TabSelectOptionMenu<InspiredGovPortal> {
 
 	public Menu previous;
 	public Menu next;
-	protected Datable<InspiredGov> superGov;
+	protected Datable<InspiredGovPortal> superGov;
 	
 	/**
 	 * 
@@ -23,8 +26,9 @@ public abstract class PickGovGeneral extends TabSelectOptionMenu<InspiredGov> {
 	 * @param next		Final menu to end on
 	 * @param govTargetType
 	 * @param superGov
+	 * @throws RemoteException 
 	 */
-	public PickGovGeneral(PlayerDataPortal PDI, Menu previous, Menu next, Datable<InspiredGov> superGov) {
+	public PickGovGeneral(PlayerDataPortal PDI, Menu previous, Menu next, Datable<InspiredGovPortal> superGov) throws RemoteException {
 		super(PDI);
 		this.previous = previous;
 		this.next = next;
@@ -56,11 +60,11 @@ public abstract class PickGovGeneral extends TabSelectOptionMenu<InspiredGov> {
 	 * @param gov
 	 * @return
 	 */
-	public abstract boolean check(InspiredGov gov);
+	public abstract boolean check(InspiredGovPortal gov);
 
 	@Override
 	public void addTabOptions() {
-		for(InspiredGov govToTest: superGov.getData().getAllSubGovsAndFacilitiesJustBelow()) {
+		for(InspiredGovPortal govToTest: superGov.getData().getAllSubGovsAndFacilitiesJustBelow()) {
 			if(check(govToTest)) {
 				this.taboptions.add(govToTest);
 			}

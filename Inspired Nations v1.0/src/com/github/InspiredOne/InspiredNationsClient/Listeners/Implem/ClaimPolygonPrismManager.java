@@ -2,7 +2,7 @@ package com.github.InspiredOne.InspiredNationsClient.Listeners.Implem;
 
 import com.github.InspiredOne.InspiredNations.Exceptions.PointsInDifferentWorldException;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimPolygonPrism;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.ClaimAndUnclaimLand.ClaimPolygonPrism;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.PolygonPrism;
 

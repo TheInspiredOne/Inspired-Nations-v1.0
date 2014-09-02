@@ -83,7 +83,7 @@ public class NPC implements Serializable, ItemBuyer {
 			throw new NegativeMoneyTransferException();
 		}
 		if(amount.compareTo(this.getTotalMoney(monType, mcup)) <= 0) {
-			if(amount.compareTo(this.getTotalUnallocatedMoney(monType.getSelf())) > 0) {
+			if(amount.compareTo(this.getTotalUnallocatedMoney(Currency.resolve(monType))) > 0) {
 				amount = amount.subtract(accounts.getTotalMoney(monType, mcdown));
 				accounts.transferMoney(accounts.getTotalMoney(monType, mcup), monType, target);
 			}

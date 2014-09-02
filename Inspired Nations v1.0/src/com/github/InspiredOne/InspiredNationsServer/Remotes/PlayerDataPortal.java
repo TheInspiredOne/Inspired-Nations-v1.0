@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.github.InspiredOne.InspiredNationsClient.Exceptions.PlayerOfflineException;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
@@ -17,7 +18,7 @@ import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Point3D;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
-public interface PlayerDataPortal extends Remote, Nameable, Notifyable, Payable,  Serializable {
+public interface PlayerDataPortal extends Remote, Nameable, Notifyable, Payable, Serializable {
 	
 	public PlayerID getPlayerID() throws RemoteException;
 	public MessageManagerPortal getMsg() throws RemoteException;

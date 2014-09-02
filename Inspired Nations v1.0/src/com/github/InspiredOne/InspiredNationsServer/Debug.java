@@ -8,15 +8,15 @@ public class Debug {
 
 
 	public static void print(Object msg) {
-		System.out.print(msg.toString());
+		System.out.println(msg.toString());
 	}
 	
 	public static void print(int i) {
-		System.out.print("Debuger Check: " + i);
+		System.out.println("Debuger Check: " + i);
 	}
 	
 	public static void InformPluginDev() {
-		System.out.print(InformPluginDev);
+		System.out.println(InformPluginDev);
 	}
 	
 	public static void node(String string) {

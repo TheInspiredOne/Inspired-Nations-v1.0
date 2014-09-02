@@ -19,7 +19,7 @@ public abstract class PickPlayerGeneral extends TabSelectOptionMenu<PlayerID> {
 	}
 
 	@Override
-	public Menu getPreviousPrompt() {
+	public Menu getPreviousPrompt() throws RemoteException {
 		return previous;
 	}
 

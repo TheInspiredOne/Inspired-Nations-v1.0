@@ -1,7 +1,12 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
+import java.rmi.RemoteException;
+
+import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickGovGeneral;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.InspiredGovPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
 public class PickGovernmentToShare extends PickGovGeneral {
@@ -9,7 +14,7 @@ public class PickGovernmentToShare extends PickGovGeneral {
 	AccountPortal account;
 	
 	public PickGovernmentToShare(PlayerDataPortal PDI, Menu previous, Menu next, AccountPortal account,
-			Datable<InspiredGov> superGov) {
+			Datable<InspiredGovPortal> superGov) throws RemoteException {
 		super(PDI, previous, next, superGov);
 		this.account = account;
 	}
@@ -20,7 +25,7 @@ public class PickGovernmentToShare extends PickGovGeneral {
 	}
 
 	@Override
-	public boolean check(InspiredGov gov) {
+	public boolean check(InspiredGovPortal gov) {
 		return true;
 	}
 
@@ -35,7 +40,7 @@ public class PickGovernmentToShare extends PickGovGeneral {
 	}
 
 	@Override
-	public void addOptions() {
+	public void addOptions() throws RemoteException {
 		this.options.add(new ShareAccountOption(this, "Share Account With " + this.getData().getTypeName(), account, this.getData().getAccounts()));
 
 	}

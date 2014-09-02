@@ -13,12 +13,18 @@ import org.bukkit.Location;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Regions.InspiredRegion;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.InspiredGovPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
 
@@ -31,7 +37,7 @@ import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable
  * @author InspiredOne
  *
  */
-public abstract class InspiredGov implements Serializable, Nameable, Datable<InspiredGov>, Notifyable, Payable {
+public abstract class InspiredGov implements InspiredGovPortal, Serializable, Nameable, Datable<InspiredGov>, Notifyable, Payable {
 
 	/**
 	 * 
@@ -130,7 +136,7 @@ public abstract class InspiredGov implements Serializable, Nameable, Datable<Ins
 	}
 	public InspiredGov getSuperGovObj(Class<? extends OwnerGov> govtype) {
 		InspiredGov govtest = this;
-		while(govtest != InspiredNations.global) {
+		while(govtest != InspiredNationsServer.global) {
 			if(govtest.getClass().equals(govtype)) {
 				return govtest;
 			}
@@ -138,7 +144,7 @@ public abstract class InspiredGov implements Serializable, Nameable, Datable<Ins
 				govtest = govtest.getSuperGovObj();
 			}
 		}
-		return InspiredNations.global;
+		return InspiredNationsServer.global;
 	}
 	/**
 	 * 
@@ -395,7 +401,7 @@ public abstract class InspiredGov implements Serializable, Nameable, Datable<Ins
 		// Iterate over all the sub-gov types.
 		for(Class<? extends OwnerGov> subType:this.getData().getSubGovs()) {
 			// Iterate over every government of that type
-			for(InspiredGov govToTest:InspiredNations.regiondata.get(subType)) {
+			for(InspiredGov govToTest:InspiredNationsServer.regiondata.get(subType)) {
 				// Check if the government is under the particular superGov
 				if(govToTest.isSubOf(this.getData())) {
 					output.add(govToTest);
@@ -1027,7 +1033,7 @@ public abstract class InspiredGov implements Serializable, Nameable, Datable<Ins
             toHashCode();
     }
 
-    @Override
+    @Override*
     public boolean equals(Object obj) {
         if (obj == null)
             return false;

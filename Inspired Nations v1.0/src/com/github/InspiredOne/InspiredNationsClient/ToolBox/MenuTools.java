@@ -12,6 +12,7 @@ import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Governments.OwnerGov;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.ProtectionLevels;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Relation;
@@ -81,7 +82,7 @@ public class MenuTools {
 	 */
 	public static String oneLineWallet(String text, PlayerDataPortal PDI, Payable account) throws RemoteException {
 		String output = text.concat(PDI.LABEL() + "Holdings: " + PDI.VALUE() +
-				Tools.cut(account.getTotalMoney(PDI.getCurrency(), InspiredNationsServer.Exchange.mcdown)) + PDI.UNIT() +" " + PDI.getCurrency() + "\n");
+				Tools.cut(account.getTotalMoney(PDI.getCurrency(), InspiredNationsServer.Exchange.mcdown)) + PDI.UNIT() +" " + PDI.getCurrency().getName() + "\n");
 		return output;
 	}
 	/**
@@ -486,7 +487,7 @@ public class MenuTools {
 				
 			};
 		}
-		public static Alert RECEIVED_MONEY(final BigDecimal amount, final Currency curren, final Nameable sender) {
+		public static Alert RECEIVED_MONEY(final BigDecimal amount, final CurrencyPortal curren, final Nameable sender) {
 			return new Alert() {
 
 				/**
@@ -495,10 +496,10 @@ public class MenuTools {
 				private static final long serialVersionUID = -8611525947131654856L;
 
 				@Override
-				public String getMessage(PlayerDataPortal receiver) {
-					BigDecimal converted = Tools.cut(InspiredNations.Exchange.getExchangeValue(amount, curren, receiver.getCurrency()));
-					return makeMessage(sender.getDisplayName(receiver) + makeMessage(" paid you " +TextColor.VALUE(receiver)+ converted + " "
-							+ TextColor.UNIT(receiver) + receiver.getCurrency() + TextColor.ALERT(receiver)+ ".",(receiver)), (receiver));
+				public String getMessage(PlayerDataPortal receiver) throws RemoteException {
+					BigDecimal converted = Tools.cut(InspiredNationsClient.server.getExchange().getExchangeValue(amount, curren, receiver.getCurrency()));
+					return makeMessage(sender.getDisplayName(receiver.getPlayerID()) + makeMessage(" paid you " +receiver.VALUE()+ converted + " "
+							+ receiver.UNIT() + receiver.getCurrency() + receiver.ALERT()+ ".",(receiver)), (receiver));
 				}
 
 				@Override
@@ -509,7 +510,7 @@ public class MenuTools {
 				
 			};
 		}
-		public static Alert TRANSFER_SUCCESSFUL(final BigDecimal amount, final Currency curren, final Nameable sender, final Nameable paid) {
+		public static Alert TRANSFER_SUCCESSFUL(final BigDecimal amount, final CurrencyPortal curren, final Nameable sender, final Nameable paid) {
 			return new Alert() {
 
 				/**
@@ -518,11 +519,11 @@ public class MenuTools {
 				private static final long serialVersionUID = 8894522114770201993L;
 
 				@Override
-				public String getMessage(PlayerDataPortal receiver) {
-					BigDecimal converted = Tools.cut(InspiredNations.Exchange.getExchangeValue(amount, curren, receiver.getCurrency()));
-					return makeMessage(sender.getDisplayName(receiver), receiver) + makeMessage(TextColor.ALERT(receiver) + " paid " + TextColor.VALUE(receiver) + converted +
-							" " + TextColor.UNIT(receiver) + receiver.getCurrency() + TextColor.ALERT(receiver) + " to " + paid.getDisplayName(receiver)
-							+TextColor.ALERT(receiver) + ".", (receiver));
+				public String getMessage(PlayerDataPortal receiver) throws RemoteException {
+					BigDecimal converted = Tools.cut(InspiredNationsClient.server.getExchange().getExchangeValue(amount, curren, receiver.getCurrency()));
+					return makeMessage(sender.getDisplayName(receiver.getPlayerID()), receiver) + makeMessage(receiver.ALERT() + " paid " + receiver.VALUE() + converted +
+							" " + receiver.UNIT() + receiver.getCurrency() + receiver.ALERT() + " to " + paid.getDisplayName(receiver.getPlayerID())
+							+receiver.ALERT() + ".", (receiver));
 				}
 
 				@Override

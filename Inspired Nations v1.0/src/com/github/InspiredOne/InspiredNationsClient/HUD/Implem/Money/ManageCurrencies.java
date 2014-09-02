@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.PromptOption;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountCollectionPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AccountPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
@@ -49,10 +50,10 @@ public class ManageCurrencies extends TabSelectOptionMenu<CurrencyAccountPortal>
 	}
 
 	@Override
-	public void addOptions() {
+	public void addOptions() throws RemoteException {
 		if(this.taboptions.size() > 0) {
 			this.options.add(new PromptOption(this, "Pay with " + this.getData().getName(), new PayNav(PDI, this, this.getData())));
-			this.options.add(new ChangeTabOrderOption<>(this, "Change Currency Order <+/->", account.getMoney(), this.getData()));
+			this.options.add(new ChangeTabOrderOption<>(this, "Change Currency Order <+/->", account, this.getData()));
 			this.options.add(new PromptOption(this, "Transfer " + this.getData().getCurrency(), new PickAccount(PDI, this, accounts, this.getData())));
 			if(this.taboptions.size() > 1) {
 				this.options.add(new RemoveCurrencyOption(this, "Remove " + this.getData().getCurrency(), account, this.getData()));

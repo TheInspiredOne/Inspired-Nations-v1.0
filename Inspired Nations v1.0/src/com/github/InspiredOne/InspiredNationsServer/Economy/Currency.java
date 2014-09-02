@@ -24,16 +24,24 @@ public final class Currency implements CurrencyPortal, Comparable<Currency>{
 	private static final long serialVersionUID = 2855995345401677901L;
 	private String name;
 	public static Currency DEFAULT;
-	
+	private static int CurrencyID = 0;
+	private final int id;
 
 	public Currency(String name) throws RemoteException {
 		//TODO Remove later, figure out when to add a currency to the exchange
 		//InspiredNations.Exchange.registerCurrency(this, new BigDecimal(500));
 		this.name = name;
+		this.id = Currency.CurrencyID;
 		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
 	}
-	public Currency getSelf() {
-		return this;
+	
+	public static Currency resolve(CurrencyPortal portal) throws RemoteException {
+		for(Currency curren:InspiredNationsServer.Exchange.getExchangeMap().keySet()) {
+			if(portal.getID() == curren.getID()) {
+				return curren;
+			}
+		}
+		return null;
 	}
 	
 	public BigDecimal getExchangeRate(CurrencyPortal output) {
@@ -130,5 +138,10 @@ public final class Currency implements CurrencyPortal, Comparable<Currency>{
 		int compareVal = arg0.getExchangeRate(DEFAULT).multiply(new BigDecimal(1000)).intValue();
 		int thisval = this.getExchangeRate(DEFAULT).multiply(new BigDecimal(1000)).intValue();
 		return thisval - compareVal;
+	}
+
+	@Override
+	public int getID() throws RemoteException {
+		return this.id;
 	}
 }

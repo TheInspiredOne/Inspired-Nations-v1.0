@@ -29,23 +29,50 @@ public class Account implements AccountPortal {
 	private static final long serialVersionUID = -7022565910007118461L;
 	private static final String typeName = "Money";
 	private String name = "Money";
-	private ArrayList<CurrencyAccount> money = new ArrayList<CurrencyAccount>();
+	public ArrayList<CurrencyAccount> money = new ArrayList<CurrencyAccount>();
 	private boolean AutoExchange = true;
+	private static int accountID = 0;
+	private final int id;
 
 	
 	public Account() throws RemoteException {
 		//TODO remove these for later. figure out how to handle when a player is first joining a server with no
 		// currencies already
 		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
+		this.id = Account.accountID;
+		Account.accountID++;
 	}
 	public Account(String name) throws RemoteException {
 		this.setName(name);
-	}
-	
-	public Account getSelf() {
-		return this;
+		this.id = Account.accountID;
+		Account.accountID++;
 	}
 
+	public static Account resolve(AccountPortal portal) throws RemoteException {
+		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
+			for(Account account:player.getAccounts()) {
+				if(account.getID() == portal.getID()) {
+					return account;
+				}
+			}
+			for(NPC npc:player.npcs) {
+				for(Account account:npc.accounts) {
+					if(account.getID() == portal.getID()) {
+						return account;
+					}
+				}
+			}
+		}
+		for(InspiredGov gov:InspiredNationsServer.regiondata) {
+			for(Account account:gov.getAccounts()) {
+				if(account.getID() == portal.getID()) {
+					return account;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public String getTypeName() {
 		return typeName;
 	}
@@ -88,7 +115,7 @@ public class Account implements AccountPortal {
 			return exch.getExchangeValue(curren.getTotalMoney(getType, InspiredNationsServer.Exchange.mcdown), getType, valueType);
 		}
 		else {
-			money.add(new CurrencyAccount(getType.getSelf(), BigDecimal.ZERO));
+			money.add(new CurrencyAccount(Currency.resolve(getType), BigDecimal.ZERO));
 			return this.getMoney(getType, valueType);
 		}
 	}
@@ -116,7 +143,7 @@ public class Account implements AccountPortal {
 		}
 		else {
 			// looks to see if accountCollection has MonType
-			CurrencyAccount account = getCurrenAccount(monType.getSelf());
+			CurrencyAccount account = getCurrenAccount(Currency.resolve(monType));
 			account.addMoney(mon, monType);
 		}
 	}
@@ -144,7 +171,7 @@ public class Account implements AccountPortal {
 	}
 	
 	public CurrencyAccount getCurrenAccount(CurrencyPortal monType) throws RemoteException {
-		CurrencyAccount account = new CurrencyAccount(monType.getSelf());
+		CurrencyAccount account = new CurrencyAccount(Currency.resolve(monType));
 		for(CurrencyAccount curren:this.money) {
 			if(curren.getCurrency().equals(monType)) {
 				return curren;
@@ -238,7 +265,7 @@ public class Account implements AccountPortal {
 	@Override
 	public void addCurrencyAccount(CurrencyAccountPortal account)
 			throws RemoteException {
-		this.getMoney().add(account.getSelf());
+		this.getMoney().add(CurrencyAccount.resolve(account));
 	}
 	@Override
 	public int getCurrencySize() throws RemoteException {
@@ -250,6 +277,46 @@ public class Account implements AccountPortal {
 	}
 	@Override
 	public void removeCurrency(CurrencyPortal portal) throws RemoteException {
-		this.getMoney().remove(portal.getSelf());
+		this.getMoney().remove(Currency.resolve(portal));
+	}
+	@Override
+	public void removeCurrency(CurrencyAccountPortal curren)
+			throws RemoteException {
+		this.money.remove(CurrencyAccount.resolve(curren));
+	}
+	@Override
+	public int getID() throws RemoteException {
+		return this.id;
+	}
+
+	@Override
+	public int moveUp(int start) throws RemoteException {
+		CurrencyAccount theOption = money.get(start);
+		int position = start;
+		int size = this.money.size();
+		if(size == 0) {
+			return 0;
+		}
+		else {
+			int newpos = Tools.newPosition(position - 1, size);
+			money.remove(position);
+			money.add(newpos, theOption);
+			return newpos;
+		}
+	}
+	@Override
+	public int moveDown(int start) throws RemoteException {
+		CurrencyAccount theOption = money.get(start);
+		int position = start;
+		int size = this.money.size();
+		if(size == 0) {
+			return 0;
+		}
+		else {
+			int newpos = Tools.newPosition(position + 1, size);
+			money.remove(position);
+			money.add(newpos,  theOption);
+			return newpos;
+		}		
 	}
 }

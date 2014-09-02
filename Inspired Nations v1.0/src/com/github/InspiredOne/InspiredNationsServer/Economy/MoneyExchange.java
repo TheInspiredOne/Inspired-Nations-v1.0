@@ -127,8 +127,8 @@ public class MoneyExchange implements Serializable, MoneyExchangePortal{
 	public final BigDecimal exchange(BigDecimal mon, CurrencyPortal monType, CurrencyPortal valueType) throws RemoteException {
 		BigDecimal outputup = this.getExchangeValue(mon, monType, valueType, mcup);
 		BigDecimal outputdown = this.getExchangeValue(mon, monType, valueType, mcdown); //added outputdown
-		Exchange.put(monType.getSelf(), Exchange.get(monType).add(mon));
-		Exchange.put(valueType.getSelf(), Exchange.get(valueType).subtract(outputdown));
+		Exchange.put(Currency.resolve(monType), Exchange.get(monType).add(mon));
+		Exchange.put(Currency.resolve(valueType), Exchange.get(valueType).subtract(outputdown));
 		
 		return outputup;
 	}

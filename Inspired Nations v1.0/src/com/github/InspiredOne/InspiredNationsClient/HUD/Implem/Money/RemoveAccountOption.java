@@ -1,5 +1,7 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
+import java.rmi.RemoteException;
+
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
@@ -35,15 +37,9 @@ public class RemoveAccountOption extends Option {
 	}
 
 	@Override
-	public Menu response(String input) {
-		superAcc.remove(account);
-		try {
-			account.transferMoney(account.getTotalMoney(Currency.DEFAULT, InspiredNationsServer.Exchange.mcdown), Currency.DEFAULT, superAcc);
-		} catch (BalanceOutOfBoundsException e) {
-			e.printStackTrace();
-		} catch (NegativeMoneyTransferException e) {
-			e.printStackTrace();
-		}
+	public Menu response(String input) throws RemoteException {
+		superAcc.removeAccount(account);
+
 		return menu;
 	}
 

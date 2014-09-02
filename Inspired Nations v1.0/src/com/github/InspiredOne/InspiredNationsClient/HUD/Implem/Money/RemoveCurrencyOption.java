@@ -1,5 +1,7 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
+import java.rmi.RemoteException;
+
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.OptionMenu;
@@ -37,9 +39,9 @@ public class RemoveCurrencyOption extends Option {
 	}
 
 	@Override
-	public Menu response(String input) {
+	public Menu response(String input) throws RemoteException {
 		boolean trans = account.isAutoExchange();
-		this.account.remove(curren);
+		this.account.removeCurrency(curren);
 		account.setAutoExchange(true);
 		try {
 			curren.transferMoney(curren.getTotalMoney(curren.getCurrency(), MoneyExchange.mcdown), curren.getCurrency(), account);

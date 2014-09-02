@@ -7,14 +7,11 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
-import com.github.InspiredOne.InspiredNationsServer.Economy.CurrencyAccount;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
-import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 
 public interface CurrencyAccountPortal extends Remote, Payable, Nameable, Serializable {
 
@@ -30,6 +27,6 @@ public interface CurrencyAccountPortal extends Remote, Payable, Nameable, Serial
 			throws NegativeMoneyTransferException, RemoteException;
 	public BigDecimal getTotalMoney(CurrencyPortal valueType, MathContext round) throws RemoteException;
 	public void sendNotification(AlertPortal msg) throws RemoteException;
-	public CurrencyAccount getSelf() throws RemoteException;
+	public int getID() throws RemoteException;
 	
 }

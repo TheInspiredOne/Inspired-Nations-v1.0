@@ -26,6 +26,17 @@ public class Tools {
 		return input.divide(BigDecimal.ONE, 2, BigDecimal.ROUND_DOWN);
 	}
 	
+	/**
+	 * Finds the new position to be used when changing the order of the options
+	 * in a tab select menu.
+	 * @param position original position
+	 * @param size size of the array
+	 * @return
+	 */
+	public static int newPosition(int position, int size) {
+		return (size + position) % size;
+	}
+	
 	public static List<InspiredGov> getGovsThatContain(Location loc) {
 		List<InspiredGov> output = new ArrayList<InspiredGov>();
 		

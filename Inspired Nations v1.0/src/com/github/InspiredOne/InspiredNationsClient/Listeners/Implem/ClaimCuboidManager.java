@@ -9,7 +9,7 @@ import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNations.ToolBox.Point3D;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNations.ToolBox.Tools.TextColor;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimCuboid;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.ClaimAndUnclaimLand.ClaimCuboid;
 import com.github.InspiredOne.InspiredNationsClient.Listeners.ActionManager;
 
 public class ClaimCuboidManager<T extends ClaimCuboid> extends ActionManager<T> {

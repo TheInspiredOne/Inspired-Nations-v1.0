@@ -1,7 +1,10 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
+import java.rmi.RemoteException;
+
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
 import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickNavGeneral;
+import com.github.InspiredOne.InspiredNationsClient.HUD.MenuLoops.FindAddress.PickPlayerGeneral;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 
@@ -14,8 +17,9 @@ public class PayNav extends PickNavGeneral {
 	 * @param PDI
 	 * @param accounts
 	 * @param back	the menu to return to after doing all of the payment stuff.
+	 * @throws RemoteException 
 	 */
-	public PayNav(PlayerDataPortal PDI, Menu back, Payable accounts) {
+	public PayNav(PlayerDataPortal PDI, Menu back, Payable accounts) throws RemoteException {
 		super(PDI, back);
 		this.accounts = accounts;
 	}
@@ -46,7 +50,7 @@ public class PayNav extends PickNavGeneral {
 	}
 
 	@Override
-	public PickPlayerGeneral getPlayerMenu() {
+	public PickPlayerGeneral getPlayerMenu() throws RemoteException {
 		return new PayPlayer(PDI, accounts, previous);
 	}
 

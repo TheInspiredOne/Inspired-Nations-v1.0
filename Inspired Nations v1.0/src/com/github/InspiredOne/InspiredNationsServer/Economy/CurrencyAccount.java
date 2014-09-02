@@ -10,6 +10,7 @@ import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NameAlreadyTakenException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.AlertPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyAccountPortal;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.CurrencyPortal;
@@ -29,23 +30,58 @@ public class CurrencyAccount implements CurrencyAccountPortal, Cloneable {
 	private static final long serialVersionUID = 6553887792904870042L;
 	private Currency curren;
 	private BigDecimal amount;
+	private static int currencyAccountID = 0;
+	private final int id;
 	
 	public CurrencyAccount(Currency curren) throws RemoteException {
 		this.curren = curren;
 		this.amount = BigDecimal.ZERO;
 		UnicastRemoteObject.exportObject(this, InspiredNationsServer.port);
+		id = CurrencyAccount.currencyAccountID;
+		CurrencyAccount.currencyAccountID++;
 	}
 	public CurrencyAccount(Currency curren2, BigDecimal amount) throws RemoteException {
 		this.curren = curren2;
 		this.amount = amount;
+		id = CurrencyAccount.currencyAccountID;
+		CurrencyAccount.currencyAccountID++;
 	}
 	public CurrencyAccount(CurrencyPortal curren2, BigDecimal amount) throws RemoteException {
-		this.curren = curren2.getSelf();
+		this.curren = Currency.resolve(curren2);
 		this.amount = amount;
+		id = CurrencyAccount.currencyAccountID;
+		CurrencyAccount.currencyAccountID++;
 	}
 	
-	public CurrencyAccount getSelf() {
-		return this;
+	public static CurrencyAccount resolve(CurrencyAccountPortal portal) throws RemoteException {
+		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
+			for(Account account:player.getAccounts()) {
+				for(int i = 0;i<account.getCurrencySize(); i++) {
+					if(account.getCurrency(i).getID() == portal.getID()) {
+						return account.money.get(i);
+					}
+				}
+			}
+			for(NPC npc:player.npcs) {
+				for(Account account:npc.accounts) {
+					for(int i = 0;i<account.getCurrencySize(); i++) {
+						if(account.getCurrency(i).getID() == portal.getID()) {
+							return account.money.get(i);
+						}
+					}
+				}
+			}
+		}
+		for(InspiredGov gov:InspiredNationsServer.regiondata) {
+			for(Account account:gov.getAccounts()) {
+				for(int i = 0;i<account.getCurrencySize(); i++) {
+					if(account.getCurrency(i).getID() == portal.getID()) {
+						return account.money.get(i);
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	public CurrencyAccount clone() {
@@ -63,7 +99,7 @@ public class CurrencyAccount implements CurrencyAccountPortal, Cloneable {
 		return curren;
 	}
 	public void setCurrency(CurrencyPortal curren) throws RemoteException { 
-		this.curren = curren.getSelf();
+		this.curren = Currency.resolve(curren);
 	}
 	
 	@Override
@@ -131,5 +167,8 @@ public class CurrencyAccount implements CurrencyAccountPortal, Cloneable {
 			}
 		}
 	}
-
+	@Override
+	public int getID() throws RemoteException {
+		return this.id;
+	}
 }

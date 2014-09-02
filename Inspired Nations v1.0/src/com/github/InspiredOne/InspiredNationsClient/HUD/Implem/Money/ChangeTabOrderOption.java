@@ -1,5 +1,6 @@
 package com.github.InspiredOne.InspiredNationsClient.HUD.Implem.Money;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.github.InspiredOne.InspiredNationsClient.HUD.Menu;
@@ -7,22 +8,23 @@ import com.github.InspiredOne.InspiredNationsClient.HUD.Option;
 import com.github.InspiredOne.InspiredNationsClient.HUD.TabSelectOptionMenu;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.OptionUnavail;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.Reorderable;
 
 public class ChangeTabOrderOption<T extends Nameable> extends Option {
 
-	ArrayList<T> options;
+	Reorderable options;
 	T theOption;
 	TabSelectOptionMenu<T> menu;
 	
 	public ChangeTabOrderOption(TabSelectOptionMenu<T> menu, String label,
-			OptionUnavail reason, ArrayList<T> options, T theOption) {
+			OptionUnavail reason, Reorderable options, T theOption) {
 		super(menu, label, reason);
 		this.options = options;
 		this.theOption = theOption;
 		this.menu = menu;
 	}
 
-	public ChangeTabOrderOption(TabSelectOptionMenu<T> menu, String label, ArrayList<T> options, T theOption) {
+	public ChangeTabOrderOption(TabSelectOptionMenu<T> menu, String label, Reorderable options, T theOption) {
 		super(menu, label);
 		this.options = options;
 		this.theOption = theOption;
@@ -30,7 +32,7 @@ public class ChangeTabOrderOption<T extends Nameable> extends Option {
 	}
 
 	public ChangeTabOrderOption(TabSelectOptionMenu<T> menu, String label,
-			String description, ArrayList<T> options, T theOption) {
+			String description, Reorderable options, T theOption) {
 		super(menu, label, description);
 		this.options = options;
 		this.theOption = theOption;
@@ -38,33 +40,19 @@ public class ChangeTabOrderOption<T extends Nameable> extends Option {
 	}
 
 	@Override
-	public Menu response(String input) {
-		int position = options.indexOf(theOption);
-		int size = options.size();
-		if(size == 0) {
+	public Menu response(String input) throws RemoteException {
+		if(menu.getTabOptions().size() == 0) {
 			return menu;
 		}
-		else {
-			if(input.equalsIgnoreCase("-")) {
-				int newpos = newPosition(position + 1, size);
-				options.remove(position);
-				options.add(newpos,  theOption);
-				menu.setTabcnt(newpos);
-			}
-			else if(input.equalsIgnoreCase("+"))  {
-				int newpos = newPosition(position - 1, size);
-				options.remove(position);
-				options.add(newpos, theOption);
-				menu.setTabcnt(newpos);
-				
-			}
+		if(input.equalsIgnoreCase("-")) {
+			int newpos = options.moveDown(menu.getTabcnt());
+			menu.setTabcnt(newpos);
 		}
-
-		
+		else if(input.equalsIgnoreCase("+"))  {
+			int newpos = options.moveUp(menu.getTabcnt());
+			menu.setTabcnt(newpos);
+			
+		}
 		return menu;
-	}
-
-	private int newPosition(int position, int size) {
-		return (size + position) % size;
 	}
 }

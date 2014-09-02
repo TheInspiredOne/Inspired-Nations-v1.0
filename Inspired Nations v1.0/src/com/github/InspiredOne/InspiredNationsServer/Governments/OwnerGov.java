@@ -23,8 +23,9 @@ import com.github.InspiredOne.InspiredNations.ToolBox.Tools.TextColor;
 import com.github.InspiredOne.InspiredNationsClient.RemoteInterfaces.PlayerClientInter;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Economy.NPC;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.OwnerGovPortal;
 
-public abstract class OwnerGov extends InspiredGov {
+public abstract class OwnerGov extends InspiredGov implements OwnerGovPortal {
 	
 	/**
 	 * 

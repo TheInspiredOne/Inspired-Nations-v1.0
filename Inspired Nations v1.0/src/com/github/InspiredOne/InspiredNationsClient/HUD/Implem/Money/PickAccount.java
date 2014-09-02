@@ -41,7 +41,7 @@ public class PickAccount extends TabSelectOptionMenu<AccountPortal> {
 
 	@Override
 	public void addTabOptions() throws RemoteException {
-		for(int i = 0; i<accounts.getSize(); i++) {
+		for(int i = 0; i<accounts.getSizeOf(); i++) {
 			this.taboptions.add(accounts.get(i));
 		}
 		

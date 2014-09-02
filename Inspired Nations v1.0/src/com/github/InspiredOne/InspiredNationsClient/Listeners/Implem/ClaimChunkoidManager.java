@@ -6,7 +6,7 @@ import com.github.InspiredOne.InspiredNations.Exceptions.InsufficientRefundAccou
 import com.github.InspiredOne.InspiredNations.Exceptions.RegionOutOfEncapsulationBoundsException;
 import com.github.InspiredOne.InspiredNations.ToolBox.MenuTools.MenuError;
 import com.github.InspiredOne.InspiredNations.ToolBox.Point2D;
-import com.github.InspiredOne.InspiredNationsClient.Hud.Implem.ClaimAndUnclaimLand.ClaimChunkoid;
+import com.github.InspiredOne.InspiredNationsClient.HUD.Implem.ClaimAndUnclaimLand.ClaimChunkoid;
 import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.ChunkRegion;
 import com.github.InspiredOne.InspiredNationsServer.Regions.Implem.Chunkoid;
 
