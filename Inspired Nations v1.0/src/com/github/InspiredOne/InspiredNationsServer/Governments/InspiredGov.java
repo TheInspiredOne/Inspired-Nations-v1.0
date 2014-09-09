@@ -12,18 +12,32 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Location;
 
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Datable;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.MenuTools.MenuAlert;
 import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
+import com.github.InspiredOne.InspiredNationsServer.Debug;
 import com.github.InspiredOne.InspiredNationsServer.InspiredNationsServer;
+import com.github.InspiredOne.InspiredNationsServer.PlayerData;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Account;
 import com.github.InspiredOne.InspiredNationsServer.Economy.AccountCollection;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
+import com.github.InspiredOne.InspiredNationsServer.Economy.MoneyExchange;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Payable;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.InspiredGovTooStrongException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.InsufficientRefundAccountBalanceException;
 import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.RegionOutOfEncapsulationBoundsException;
+import com.github.InspiredOne.InspiredNationsServer.Regions.CummulativeRegion;
 import com.github.InspiredOne.InspiredNationsServer.Regions.InspiredRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.NonCummulativeRegion;
+import com.github.InspiredOne.InspiredNationsServer.Regions.Region;
+import com.github.InspiredOne.InspiredNationsServer.Regions.nullRegion;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.InspiredGovPortal;
+import com.github.InspiredOne.InspiredNationsServer.Remotes.PlayerDataPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.PlayerID;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedMap;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.IndexedSet;
+import com.github.InspiredOne.InspiredNationsServer.ToolBox.ProtectionLevels;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Tools;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Alert;
 import com.github.InspiredOne.InspiredNationsServer.ToolBox.Messaging.Notifyable;
@@ -198,7 +212,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 		if (this instanceof Facility) {
 			//join facility account with supergov account
 			try {
-				this.transferMoney(this.getAccounts().getTotalMoney(currency.DEFAULT, InspiredNations.Exchange.mcdown), currency.DEFAULT, this.getSuperGovObj());
+				this.transferMoney(this.getAccounts().getTotalMoney(currency.DEFAULT, MoneyExchange.mcdown), currency.DEFAULT, this.getSuperGovObj());
 			} catch (BalanceOutOfBoundsException e) {
 				e.printStackTrace();
 			} catch (NegativeMoneyTransferException e) {
@@ -210,7 +224,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 			try {
 				Account GovAccount = new Account(this.getName());
 				
-				this.getAccounts().transferMoney(this.getAccounts().getTotalMoney(currency.DEFAULT, InspiredNations.Exchange.mcdown), currency.DEFAULT, GovAccount);
+				this.getAccounts().transferMoney(this.getAccounts().getTotalMoney(currency.DEFAULT, MoneyExchange.mcdown), currency.DEFAULT, GovAccount);
 				
 				if (this instanceof OwnerGov) {
 					for (PlayerID PID: ((OwnerGov) this).getOwnersList()) {
@@ -224,14 +238,14 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 			}
 		}
 		// remove the government from all of the gov relations
-		for(InspiredGov gov:InspiredNations.regiondata) {
+		for(InspiredGov gov:InspiredNationsServer.regiondata) {
 			if(gov instanceof OwnerGov) {
 				((OwnerGov) gov).getRelations().remove(this);
 			}
 		}
 		// Finally remove the government from regiondata
 		Debug.print("Getting unregistered: " + this.getName());
-		InspiredNations.regiondata.removeValue(this);
+		InspiredNationsServer.regiondata.removeValue(this);
 	}
 
 	/**
@@ -267,7 +281,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	@SuppressWarnings("unchecked")
 	public <T extends InspiredGov> List<T> getAllSubGovs(Class<T> key) {
 		List<T> output = new ArrayList<T>();
-		for(Iterator<InspiredGov> iter = InspiredNations.regiondata.get(key).iterator(); iter.hasNext(); ) {
+		for(Iterator<InspiredGov> iter = InspiredNationsServer.regiondata.get(key).iterator(); iter.hasNext(); ) {
 			InspiredGov gov = iter.next();
 			if (gov.getSuperGovObj().equals(this)) {
 				output.add((T) gov);
@@ -486,7 +500,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 				subgov.payTaxes();
 			}
 		}
-		while(this.getTotalMoney(currency, InspiredNations.Exchange.mcdown).compareTo(this.currentTaxCycleValue(currency)) < 0 &&
+		while(this.getTotalMoney(currency, MoneyExchange.mcdown).compareTo(this.currentTaxCycleValue(currency)) < 0 &&
 				this.getProtectionlevel() > 0) {
 			try {
 				this.setProtectionlevel(this.getProtectionlevel() - 1);
@@ -518,7 +532,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	public final OwnerGov getSuperGovBelow(InspiredGov govtop) throws NotASuperGovException{
 		InspiredGov govbottom = this;
 		for(Class<? extends OwnerGov> govtype:govtop.getSubGovs()) {
-			for(InspiredGov govtest:InspiredNations.regiondata.get(govtype)) {
+			for(InspiredGov govtest:InspiredNationsServer.regiondata.get(govtype)) {
 				if(govbottom.equals(govtest)) {
 					return (OwnerGov) govtest;
 				}
@@ -531,7 +545,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	}
 	
 	public final boolean isSubOfClass(Class<? extends OwnerGov> gov) {
-		if(gov.equals(InspiredNations.global.getClass())) {
+		if(gov.equals(InspiredNationsServer.global.getClass())) {
 			return true;
 		}
 		else if (this instanceof GlobalGov) {
@@ -553,8 +567,8 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	 */
 	public void register() {
 		List<InspiredGov> value = new ArrayList<InspiredGov>();
-		if(!InspiredNations.regiondata.containsKey(this.getClass())) {
-			InspiredNations.regiondata.put(this.getClass(), value);
+		if(!InspiredNationsServer.regiondata.containsKey(this.getClass())) {
+			InspiredNationsServer.regiondata.put(this.getClass(), value);
 		}
 		
 		for(Class<? extends InspiredGov> cla:this.getSubGovs()) {
@@ -585,10 +599,10 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	 * @return		true if this is below gov
 	 */
 	public final boolean isSubOf(InspiredGov gov) {
-		if(this.equals(InspiredNations.global)) {
+		if(this.equals(InspiredNationsServer.global)) {
 			return false;
 		}
-		else if(gov.equals(InspiredNations.global)) {
+		else if(gov.equals(InspiredNationsServer.global)) {
 			return true;
 		}
 		else if(gov.equals(this.getSuperGovObj())) {
@@ -607,8 +621,8 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 			throw new NegativeProtectionLevelException();
 		}
 		else {
-			BigDecimal refund = this.taxValue(this.getRegion().getRegion(),InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, Currency.DEFAULT);
-			BigDecimal newcost = this.taxValue(this.getRegion().getRegion(),InspiredNations.taxTimer.getFractionLeft(), protectionlevel, Currency.DEFAULT);
+			BigDecimal refund = this.taxValue(this.getRegion().getRegion(),InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, Currency.DEFAULT);
+			BigDecimal newcost = this.taxValue(this.getRegion().getRegion(),InspiredNationsServer.taxTimer.getFractionLeft(), protectionlevel, Currency.DEFAULT);
 			BigDecimal cost = refund.subtract(newcost);
 			if(cost.compareTo(BigDecimal.ZERO) < 0) {
 				try {
@@ -622,7 +636,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 				} catch (NegativeMoneyTransferException e) {
 				} catch (BalanceOutOfBoundsException e) {
 					try {
-						this.pullFromSuper(this.getSuperGovObj().getAccounts().getTotalMoney(Currency.DEFAULT, InspiredNations.Exchange.mcdown), Currency.DEFAULT);
+						this.pullFromSuper(this.getSuperGovObj().getAccounts().getTotalMoney(Currency.DEFAULT, MoneyExchange.mcdown), Currency.DEFAULT);
 					} catch (NegativeMoneyTransferException e1) {
 					}
 				}
@@ -660,7 +674,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	}
 	public BigDecimal getExpectedRevenueFrom(Class<? extends InspiredGov> gov, Currency curren) {
 		BigDecimal output = BigDecimal.ZERO;
-		for(InspiredGov subgov:InspiredNations.regiondata.get(gov)) {
+		for(InspiredGov subgov:InspiredNationsServer.regiondata.get(gov)) {
 			if(subgov.getSuperGovObj() == this) {
 				output = output.add(subgov.currentTaxCycleValue(curren));
 			}
@@ -719,7 +733,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 		//TODO come up with some kind of war money function
 		output = (new BigDecimal(region.volume()/10000.).multiply(new BigDecimal(taxfrac))).multiply(new BigDecimal(taxrate));
 		output = output.multiply(new BigDecimal(protect)).add(additionalcost);
-		output = InspiredNations.Exchange.getExchangeValue(output, Currency.DEFAULT, curren);
+		output = InspiredNationsServer.Exchange.getExchangeValue(output, Currency.DEFAULT, curren);
 		return output;
 	}
 	 
@@ -741,9 +755,9 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	 */
 	public void setLand(Region region) throws BalanceOutOfBoundsException, InspiredGovTooStrongException, RegionOutOfEncapsulationBoundsException, InsufficientRefundAccountBalanceException {
 		Currency curren = Currency.DEFAULT;
-		BigDecimal holdings = this.accounts.getTotalMoney(curren, InspiredNations.Exchange.mcdown);
-		BigDecimal reimburse = this.taxValue(this.getRegion().getRegion(), InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, curren);
-		BigDecimal cost = this.taxValue(region, InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, curren);
+		BigDecimal holdings = this.accounts.getTotalMoney(curren, MoneyExchange.mcdown);
+		BigDecimal reimburse = this.taxValue(this.getRegion().getRegion(), InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, curren);
+		BigDecimal cost = this.taxValue(region, InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, curren);
 		BigDecimal difference = cost.subtract(reimburse);// positive if owe country money, negative if country owe money
 		// Can they afford it?
 		if(holdings.compareTo(difference) < 0) {
@@ -753,7 +767,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 		// Is it inside all the regions it's supposed to be in?
 		for(Class<? extends InspiredRegion > regionType:this.getRegion().getEncapsulatingRegions()) {
 			InspiredRegion check = Tools.getInstance(regionType);
-			for(InspiredGov gov:InspiredNations.regiondata.get(check.getRelatedGov())) {
+			for(InspiredGov gov:InspiredNationsServer.regiondata.get(check.getRelatedGov())) {
 				if(this.isSubOf(gov) && !region.IsIn(gov.getRegion().getRegion()) && !(region instanceof nullRegion)) {
 					throw new RegionOutOfEncapsulationBoundsException(gov);
 				}
@@ -790,7 +804,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 			}
 			catch (BalanceOutOfBoundsException ex) {
 				try {
-					this.pullFromSuper(this.getSuperGovObj().getAccounts().getTotalMoney(curren, InspiredNations.Exchange.mcdown), curren);
+					this.pullFromSuper(this.getSuperGovObj().getAccounts().getTotalMoney(curren, MoneyExchange.mcdown), curren);
 				} catch (NegativeMoneyTransferException e) {
 					e.printStackTrace();
 				}
@@ -814,7 +828,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	public void removeLandNotIn(Region select) {
 		Region regionfrom = this.getRegion().getRegion();
 		Currency curren = Currency.DEFAULT;
-		BigDecimal reimburse = this.taxValue(this.getRegion().getRegion(), InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, curren);
+		BigDecimal reimburse = this.taxValue(this.getRegion().getRegion(), InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, curren);
 		if(regionfrom instanceof CummulativeRegion<?>) {
 			ArrayList<NonCummulativeRegion> removed = new ArrayList<NonCummulativeRegion>();
 			for(NonCummulativeRegion region:((CummulativeRegion<?>) regionfrom).getRegions()) {
@@ -832,13 +846,13 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 		for(InspiredGov gov:this.getAllSubGovsAndFacilitiesJustBelow()) {
 			gov.removeLandNotIn(this.getRegion().getRegion());
 		}
-		BigDecimal newcost = this.taxValue(this.getRegion().getRegion(), InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, curren);
+		BigDecimal newcost = this.taxValue(this.getRegion().getRegion(), InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, curren);
 		BigDecimal difference = reimburse.subtract(newcost);
 		try {
 			this.pullFromSuper(difference, curren);	// Pull the reimbursment from them
 		} catch (BalanceOutOfBoundsException e) {	// If they don't have enough
 			try {
-				this.pullFromSuper(this.getSuperGovObj().accounts.getTotalMoney(curren, InspiredNations.Exchange.mcdown), curren); // Pull all they have
+				this.pullFromSuper(this.getSuperGovObj().accounts.getTotalMoney(curren, MoneyExchange.mcdown), curren); // Pull all they have
 			} catch (BalanceOutOfBoundsException e1) {	// Should not encounter
 				e1.printStackTrace();	
 			} catch (NegativeMoneyTransferException e1) { // Should not encounter
@@ -856,7 +870,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	public void removeLand(Region select, boolean check) {
 		Region regionfrom = this.getRegion().getRegion();
 		Currency curren = Currency.DEFAULT;
-		BigDecimal reimburse = this.taxValue(this.getRegion().getRegion(), InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, curren);
+		BigDecimal reimburse = this.taxValue(this.getRegion().getRegion(), InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, curren);
 		
 		ArrayList<NonCummulativeRegion> removed = new ArrayList<NonCummulativeRegion>();
 		if(regionfrom instanceof CummulativeRegion<?>) {
@@ -892,14 +906,14 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 				}
 			}
 		}
-		BigDecimal cost = this.taxValue(this.region.getRegion(), InspiredNations.taxTimer.getFractionLeft(), this.protectionlevel, curren);
+		BigDecimal cost = this.taxValue(this.region.getRegion(), InspiredNationsServer.taxTimer.getFractionLeft(), this.protectionlevel, curren);
 		BigDecimal difference = cost.subtract(reimburse);// positive if own country money, negative if country ows money
 		if(difference.compareTo(BigDecimal.ZERO) > 0) { 	// If for some reason you ow the country money for this
 			try {
 				this.paySuper(difference, curren);			// Pay what you owe
 			} catch (BalanceOutOfBoundsException e) {		//	If you don't have enough
 				try {
-					this.paySuper(this.accounts.getTotalMoney(curren, InspiredNations.Exchange.mcdown), curren);	// Pay what you have
+					this.paySuper(this.accounts.getTotalMoney(curren, MoneyExchange.mcdown), curren);	// Pay what you have
 				} catch (BalanceOutOfBoundsException
 						| NegativeMoneyTransferException e1) {
 				}
@@ -912,7 +926,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 				this.pullFromSuper(difference.negate(), curren);	// Pull the reimbursment from them
 			} catch (BalanceOutOfBoundsException e) {	// If they don't have enough
 				try {
-					this.pullFromSuper(this.getSuperGovObj().accounts.getTotalMoney(curren, InspiredNations.Exchange.mcdown), curren); // Pull all they have
+					this.pullFromSuper(this.getSuperGovObj().accounts.getTotalMoney(curren, MoneyExchange.mcdown), curren); // Pull all they have
 				} catch (BalanceOutOfBoundsException e1) {	// Should not encounter
 					e1.printStackTrace();	
 				} catch (NegativeMoneyTransferException e1) { // Should not encounter
@@ -944,7 +958,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 			}
 		}
 		try {
-			this.getAccounts().transferMoney(this.getAccounts().getTotalMoney(this.getCurrency(), InspiredNations.Exchange.mcdown), this.getCurrency(), newAccount);
+			this.getAccounts().transferMoney(this.getAccounts().getTotalMoney(this.getCurrency(), MoneyExchange.mcdown), this.getCurrency(), newAccount);
 			
 		} catch (BalanceOutOfBoundsException e) {
 			e.printStackTrace();
@@ -956,7 +970,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	
 	public List<PlayerData> getPlayerHolders() {
 		List<PlayerData> holders = new ArrayList<PlayerData>();
-		for(PlayerData player:InspiredNations.playerdata.values()) {
+		for(PlayerData player:InspiredNationsServer.playerdata.values()) {
 			if(player.getAccounts() == this.getAccounts()) {
 				holders.add(player);
 			}
@@ -976,8 +990,8 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	}
 
 	@Override
-	public String getDisplayName(PlayerData PDI) {
-		return TextColor.NEUTRAL(PDI) + this.getName().concat(" [" + this.getProtectionlevel() + "]");
+	public String getDisplayName(PlayerDataPortal PDI) {
+		return PDI.NEUTRAL() + this.getName().concat(" [" + this.getProtectionlevel() + "]");
 	}
 	/**
 	 * Gets the name for the position of owner for this government to be
@@ -1008,7 +1022,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	 */
 	public static List<InspiredGov> getTierGovs(int tier) {
 		List<InspiredGov> output = new ArrayList<InspiredGov>();
-		for(InspiredGov gov:InspiredNations.regiondata) {
+		for(InspiredGov gov:InspiredNationsServer.regiondata) {
 			if(gov.getTier() == tier) {
 				output.add(gov);
 			}
@@ -1018,7 +1032,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
 	public int getTier() {
 		int tier = 0;
 		InspiredGov gov = this;
-		while(gov != InspiredNations.global) {
+		while(gov != InspiredNationsServer.global) {
 			tier++;
 			gov = gov.getSuperGovObj();
 		}
@@ -1033,7 +1047,7 @@ public abstract class InspiredGov implements InspiredGovPortal, Serializable, Na
             toHashCode();
     }
 
-    @Override*
+    @Override
     public boolean equals(Object obj) {
         if (obj == null)
             return false;

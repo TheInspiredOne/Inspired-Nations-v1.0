@@ -5,16 +5,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.InspiredOne.InspiredNations.Debug;
-import com.github.InspiredOne.InspiredNations.InspiredNations;
-import com.github.InspiredOne.InspiredNations.PlayerData;
-import com.github.InspiredOne.InspiredNations.Exceptions.BalanceOutOfBoundsException;
-import com.github.InspiredOne.InspiredNations.Exceptions.NegativeMoneyTransferException;
-import com.github.InspiredOne.InspiredNations.Hud.OptionMenu;
-import com.github.InspiredOne.InspiredNations.ToolBox.Nameable;
-import com.github.InspiredOne.InspiredNations.ToolBox.PlayerID;
+import com.github.InspiredOne.InspiredNationsClient.ToolBox.Nameable;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Currency;
 import com.github.InspiredOne.InspiredNationsServer.Economy.NPC;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.BalanceOutOfBoundsException;
+import com.github.InspiredOne.InspiredNationsServer.Exceptions.NegativeMoneyTransferException;
 /**
  * Facilities cannot have subgovs
  * @author Jedidiah E. Phillips

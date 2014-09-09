@@ -10,6 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,6 +20,9 @@ import com.github.InspiredOne.InspiredNationsServer.Economy.MarketPlace;
 import com.github.InspiredOne.InspiredNationsServer.Economy.MoneyExchange;
 import com.github.InspiredOne.InspiredNationsServer.Economy.TaxTimer;
 import com.github.InspiredOne.InspiredNationsServer.Economy.Implem.ItemMarketplace;
+import com.github.InspiredOne.InspiredNationsServer.Governments.GlobalGov;
+import com.github.InspiredOne.InspiredNationsServer.Governments.GovFactory;
+import com.github.InspiredOne.InspiredNationsServer.Governments.InspiredGov;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.ServerPortalInter;
 import com.github.InspiredOne.InspiredNationsServer.Remotes.Implem.ServerPortal;
 import com.github.InspiredOne.InspiredNationsServer.SerializableIDs.ClientID;
@@ -34,6 +38,7 @@ public class InspiredNationsServer {
 
 	public static IndexedMap<PlayerID, PlayerData> playerdata = new IndexedMap<PlayerID, PlayerData>();
 	public static MoneyExchange Exchange;
+	public static GlobalGov global;
 	public static MultiGovMap regiondata = new MultiGovMap();
 	public static TaxTimer taxTimer;
 	public static List<MarketPlace<?>> Markets = new ArrayList<MarketPlace<?>>();
@@ -111,6 +116,30 @@ public class InspiredNationsServer {
 		if (Currency.DEFAULT == null) {
 			Currency.DEFAULT = new Currency("Coin");
 		}
+		global = GovFactory.getGovInstance(GlobalGov.class);
+
+		global.register();
+		// if this is first time running plugin, then add the default globalgov to the regiondata
+		// else, put the global gov loaded in the region data back into the global variable.
+		if(regiondata.get(global.getClass()).isEmpty()) {
+			regiondata.putValue(global.getClass(), global);
+		}
+		else {
+			global = (GlobalGov) regiondata.get(global.getClass()).iterator().next();
+		}
+		global.setName("Global");
+		System.out.println(">>>> Governments <<<<");
+		for(List<InspiredGov> set:regiondata.values()) {
+			for(Iterator<InspiredGov> iter = set.iterator(); iter.hasNext();){
+				InspiredGov gov = iter.next();
+				System.out.println(gov.getName());
+			}
+		}
+		System.out.println(">>>> Players <<<<");
+		for(PlayerID player:playerdata.keySet()) {
+			System.out.println(player);
+		}
+		
 		taxTimer.startTimer();
 		if (InspiredNationsServer.Markets.isEmpty()) {
 			InspiredNationsServer.Markets.add(new ItemMarketplace());
