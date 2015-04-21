@@ -20,6 +20,20 @@ Inspired Nations implements this concept on a large scale. The tax account is di
 
 To view this explicitly, consider the following graphic:
 
+![The AI Purchase Decision Tree](http://vegacore.net/DotTreeSub.png)
+
+This shows the decision tree made by the AI as it figures out how much money to allot for a Leather helmet, a Chainmail helmet, and a Gold helmet. Oval nodes are decision nodes and square nodes are the goods. There are 4 kinds of decision nodes:
+
+* CobDugg: A compromise between PerfSub and PerfComp. This generally results in a flexible ratio of quantity purchased based on how much money the NPC has. (Armor and food for instance)
+* PerfSub: For the decision between two items that are substitutes, meaning one negates the need for the other (Diamond boots and Iron Boots for instance)
+* PerfComp: For the decision with items that must be purchased in the correct ratio in order to get any utility (the ingredients for cake for instance)
+* Item: A decision between purchasing the item directly, or purchasing its components to make it. 
+
+Starting from the top of the tree, the NPC distributes all of it's available funds two nodes dow to the first PerfSub node, where he then must decide between the three kinds of Item nodes. Because it is a PerfSub node, the NPC will chose to allocate all it's money into one of the three item nodes. This decision will be based on how much utility the NPC stands to gain from each outcome. The decision that grants the NPC the most utility is the one that wins.
+
+Each item node has a PerfSub branch that gives the NPC the chance to make the item from its materials rather than just purchasing the item directly. If the materials are cheaper, the NPC will go for buying the materials over the fully made item. The Leather helmet and the Chainmail helmet both have fairly simple PerfSub branches, but the Gold helmet has quite a bit more complexity. This is because there are many ways to obtain the materials for the Gold helmet. Therefore each material Item node may have alternative ways to get it, creating sub trees for that item. The decision tree grows complex very quickly, gaining many decision nodes for each additional item added to the economy. As a result, the AI's make intricate and complicated decision on how to distribute their wealth in a way that pressures prices to an equilibrium.
+
+This tree only represents 23 different items. Inspired Nations has an AI decision tree for all the unique items in Minecraft, numbering into the 500s and counting. The beauty of this nodal structure is that it is relatively easy to keep up to date. Any added items can quickly be appended to the tree where they belong resulting in quick updates to the plugin.
 
 Some consequences of this algorithm are that the demand for one item is tightly linked with not only it's price, but also the prices of all the other items in the market. Items that are closely related such as bread, apples, potatoes and pie will have a stronger relation than unrelated items. This means that if the price of apples goes up, then the demand for bread, potatoes and pie will go up as the demand for apples falls. Unrelated items will also see an increase in demand, but the effect will likely go unnoticed. Another consequence is a result of the craftability of certain items from resources. If the price for the final product goes up, then the lost demand for that product will go into purchasing the resources to make the product.
 ### Currencies
@@ -51,4 +65,4 @@ Effective Protection = (Attacked Gov's Protection Level) - ((Attacking Gov's Mil
 
 So if a country has protection level 4 and military level 3, then a country with military level 5 can breach two protection levels leaving the country at protection level 2. This would effectively bypass player and block protection, allowing the attacking country to kill and rob from their enemy.
 
-Military levels are granted for each tier of government that has subjects. Governments that do not have subjects have a military level of zero, but can still be attacked by governments at the same tier. Therefore, a business with a high enough military level can breach protection levels of a house. The only defense that a house has is it's protection levels, so having levels above the basic 4 is a necessity. 
+Military levels are granted for each tier of government that has subjects. Governments that do not have subjects have a military level of zero, but can still be attacked by governments at the same tier. Therefore, a business with a high enough military level can breach protection levels of a house. The only defense that a house has is its protection levels, so having levels above the basic 4 is a necessity. 
