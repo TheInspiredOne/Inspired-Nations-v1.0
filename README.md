@@ -20,7 +20,7 @@ Inspired Nations implements this concept on a large scale. The tax account is di
 
 To view this explicitly, consider the following graphic:
 
-![The AI Purchase Decision Tree](http://vegacore.net/pictures/DotTreeSub.png)
+![The AI Purchase Decision Tree](http://vegacore.net/locker/pictures/DotTreeSub.png)
 
 This shows the decision tree made by the AI as it figures out how much money to allot for a Leather helmet, a Chainmail helmet, and a Gold helmet. Oval nodes are decision nodes and square nodes are the goods. There are 4 kinds of decision nodes:
 
@@ -35,7 +35,7 @@ Each item node has a PerfSub branch that gives the NPC the chance to make the it
 
 This tree only represents 23 different items. Inspired Nations has an AI decision tree for all the unique items in Minecraft, numbering into the 500s and counting. The beauty of this nodal structure is that it is relatively easy to keep up to date. Any added items can quickly be appended to the tree where they belong resulting in quick updates to the plugin. To give you some perspective on how intricate the decision tree can get, here is the tree for 100 minecraft items. (Note: the image is wrapped for viewability)
 
-![The AI Purchase Decision Tree](http://vegacore.net/pictures/DotTreeMerged.png)
+![The AI Purchase Decision Tree](http://vegacore.net/locker/pictures/DotTreeMerged.png)
 
 Some consequences of this algorithm are that the demand for one item is tightly linked with not only it's price, but also the prices of all the other items in the market. Items that are closely related such as bread, apples, potatoes and pie will have a stronger relation than unrelated items. This means that if the price of apples goes up, then the demand for bread, potatoes and pie will go up as the demand for apples falls. Unrelated items will also see an increase in demand, but the effect will likely go unnoticed. Another consequence is a result of the craftability of certain items from resources. If the price for the final product goes up, then the lost demand for that product will go into purchasing the resources to make the product.
 ### Currencies
